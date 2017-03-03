@@ -4,18 +4,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.matteojoliveau</groupId>
+    <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <name>Matteo Joliveau</name>
+            <email>matteojoliveau@gmail.com</email>
+            <url>https://matteojoliveau.com</url>
+        </developer>
+    </developers>
+
     <modules>
-        <module>plugfacecore</module>
+        <module>plugface-core</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.24</version>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>

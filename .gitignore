@@ -99,7 +99,7 @@ local.properties
 ## File-based project format:
 *.iws
 
-## Plugin-specific files:
+## com.matteojoliveau.plugface.Plugin-specific files:
 
 # IntelliJ
 /out/
