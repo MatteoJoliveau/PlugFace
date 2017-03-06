@@ -48,14 +48,22 @@ public class PluginManager {
         return context;
     }
 
+    public List<Plugin> loadPlugins(String pluginFolder) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+        File folder = new File(pluginFolder);
+        return load(folder);
+    }
+
     public List<Plugin> loadPlugins() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        List<Plugin> loadedPlugins = new ArrayList<>();
 
         File folder = new File(pluginFolder);
         if (!folder.isDirectory()) {
             throw new NotDirectoryException("Set a valid plugin directory.");
         }
+        return load(folder);
+    }
 
+    private List<Plugin> load(File folder) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        List<Plugin> loadedPlugins = new ArrayList<>();
         File[] files = folder.listFiles();
         for (File file : files) {
             if (file.getName().endsWith(".jar")) {
