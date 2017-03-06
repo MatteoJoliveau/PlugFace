@@ -5,6 +5,8 @@ import com.matteojoliveau.plugface.impl.DefaultPlugfaceContext;
 import com.matteojoliveau.plugface.impl.DefaultPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PluginSystemIT {
     public static void main(String[] args) {
@@ -23,12 +25,21 @@ public class PluginSystemIT {
 
         PluginManager manager = new PluginManager("managerOne", context);
 
-        manager.setPluginFolder("plugins");
+        manager.setPluginFolder("C:\\Users\\Matteo\\IdeaProjects\\PlugFace\\plugface-core\\src\\main\\resources");
+        List<Plugin> loaded = new ArrayList<>();
         try {
-            manager.loadPlugins();
-        } catch (IOException | ClassNotFoundException e) {
+            loaded = manager.loadPlugins();
+        } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        for (Plugin plugin :
+                loaded) {
+            context.addPlugin(plugin.getName(), plugin);
+        }
+
+        context.getPlugin("TestPlugin").start();
+
 
 
     }

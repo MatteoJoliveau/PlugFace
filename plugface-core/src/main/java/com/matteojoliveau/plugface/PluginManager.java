@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.NotDirectoryException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -45,9 +48,8 @@ public class PluginManager {
         return context;
     }
 
-    public List<Plugin> loadPlugins() throws IOException, ClassNotFoundException {
+    public List<Plugin> loadPlugins() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         List<Plugin> loadedPlugins = new ArrayList<>();
-        List<Class<?>> loadedClasses = new ArrayList<>();
 
         File folder = new File(pluginFolder);
         if (!folder.isDirectory()) {
@@ -55,37 +57,29 @@ public class PluginManager {
         }
 
         File[] files = folder.listFiles();
-        for (File file: files) {
-            if(file.getName().endsWith(".jar")) {
+        for (File file : files) {
+            if (file.getName().endsWith(".jar")) {
                 JarFile pluginFile = new JarFile(file);
                 Enumeration<JarEntry> entries = pluginFile.entries();
 
                 URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
                 URLClassLoader cl = URLClassLoader.newInstance(urls);
 
-                while(entries.hasMoreElements()){
+                while (entries.hasMoreElements()) {
                     JarEntry jarEntry = entries.nextElement();
-                    if(jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
+                    if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
                         continue;
                     }
                     String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
                     className = className.replace('/', '.');
                     Class<?> clazz = Class.forName(className, true, cl);
-                    loadedClasses.add(clazz);
+
+                    if (Plugin.class.isAssignableFrom(clazz)) {
+                        loadedPlugins.add((Plugin) clazz.newInstance());
+                    }
                 }
-
-
-            }
-
-        }
-
-        for (Class c: loadedClasses) {
-            Object o = c;
-            if (o instanceof Plugin) {
-                System.out.println("It is indeed an object. " + c.getName());
             }
         }
-
         return loadedPlugins;
     }
 
