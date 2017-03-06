@@ -50,12 +50,13 @@ public class PluginManager {
 
     public List<Plugin> loadPlugins(String pluginFolder) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         File folder = new File(pluginFolder);
+        LOGGER.debug("Loading from supplied plugin folder");
         return load(folder);
     }
 
     public List<Plugin> loadPlugins() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-
         File folder = new File(pluginFolder);
+        LOGGER.debug("Loading from previously set plugin folder");
         if (!folder.isDirectory()) {
             throw new NotDirectoryException("Set a valid plugin directory.");
         }
@@ -67,6 +68,7 @@ public class PluginManager {
         File[] files = folder.listFiles();
         for (File file : files) {
             if (file.getName().endsWith(".jar")) {
+                LOGGER.debug("Opening plugin jar file");
                 JarFile pluginFile = new JarFile(file);
                 Enumeration<JarEntry> entries = pluginFile.entries();
 
@@ -74,6 +76,7 @@ public class PluginManager {
                 URLClassLoader cl = URLClassLoader.newInstance(urls);
 
                 while (entries.hasMoreElements()) {
+                    LOGGER.debug("Loading plugin classes from jar");
                     JarEntry jarEntry = entries.nextElement();
                     if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
                         continue;
@@ -83,6 +86,7 @@ public class PluginManager {
                     Class<?> clazz = Class.forName(className, true, cl);
 
                     if (Plugin.class.isAssignableFrom(clazz)) {
+                        LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
                         loadedPlugins.add((Plugin) clazz.newInstance());
                     }
                 }
