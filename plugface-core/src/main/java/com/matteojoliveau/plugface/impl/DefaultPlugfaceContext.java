@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultPlugfaceContext implements PlugfaceContext{
-    HashMap<String, Plugin> pluginRegistry = new HashMap<>();
-    HashMap<String, PluginManager> pluginManagerRegistry = new HashMap<>();
+    private HashMap<String, Plugin> pluginRegistry = new HashMap<>();
+    private HashMap<String, PluginManager> pluginManagerRegistry = new HashMap<>();
 
     @Override
     public Plugin getPlugin(String pluginName) throws NoSuchPluginException {
@@ -16,6 +16,8 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public void addPlugin(String pluginName, Plugin plugin) {
+        plugin.setContext(this);
+        plugin.setName(pluginName);
         pluginRegistry.put(pluginName, plugin);
 
     }

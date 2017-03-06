@@ -43,6 +43,10 @@ public abstract class DefaultPlugin implements Plugin {
         return context;
     }
 
+    public void setContext(PlugfaceContext context) {
+        this.context = context;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

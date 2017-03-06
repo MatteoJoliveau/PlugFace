@@ -17,4 +17,6 @@ public interface Plugin {
 
     PlugfaceContext getContext();
 
+    void setContext(PlugfaceContext context);
+
 }

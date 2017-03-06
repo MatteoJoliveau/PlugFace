@@ -83,6 +83,15 @@ public class PluginManager {
         return loadedPlugins;
     }
 
+    public void registerPluginInContext(String pluginName, Plugin plugin) {
+        context.addPlugin(pluginName, plugin);
+    }
+
+    public Plugin removePluginFromContext(String pluginName) {
+        Plugin removed = context.removePlugin(pluginName);
+        return removed;
+    }
+
     public String getPluginFolder() {
         return pluginFolder;
     }
