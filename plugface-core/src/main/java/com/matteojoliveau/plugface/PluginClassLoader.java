@@ -13,7 +13,7 @@ import java.security.Permissions;
 import java.util.*;
 
 public class PluginClassLoader extends URLClassLoader {
-    private File propertiesFile;
+    private File permissionsFile;
 
     public PluginClassLoader(URL jarFileUrl) {
         super(new URL[]{jarFileUrl});
@@ -39,7 +39,7 @@ public class PluginClassLoader extends URLClassLoader {
 //        InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("permissions.properties");
         InputStream input = null;
         try {
-            input = new FileInputStream(propertiesFile);
+            input = new FileInputStream(permissionsFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -91,11 +91,11 @@ public class PluginClassLoader extends URLClassLoader {
         return file.getName().substring(0, file.getName().length() - 4);
     }
 
-    public File getPropertiesFile() {
-        return propertiesFile;
+    public File getPermissionsFile() {
+        return permissionsFile;
     }
 
-    public void setPropertiesFile(File propertiesFile) {
-        this.propertiesFile = propertiesFile;
+    public void setPermissionsFile(File permissionsFile) {
+        this.permissionsFile = permissionsFile;
     }
 }

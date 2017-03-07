@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -81,7 +82,7 @@ public class PluginManagerTest {
 
         PluginManager manager = new PluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPropertiesFile(classLoader.getResource("permissions.properties").getFile());
+        manager.setPermissionsFile(classLoader.getResource("permissions.properties").getFile());
         File file = new File(classLoader.getResource("plugins").getFile());
         manager.setPluginFolder(file.getAbsolutePath());
         List<Plugin> loaded = null;

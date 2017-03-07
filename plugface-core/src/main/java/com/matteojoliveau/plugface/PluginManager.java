@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.NotDirectoryException;
 import java.security.Policy;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class PluginManager {
     private PlugfaceContext context;
     private String name;
     private String pluginFolder;
-    private static File propertiesFile;
+    private File permissionsFile;
 
     public PluginManager(PlugfaceContext context) {
         this.context = context;
@@ -79,7 +78,7 @@ public class PluginManager {
 
                 URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
                 PluginClassLoader cl = new PluginClassLoader(urls);
-                cl.setPropertiesFile(propertiesFile);
+                cl.setPermissionsFile(permissionsFile);
 
                 while (entries.hasMoreElements()) {
                     LOGGER.debug("Loading plugin classes from jar");
@@ -118,15 +117,15 @@ public class PluginManager {
         this.pluginFolder = pluginFolder;
     }
 
-    public File getPropertiesFile() {
-        return propertiesFile;
+    public File getPermissionsFile() {
+        return permissionsFile;
     }
 
-    public void setPropertiesFile(File propertiesFile) {
-        PluginManager.propertiesFile = propertiesFile;
+    public void setPermissionsFile(File permissionsFile) {
+        this.permissionsFile = permissionsFile;
     }
-    public void setPropertiesFile(String fileName) {
-        PluginManager.propertiesFile = new File(fileName);
+    public void setPermissionsFile(String fileName) {
+        this.permissionsFile = new File(fileName);
     }
 
     @Override
