@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -88,7 +87,7 @@ public class PluginManagerTest {
         List<Plugin> loaded = null;
         try {
             loaded = manager.loadPlugins();
-        } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Assert.assertTrue(loaded.get(0) != null);

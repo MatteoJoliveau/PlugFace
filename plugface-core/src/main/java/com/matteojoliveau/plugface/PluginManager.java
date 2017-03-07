@@ -7,13 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.NotDirectoryException;
 import java.security.Policy;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -26,15 +24,49 @@ public class PluginManager {
     private File permissionsFile;
 
     public PluginManager(PlugfaceContext context) {
+        this(UUID.randomUUID().toString(), context);
         this.context = context;
-        Policy.setPolicy(new SandboxSecurityPolicy());
-        System.setSecurityManager(new SandboxSecurityManager());
-        LOGGER.debug("Instantiating PluginManager");
+
+    }
+    public void startPlugin(Plugin plugin) {
+        plugin.start();
+    }
+
+    public void startPlugin(String pluginName) {
+        Plugin plugin = context.getPlugin(pluginName);
+        plugin.start();
+    }
+
+    public void stopPlugin(Plugin plugin) {
+        plugin.stop();
+    }
+
+    public void stopPlugin(String pluginName) {
+        Plugin plugin = context.getPlugin(pluginName);
+        plugin.stop();
+    }
+
+    public void startAll() {
+        Map<String, Plugin> all = context.getPluginMap();
+        for (Plugin p: all.values()) {
+            p.start();
+        }
+    }
+
+    public void stopAll() {
+        Map<String, Plugin> all = context.getPluginMap();
+        for (Plugin p: all.values()) {
+            p.stop();
+        }
     }
 
     public PluginManager(String managerName, PlugfaceContext context) {
-        this(context);
+        context.addPluginManager(managerName, this);
+        this.context = context;
         this.name = managerName;
+        Policy.setPolicy(new SandboxSecurityPolicy());
+        System.setSecurityManager(new SandboxSecurityManager());
+        LOGGER.debug("Instantiating PluginManager");
     }
 
     public void configurePlugin(Plugin plugin, Map<String, Object> configuration) {
@@ -52,13 +84,16 @@ public class PluginManager {
         return context;
     }
 
-    public List<Plugin> loadPlugins(String pluginFolder) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    public List<Plugin> loadPlugins(String pluginFolder) throws NotDirectoryException {
         File folder = new File(pluginFolder);
         LOGGER.debug("Loading from supplied plugin folder");
+        if (!folder.isDirectory()) {
+            throw new NotDirectoryException("Set a valid plugin directory.");
+        }
         return load(folder);
     }
 
-    public List<Plugin> loadPlugins() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public List<Plugin> loadPlugins() throws NotDirectoryException {
         File folder = new File(pluginFolder);
         LOGGER.debug("Loading from previously set plugin folder");
         if (!folder.isDirectory()) {
@@ -67,16 +102,28 @@ public class PluginManager {
         return load(folder);
     }
 
-    private List<Plugin> load(File folder) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private List<Plugin> load(File folder) {
         List<Plugin> loadedPlugins = new ArrayList<>();
         File[] files = folder.listFiles();
+        assert files != null;
         for (File file : files) {
             if (file.getName().endsWith(".jar")) {
                 LOGGER.debug("Opening plugin jar file");
-                JarFile pluginFile = new JarFile(file);
+                JarFile pluginFile = null;
+                try {
+                    pluginFile = new JarFile(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert pluginFile != null;
                 Enumeration<JarEntry> entries = pluginFile.entries();
 
-                URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
+                URL[] urls = new URL[0];
+                try {
+                    urls = new URL[]{new URL("jar:file:" + file.getPath() + "!/")};
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 PluginClassLoader cl = new PluginClassLoader(urls);
                 cl.setPermissionsFile(permissionsFile);
 
@@ -88,11 +135,20 @@ public class PluginManager {
                     }
                     String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
                     className = className.replace('/', '.');
-                    Class<?> clazz = Class.forName(className, true, cl);
+                    Class<?> clazz = null;
+                    try {
+                        clazz = Class.forName(className, true, cl);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                     if (Plugin.class.isAssignableFrom(clazz)) {
                         LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
-                        loadedPlugins.add((Plugin) clazz.newInstance());
+                        try {
+                            loadedPlugins.add((Plugin) clazz.newInstance());
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

@@ -26,50 +26,51 @@ public class PluginClassLoader extends URLClassLoader {
     @Override
     protected PermissionCollection getPermissions(CodeSource codesource) {
         Permissions permissions = new Permissions();
-        String pluginFileName = retrieveFileNameFromCodeSource(codesource);
+        if (permissionsFile != null) {
+            String pluginFileName = retrieveFileNameFromCodeSource(codesource);
 
-        final String[] properties = new String[]{
-                "permissions." + pluginFileName + ".files",
-                "permissions." + pluginFileName + ".network"
-        };
+            final String[] properties = new String[]{
+                    "permissions." + pluginFileName + ".files",
+                    "permissions." + pluginFileName + ".network"
+            };
 
-        Properties prop = new Properties();
-        String requiredPermissions = null;
+            Properties prop = new Properties();
+            String requiredPermissions = null;
 
 //        InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("permissions.properties");
-        InputStream input = null;
-        try {
-            input = new FileInputStream(permissionsFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            prop.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            InputStream input = null;
+            try {
+                input = new FileInputStream(permissionsFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                prop.load(input);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        for (String key : properties) {
-            if (prop.containsKey(key)) {
-                requiredPermissions = prop.getProperty(key);
-                String[] slices = requiredPermissions.split(", ");
+            for (String key : properties) {
+                if (prop.containsKey(key)) {
+                    requiredPermissions = prop.getProperty(key);
+                    String[] slices = requiredPermissions.split(", ");
 
-                if (key.equals(properties[0])) {
-                    for (String s : slices) {
-                        String[] params = s.split(" ");
-                        permissions.add(new FilePermission(params[1], params[0]));
+                    if (key.equals(properties[0])) {
+                        for (String s : slices) {
+                            String[] params = s.split(" ");
+                            permissions.add(new FilePermission(params[1], params[0]));
+                        }
+                    } else if (key.equals(properties[1])) {
+                        for (String s : slices) {
+                            String[] params = s.split(" ");
+                            permissions.add(new NetPermission(params[1]));
+                        }
                     }
-                } else if (key.equals(properties[1])) {
-                    for (String s : slices) {
-                        String[] params = s.split(" ");
-                        permissions.add(new NetPermission(params[1]));
-                    }
+
+
                 }
-
-
             }
         }
-
 
         return permissions;
     }
