@@ -1,5 +1,6 @@
 package com.matteojoliveau.plugface;
 
+import com.matteojoliveau.plugface.security.SandboxSecurityManager;
 import com.matteojoliveau.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,12 @@ public class PluginManager {
     private PlugfaceContext context;
     private String name;
     private String pluginFolder;
+    private static File propertiesFile;
 
     public PluginManager(PlugfaceContext context) {
         this.context = context;
         Policy.setPolicy(new SandboxSecurityPolicy());
-        System.setSecurityManager(new SecurityManager());
+        System.setSecurityManager(new SandboxSecurityManager());
         LOGGER.debug("Instantiating PluginManager");
     }
 
@@ -76,7 +78,8 @@ public class PluginManager {
                 Enumeration<JarEntry> entries = pluginFile.entries();
 
                 URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
-                URLClassLoader cl = new PluginClassLoader(urls);
+                PluginClassLoader cl = new PluginClassLoader(urls);
+                cl.setPropertiesFile(propertiesFile);
 
                 while (entries.hasMoreElements()) {
                     LOGGER.debug("Loading plugin classes from jar");
@@ -113,6 +116,17 @@ public class PluginManager {
 
     public void setPluginFolder(String pluginFolder) {
         this.pluginFolder = pluginFolder;
+    }
+
+    public File getPropertiesFile() {
+        return propertiesFile;
+    }
+
+    public void setPropertiesFile(File propertiesFile) {
+        PluginManager.propertiesFile = propertiesFile;
+    }
+    public void setPropertiesFile(String fileName) {
+        PluginManager.propertiesFile = new File(fileName);
     }
 
     @Override

@@ -81,6 +81,7 @@ public class PluginManagerTest {
 
         PluginManager manager = new PluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
+        manager.setPropertiesFile(classLoader.getResource("permissions.properties").getFile());
         File file = new File(classLoader.getResource("plugins").getFile());
         manager.setPluginFolder(file.getAbsolutePath());
         List<Plugin> loaded = null;
