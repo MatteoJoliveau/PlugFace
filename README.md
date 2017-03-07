@@ -1,6 +1,6 @@
 #PlugFace Framework
 
-**PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE FIRST STABLE RELEASE FOR PRODUCTION USE** 
+**PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
 PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity.
 
@@ -8,6 +8,41 @@ PlugFace is a simple, lightweight, high abstraction plugin framework for Java ap
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
 * `PluginManager` utility class to load, configure and register plugins. It should be the primary way for applications to manage the PlugFace echosystems.
 * A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
+
+### Download
+PlugFace is currently distributed from a custom repository. To download the latest snapshot in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
+
+```xml
+<repository>
+    <id>plugface-snapshots</id>
+    <name>PlugFace Snapshot Repository</name>
+    <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
+</repository>
+```
+
+Then add your dependency as usual:
+```xml
+<dependency>
+    <groupId>com.matteojoliveau.plugface</groupId>
+    <artifactId>plugface-core</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+</dependency>
+```
+
+For Gradle, add the following lines to `build.gradle`:
+```gradle
+repositories {
+    maven {
+        url "https://nexus.matteojoliveau.com/repository/maven-snapshots/"
+    }
+}
+```
+Then add:
+```gradle
+dependencies {
+    compile 'com.matteojoliveau.plugface:plugface-core:0.1.0-SNAPSHOT'
+}
+```
 
 ### Example usage
 Let's consider a simple Plugin implementation:
