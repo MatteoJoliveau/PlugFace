@@ -25,7 +25,7 @@ Then add your dependency as usual:
 <dependency>
     <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface-core</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -40,7 +40,7 @@ repositories {
 Then add:
 ```gradle
 dependencies {
-    compile 'com.matteojoliveau.plugface:plugface-core:0.1.0-SNAPSHOT'
+    compile 'com.matteojoliveau.plugface:plugface-core:0.2.0-SNAPSHOT'
 }
 ```
 
@@ -105,6 +105,7 @@ Now let's simulate an application that loads the plugins from a folder and start
 
   PluginManager manager = new PluginManager("managerOne", context);
 
+  manager.setPermissionsFile("/path/to/permissions.properties")
   manager.setPluginFolder("/path/to/plugins/folder/");
   List<Plugin> loaded = null;
   try {
@@ -120,6 +121,22 @@ Now let's simulate an application that loads the plugins from a folder and start
   context.getPlugin("testPlugin").start();
 ```
 You should see a wonderful *Hello I am a test plugin!* printing out. PlugFace is working!
+
+### Plugins Permissions
+PlugFace implements a sandbox to isolate Plugins from the application's environment. By default, Plugins run without any permission, so executing actions like trying to access files or the network will result in a SecurityException. You can manually assign permissions to each plugin by defining them in a permissions.properties file. The syntax is like the following:
+`permissions.pluginFileName.files=read /path/to/file`
+This snippet grants reading permissions on a file to the specified Plugin. The Plugin name is the name of the JAR file minus the extension, so for example if the file is called *plugin-1.0-RELEASE.jar* you will specify the property like:
+`permissions.plugin-1.0-RELEASE.files= read /path/to/file`
+Multiple permissions of the same type can be specified in a single property:
+`permissions.plugin-1.0-RELEASE.files= read /path/to/file1, write /path/to/file1, read /path/to/file2`
+
+***CURRENTLY SUPPORTED PERMISSIONS***
+* permissions.pluginName.files= 
+    * read /path/to/file
+    * write /path/to/file
+    * execute /path/to/file
+    * delete /path/to/file
+
     
 ### License
 Copyright 2017 Matteo Joliveau
