@@ -1,5 +1,6 @@
 package com.matteojoliveau.plugface;
 
+import com.matteojoliveau.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.NotDirectoryException;
+import java.security.Policy;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -23,13 +25,14 @@ public class PluginManager {
     private String pluginFolder;
 
     public PluginManager(PlugfaceContext context) {
-        LOGGER.debug("Instantiating PluginManager");
         this.context = context;
+        Policy.setPolicy(new SandboxSecurityPolicy());
+        System.setSecurityManager(new SecurityManager());
+        LOGGER.debug("Instantiating PluginManager");
     }
 
     public PluginManager(String managerName, PlugfaceContext context) {
-        LOGGER.debug("Instantiating PluginManager");
-        this.context = context;
+        this(context);
         this.name = managerName;
     }
 
@@ -73,7 +76,7 @@ public class PluginManager {
                 Enumeration<JarEntry> entries = pluginFile.entries();
 
                 URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
-                URLClassLoader cl = URLClassLoader.newInstance(urls);
+                URLClassLoader cl = new PluginClassLoader(urls);
 
                 while (entries.hasMoreElements()) {
                     LOGGER.debug("Loading plugin classes from jar");

@@ -3,7 +3,6 @@ package com.matteojoliveau.plugface;
 import java.util.Map;
 
 public interface PlugfaceContext {
-
     /*
         Plugins
     */
