@@ -1,6 +1,6 @@
 package com.matteojoliveau.plugface.security;
 
-import sun.plugin.security.PluginClassLoader;
+import com.matteojoliveau.plugface.PluginClassLoader ;
 
 import java.security.*;
 
@@ -17,7 +17,7 @@ public class SandboxSecurityPolicy extends Policy {
     }
 
     private boolean isPlugin(ProtectionDomain domain) {
-        return domain.getClassLoader() instanceof PluginClassLoader;
+        return (domain.getClassLoader() instanceof PluginClassLoader);
     }
 
     private PermissionCollection pluginPermissions() {
