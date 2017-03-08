@@ -1,7 +1,7 @@
 # PlugFace Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/Snapshot-v0.2.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
-[![GitHub release](https://img.shields.io/badge/Release-coming%20soon-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
+[![GitHub release](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
@@ -13,7 +13,28 @@ PlugFace is a simple, lightweight, high abstraction plugin framework for Java ap
 * A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
 
 ### Download
-PlugFace is currently distributed from a custom repository. To download the latest snapshot in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
+PlugFace is currently distributed from a custom repository. 
+To download the latest stable release in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
+
+```xml
+<repository>
+    <id>plugface-releases</id>
+    <name>PlugFace Releas Repository</name>
+    <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
+</repository>
+```
+
+Then add your dependency as usual:
+```xml
+<dependency>
+    <groupId>com.matteojoliveau.plugface</groupId>
+    <artifactId>plugface-core</artifactId>
+    <version>0.2.0-RELEASE</version>
+</dependency>
+```
+
+If you want to try the latest dev build, you can use the snapshot repository.
+To download the latest snapshot in Maven, add the following snippet to your `pom.xml` file:
 
 ```xml
 <repository>
@@ -36,14 +57,14 @@ For Gradle, add the following lines to `build.gradle`:
 ```gradle
 repositories {
     maven {
-        url "https://nexus.matteojoliveau.com/repository/maven-snapshots/"
+        url "https://nexus.matteojoliveau.com/repository/maven-releases/"
     }
 }
 ```
 Then add:
 ```gradle
 dependencies {
-    compile 'com.matteojoliveau.plugface:plugface-core:0.2.0-SNAPSHOT'
+    compile 'com.matteojoliveau.plugface:plugface-core:0.2.0-RELEASE'
 }
 ```
 
