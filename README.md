@@ -166,7 +166,7 @@ Multiple permissions of the same type can be specified in a single property:
 
 ### Plugin Extensions
 
-One of the key elements of PlugFace is its reusability. It does not bind itself to a specific usecase, type of application or environment. However, each application has different needs, and therefore should have a more specific API that Plugins should implement in order to enhance functionality. But how could this be achieved without having to provide an SDK that Plugins should install and implement? Well, the solutions is called ** loosely coupled API with automatic method discovery **. 
+One of the key elements of PlugFace is its reusability. It does not bind itself to a specific usecase, type of application or environment. However, each application has different needs, and therefore should have a more specific API that Plugins should implement in order to enhance functionality. But how could this be achieved without having to provide an SDK that Plugins should install and implement? Well, the solutions is called **loosely coupled API with automatic method discovery**. 
 Which is just a fancy way to say "Java reflection and annotations working together".
 
 Let's see how this works.
