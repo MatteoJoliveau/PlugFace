@@ -1,4 +1,4 @@
-package com.matteojoliveau.plugface.annotations;
+package com.matteojoliveau.plugface;
 
 /*-
  * #%L
@@ -26,12 +26,19 @@ THE SOFTWARE.
  * #L%
  */
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class ExtensionMethodNotFound extends RuntimeException {
+    public ExtensionMethodNotFound() {
+    }
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ExtensionMethod {
+    public ExtensionMethodNotFound(String message) {
+        super(message);
+    }
+
+    public ExtensionMethodNotFound(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ExtensionMethodNotFound(Throwable cause) {
+        super(cause);
+    }
 }

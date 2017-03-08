@@ -1,5 +1,31 @@
 package com.matteojoliveau.plugface;
 
+/*-
+ * #%L
+ * plugface-core
+ * %%
+ * Copyright (C) 2017 Matteo Joliveau
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+ * #L%
+ */
+
 import com.matteojoliveau.plugface.annotations.ExtensionMethod;
 import com.matteojoliveau.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
@@ -72,21 +98,26 @@ public class PluginManager {
 
     public void startAll() {
         Map<String, Plugin> all = context.getPluginMap();
-        for (Plugin p: all.values()) {
+        for (Plugin p : all.values()) {
             p.start();
         }
     }
 
     public void stopAll() {
         Map<String, Plugin> all = context.getPluginMap();
-        for (Plugin p: all.values()) {
+        for (Plugin p : all.values()) {
             p.stop();
         }
     }
 
     public Object execExtension(String pluginName, String methodName, Object... parameters) {
         Plugin plugin = context.getPlugin(pluginName);
-        Method method = extensions.get(plugin).get(methodName);
+        Method method = null;
+        try {
+            method = extensions.get(plugin).get(methodName);
+        } catch (NullPointerException e) {
+            throw new ExtensionMethodNotFound(methodName + " not found");
+        }
         Object returned = null;
         try {
             returned = method.invoke(plugin, parameters);
@@ -168,7 +199,7 @@ public class PluginManager {
                             loadedPlugins.add(plugin);
 
                             Map<String, Method> methods = new HashMap<>();
-                            for(Method method: clazz.getMethods()) {
+                            for (Method method : clazz.getMethods()) {
                                 if (method.isAnnotationPresent(ExtensionMethod.class)) {
                                     methods.put(method.getName(), method);
                                 }
@@ -213,7 +244,7 @@ public class PluginManager {
         this.permissionsFile = new File(fileName);
     }
 
-    public  Map<Plugin, Map<String, Method>>  getExtensions() {
+    public Map<Plugin, Map<String, Method>> getExtensions() {
         return extensions;
     }
 
