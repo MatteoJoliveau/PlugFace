@@ -177,7 +177,7 @@ Now this method will be automagically discovered by our `PluginManager` at load 
 ```java
     //Somewhere in the application
     
-    String greeting = manager.execExtension("testPlugin", "sayHello", "Matteo");
+    String greeting = (String) manager.execExtension("testPlugin", "sayHello", "Matteo");
 ```
 The method `execExtension()` accepts three parameters: 
 * the name of the plugin that you want to call the method from
