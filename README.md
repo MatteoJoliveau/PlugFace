@@ -19,7 +19,7 @@ To download the latest stable release in Maven, add the following snippet to the
 ```xml
 <repository>
     <id>plugface-releases</id>
-    <name>PlugFace Releas Repository</name>
+    <name>PlugFace Release Repository</name>
     <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
 </repository>
 ```
