@@ -110,6 +110,16 @@ public class PluginManager {
         }
     }
 
+    public void restartPlugin(Plugin plugin) {
+        plugin.stop();
+        plugin.start();
+    }
+
+    public void restartPlugin(String pluginName) {
+        Plugin plugin = context.getPlugin(pluginName);
+        restartPlugin(plugin);
+    }
+
     public Object execExtension(String pluginName, String methodName, Object... parameters) {
         Plugin plugin = context.getPlugin(pluginName);
         Method method = null;
