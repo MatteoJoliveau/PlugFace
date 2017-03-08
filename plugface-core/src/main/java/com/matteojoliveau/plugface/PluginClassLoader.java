@@ -37,7 +37,6 @@ public class PluginClassLoader extends URLClassLoader {
             Properties prop = new Properties();
             String requiredPermissions = null;
 
-//        InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("permissions.properties");
             InputStream input = null;
             try {
                 input = new FileInputStream(permissionsFile);

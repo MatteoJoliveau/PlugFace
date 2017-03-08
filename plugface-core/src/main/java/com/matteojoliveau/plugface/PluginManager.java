@@ -1,12 +1,14 @@
 package com.matteojoliveau.plugface;
 
-import com.matteojoliveau.plugface.security.SandboxSecurityManager;
+import com.matteojoliveau.plugface.annotations.ExtensionMethod;
 import com.matteojoliveau.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.NotDirectoryException;
@@ -22,12 +24,34 @@ public class PluginManager {
     private String name;
     private String pluginFolder;
     private File permissionsFile;
+    private Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
 
     public PluginManager(PlugfaceContext context) {
         this(UUID.randomUUID().toString(), context);
         this.context = context;
 
     }
+
+    public PluginManager(String managerName, PlugfaceContext context) {
+        context.addPluginManager(managerName, this);
+        this.context = context;
+        this.name = managerName;
+        Policy.setPolicy(new SandboxSecurityPolicy());
+        System.setSecurityManager(new SecurityManager());
+        LOGGER.debug("Instantiating PluginManager");
+    }
+
+    public void configurePlugin(Plugin plugin, Map<String, Object> configuration) {
+        PluginConfiguration config = plugin.getPluginConfiguration();
+        config.updateConfiguration(configuration);
+        plugin.setPluginConfiguration(config);
+    }
+
+    public void configurePlugin(String pluginName, Map<String, Object> configuration) {
+        Plugin plugin = context.getPlugin(pluginName);
+        configurePlugin(plugin, configuration);
+    }
+
     public void startPlugin(Plugin plugin) {
         plugin.start();
     }
@@ -60,24 +84,18 @@ public class PluginManager {
         }
     }
 
-    public PluginManager(String managerName, PlugfaceContext context) {
-        context.addPluginManager(managerName, this);
-        this.context = context;
-        this.name = managerName;
-        Policy.setPolicy(new SandboxSecurityPolicy());
-        System.setSecurityManager(new SandboxSecurityManager());
-        LOGGER.debug("Instantiating PluginManager");
-    }
-
-    public void configurePlugin(Plugin plugin, Map<String, Object> configuration) {
-        PluginConfiguration config = plugin.getPluginConfiguration();
-        config.updateConfiguration(configuration);
-        plugin.setPluginConfiguration(config);
-    }
-
-    public void configurePlugin(String pluginName, Map<String, Object> configuration) {
+    public Object execExtension(String pluginName, String methodName, Object... parameters) {
         Plugin plugin = context.getPlugin(pluginName);
-        configurePlugin(plugin, configuration);
+        Method method = extensions.get(plugin).get(methodName);
+        Object returned = null;
+        try {
+            returned = method.invoke(plugin, parameters);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return returned;
     }
 
     public PlugfaceContext getContext() {
@@ -139,13 +157,23 @@ public class PluginManager {
                     try {
                         clazz = Class.forName(className, true, cl);
                     } catch (ClassNotFoundException e) {
+                        System.err.println(e.getMessage());
                         e.printStackTrace();
                     }
 
                     if (Plugin.class.isAssignableFrom(clazz)) {
                         LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
                         try {
-                            loadedPlugins.add((Plugin) clazz.newInstance());
+                            Plugin plugin = (Plugin) clazz.newInstance();
+                            loadedPlugins.add(plugin);
+
+                            Map<String, Method> methods = new HashMap<>();
+                            for(Method method: clazz.getMethods()) {
+                                if (method.isAnnotationPresent(ExtensionMethod.class)) {
+                                    methods.put(method.getName(), method);
+                                }
+                            }
+                            extensions.put(plugin, methods);
                         } catch (InstantiationException | IllegalAccessException e) {
                             e.printStackTrace();
                         }
@@ -180,8 +208,13 @@ public class PluginManager {
     public void setPermissionsFile(File permissionsFile) {
         this.permissionsFile = permissionsFile;
     }
+
     public void setPermissionsFile(String fileName) {
         this.permissionsFile = new File(fileName);
+    }
+
+    public  Map<Plugin, Map<String, Method>>  getExtensions() {
+        return extensions;
     }
 
     @Override
