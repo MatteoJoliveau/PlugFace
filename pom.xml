@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>0.3.0-SNAPSHOT</version>
     <description>A Java general purpose plugin framework</description>
-    <url>https://github.com/MatteoJoliveau/PlugFace</url>
+    <url>http://plugface.matteojoliveau.com/</url>
     <inceptionYear>2017</inceptionYear>
 
     <developers>
