@@ -1,6 +1,6 @@
 # PlugFace Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Snapshot-v0.2.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
+[![Version](https://img.shields.io/badge/Snapshot-v0.3.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
 [![GitHub release](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
@@ -29,7 +29,7 @@ Then add your dependency as usual:
 <dependency>
     <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface-core</artifactId>
-    <version>0.2.0-RELEASE</version>
+    <version>${release.version}</version>
 </dependency>
 ```
 
@@ -49,7 +49,7 @@ Then add your dependency as usual:
 <dependency>
     <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface-core</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>${snapshot.version}</version>
 </dependency>
 ```
 
@@ -64,7 +64,7 @@ repositories {
 Then add:
 ```gradle
 dependencies {
-    compile 'com.matteojoliveau.plugface:plugface-core:0.2.0-RELEASE'
+    compile 'com.matteojoliveau.plugface:plugface-core:$RELEASEVERSION'
 }
 ```
 
