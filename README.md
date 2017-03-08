@@ -171,7 +171,7 @@ Which is just a fancy way to say "Java reflection and annotations working togeth
 
 Let's see how this works.
 
-Imagine we have an application that require its plugins to expose a method called *sayHello()*, that accepts a `String` for the name of the person you want to greet and returns `void`. Using PlugFace's `ExtensionMethod` annotation, we can write this method in our Plugin class and mark it so that the application can discover it.
+Imagine we have an application that require its plugins to expose a method called *sayHello()*, that accepts a `String` for the name of the person you want to greet and returns a `String` with the greetings. Using PlugFace's `ExtensionMethod` annotation, we can write this method in our Plugin class and mark it so that the application can discover it.
 So in our `Test` class we will add the method:
 
 ```java
