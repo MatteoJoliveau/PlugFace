@@ -1,4 +1,7 @@
 #PlugFace Framework
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/Snapshot-v0.2.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
+[![GitHub release](https://img.shields.io/badge/Release-v0.1.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
@@ -61,6 +64,7 @@ public class Test implements Plugin{
     
     public Test() {
         this.name = "testPlugin";
+        this.pluginConfiguration = new DefaultPluginConfiguration();
     }
 
     public void start() {
@@ -100,25 +104,24 @@ public class Test implements Plugin{
 Now let's simulate an application that loads the plugins from a folder and starts the test plugin:
 
 ```java
-  //Somewhere in the application
-  PlugfaceContext context = new DefaultPlugfaceContext();
+//Somewhere in the application
+PlugfaceContext context = new DefaultPlugfaceContext();
 
-  PluginManager manager = new PluginManager("managerOne", context);
+PluginManager manager = new PluginManager(context);
+manager.setPluginFolder("/path/to/plugins");
+manager.setPermissionsFile("/path/to/permissions.properties"); //optional
+List<Plugin> loaded = null;
+try {
+    loaded = manager.loadPlugins();
+} catch (IOException e) {
+    e.printStackTrace();
+}
 
-  manager.setPermissionsFile("/path/to/permissions.properties")
-  manager.setPluginFolder("/path/to/plugins/folder/");
-  List<Plugin> loaded = null;
-  try {
-      loaded = manager.loadPlugins();
-  } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-      e.printStackTrace();
-  }
+for (Plugin p : loaded) {
+    context.addPlugin(p.getName(), p);
+}
 
-  for (Plugin plugin: loaded) {
-      manager.registerPluginInContext(plugin.getName(), plugin);
-  }
-
-  context.getPlugin("testPlugin").start();
+manager.startAll(); 
 ```
 You should see a wonderful *Hello I am a test plugin!* printing out. PlugFace is working!
 
