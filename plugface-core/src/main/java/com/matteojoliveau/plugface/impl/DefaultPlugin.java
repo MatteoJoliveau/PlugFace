@@ -35,11 +35,7 @@ public abstract class DefaultPlugin implements Plugin {
     private PluginConfiguration pluginConfiguration;
     private String name;
     private PlugfaceContext context;
-
-    public DefaultPlugin(PlugfaceContext context) {
-        this.context = context;
-    }
-
+    
     public DefaultPlugin(String pluginName, PlugfaceContext context) {
         this.context = context;
         this.name = pluginName;

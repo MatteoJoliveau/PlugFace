@@ -88,7 +88,7 @@ public class PluginClassLoader extends URLClassLoader {
                     } else if (key.equals(properties[1])) {
                         for (String s : slices) {
                             String[] params = s.split(" ");
-                            permissions.add(new NetPermission(params[1]));
+                            permissions.add(new NetPermission(params[0]));
                         }
                     }
 
