@@ -13,7 +13,9 @@ PlugFace is a simple, lightweight, high abstraction plugin framework for Java ap
 * A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
 
 ### Download
-PlugFace is currently distributed from a custom repository. 
+There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
+Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Wiki for the full list.
+
 To download the latest stable release in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
 
 ```xml
@@ -126,6 +128,8 @@ for (Plugin p : loaded) {
 manager.startAll(); 
 ```
 You should see a wonderful *Hello I am a test plugin!* printing out. PlugFace is working!
+
+Check out the [Quickstart](https://github.com/MatteoJoliveau/PlugFace/wiki/Getting-Started) and [How It Works](https://github.com/MatteoJoliveau/PlugFace/wiki/How-It-Works) guides for more detailed instructions.
 
 ### License
 Copyright 2017 Matteo Joliveau
