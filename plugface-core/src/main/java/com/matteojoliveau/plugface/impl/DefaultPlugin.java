@@ -41,30 +41,32 @@ public abstract class DefaultPlugin implements Plugin {
         this.name = pluginName;
     }
 
-    public abstract void start();
-
-    public abstract void stop();
-
+    @Override
     public PluginConfiguration getPluginConfiguration() {
         return pluginConfiguration;
     }
 
+    @Override
     public void setPluginConfiguration(PluginConfiguration configuration) {
         this.pluginConfiguration = configuration;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public PlugfaceContext getContext() {
         return context;
     }
 
+    @Override
     public void setContext(PlugfaceContext context) {
         this.context = context;
     }

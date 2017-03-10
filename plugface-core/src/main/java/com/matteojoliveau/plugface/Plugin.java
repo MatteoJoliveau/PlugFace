@@ -28,10 +28,11 @@ THE SOFTWARE.
 
 
 public interface Plugin {
+    void start();
 
-    abstract void start();
+    void stop();
 
-    abstract void stop();
+    Object operate(Object... parameters);
 
     PluginConfiguration getPluginConfiguration();
 

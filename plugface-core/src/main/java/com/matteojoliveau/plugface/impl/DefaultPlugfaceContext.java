@@ -36,8 +36,12 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     private HashMap<String, PluginManager> pluginManagerRegistry = new HashMap<>();
 
     @Override
-    public Plugin getPlugin(String pluginName) throws NoSuchPluginException {
-        return pluginRegistry.get(pluginName);
+    public Plugin getPlugin(String pluginName) {
+        if(hasPlugin(pluginName)) {
+            return pluginRegistry.get(pluginName);
+        } else {
+            throw new NoSuchPluginException(pluginName + " not found");
+        }
     }
 
     @Override
@@ -54,8 +58,12 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     }
 
     @Override
-    public Plugin removePlugin(String pluginName) throws NoSuchPluginException {
-        return pluginRegistry.remove(pluginName);
+    public Plugin removePlugin(String pluginName) {
+        if(hasPlugin(pluginName)) {
+            return pluginRegistry.remove(pluginName);
+        } else {
+            throw new NoSuchPluginException(pluginName + " not found");
+        }
     }
 
     @Override

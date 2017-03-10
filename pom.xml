@@ -30,14 +30,14 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <distributionManagement>
         <repository>
             <uniqueVersion>false</uniqueVersion>
-            <id>nexus-release</id>
+            <id>nexus-releases</id>
             <name>Nexus Releases</name>
             <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
             <layout>default</layout>
@@ -47,8 +47,8 @@
             <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
         </snapshotRepository>
         <site>
-            <id>nexus-site</id>
-            <url>dav:https://nexus.matteojoliveau.com/repository/site/</url>
+            <id>nexus-sites</id>
+            <url>dav:https://nexus.matteojoliveau.com/repository/maven-sites/</url>
         </site>
     </distributionManagement>
 

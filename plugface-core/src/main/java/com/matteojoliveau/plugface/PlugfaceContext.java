@@ -32,13 +32,13 @@ public interface PlugfaceContext {
     /*
         Plugins
     */
-    Plugin getPlugin(String pluginName) throws NoSuchPluginException;
+    Plugin getPlugin(String pluginName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginException in body
 
     void addPlugin(String pluginName, Plugin plugin);
 
     boolean hasPlugin(String pluginName);
 
-    Plugin removePlugin(String pluginName) throws NoSuchPluginException;
+    Plugin removePlugin(String pluginName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginException in body
 
     Map<String, Plugin> getPluginMap();
 
@@ -46,13 +46,13 @@ public interface PlugfaceContext {
         Plugin Managers
      */
 
-    PluginManager getPluginManager(String managerName) throws NoSuchPluginManagerException ;
+    PluginManager getPluginManager(String managerName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginManagerException in body
 
     void addPluginManager(String managerName, PluginManager manager);
 
     boolean hasPluginManger(String managerName);
 
-    PluginManager removePluginManager(String managerName) throws NoSuchPluginManagerException ;
+    PluginManager removePluginManager(String managerName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginManagerException in body
 
     Map<String, PluginManager> getPluginManagerMap();
 

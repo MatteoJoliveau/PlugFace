@@ -51,6 +51,11 @@ public class DefaultPluginTest {
             public void stop() {
                 System.out.println("Stopping test plugin");
             }
+
+            @Override
+            public Object operate(Object... parameters) {
+                return null;
+            }
         };
 
         plugin.setPluginConfiguration(config);
@@ -72,6 +77,13 @@ public class DefaultPluginTest {
             public void stop() {
                 System.out.println("Stopping test plugin");
             }
+
+            @Override
+            public Object operate(Object... parameters) {
+                return null;
+            }
+
+
         };
 
         Assert.assertEquals(context, plugin.getContext());
@@ -95,6 +107,11 @@ public class DefaultPluginTest {
             @Override
             public void stop() {
                 System.out.println("Stopping test plugin");
+            }
+
+            @Override
+            public Object operate(Object... parameters) {
+                return null;
             }
         };
 
