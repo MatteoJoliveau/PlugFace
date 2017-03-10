@@ -26,19 +26,19 @@ THE SOFTWARE.
  * #L%
  */
 
-import sun.net.www.protocol.jar.URLJarFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.NetPermission;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLConnection;
+import java.net.*;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.Permissions;
-import java.util.*;
+import java.util.Properties;
+import java.util.jar.JarFile;
 
 public class PluginClassLoader extends URLClassLoader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginClassLoader.class);
     private File permissionsFile;
 
     public PluginClassLoader(URL jarFileUrl) {
@@ -61,18 +61,18 @@ public class PluginClassLoader extends URLClassLoader {
             };
 
             Properties prop = new Properties();
-            String requiredPermissions = null;
+            String requiredPermissions;
 
             InputStream input = null;
             try {
                 input = new FileInputStream(permissionsFile);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.error("Permission file not found", e);
             }
             try {
                 prop.load(input);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Error reading properties", e);
             }
 
             for (String key : properties) {
@@ -105,15 +105,17 @@ public class PluginClassLoader extends URLClassLoader {
         try {
             connection = codeSource.getLocation().openConnection();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Can't open a connection to the codesource", e);
         }
 
-        File file = null;
+        JarFile file = null;
         try {
-            file = new File(((URLJarFile) connection.getContent()).getName());
+            assert connection != null;
+            file = ((JarURLConnection) connection.getContent()).getJarFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error retrieving the Jar file", e);
         }
+        assert file != null;
         return file.getName().substring(0, file.getName().length() - 4);
     }
 

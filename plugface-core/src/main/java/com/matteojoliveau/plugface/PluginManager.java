@@ -120,9 +120,8 @@ public class PluginManager {
         restartPlugin(plugin);
     }
 
-    public Object execExtension(String pluginName, String methodName, Object... parameters) {
-        Plugin plugin = context.getPlugin(pluginName);
-        Method method = null;
+    public Object execExtension(Plugin plugin, String methodName, Object... parameters) {
+        Method method;
         try {
             method = extensions.get(plugin).get(methodName);
         } catch (NullPointerException e) {
@@ -132,11 +131,15 @@ public class PluginManager {
         try {
             returned = method.invoke(plugin, parameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Can't invoke this method", e);
         }
 
         return returned;
+    }
+
+    public Object execExtension(String pluginName, String methodName, Object... parameters) {
+        Plugin plugin = context.getPlugin(pluginName);
+        return execExtension(plugin, methodName, parameters);
     }
 
     public PlugfaceContext getContext() {
@@ -168,58 +171,58 @@ public class PluginManager {
         for (File file : files) {
             if (file.getName().endsWith(".jar")) {
                 LOGGER.debug("Opening plugin jar file");
-                JarFile pluginFile = null;
-                try {
-                    pluginFile = new JarFile(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                assert pluginFile != null;
-                Enumeration<JarEntry> entries = pluginFile.entries();
+                try (JarFile pluginFile = new JarFile(file)) {
 
-                URL[] urls = new URL[0];
-                try {
-                    urls = new URL[]{new URL("jar:file:" + file.getPath() + "!/")};
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                PluginClassLoader cl = new PluginClassLoader(urls);
-                cl.setPermissionsFile(permissionsFile);
+                    Enumeration<JarEntry> entries = pluginFile.entries();
 
-                while (entries.hasMoreElements()) {
-                    LOGGER.debug("Loading plugin classes from jar");
-                    JarEntry jarEntry = entries.nextElement();
-                    if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
-                        continue;
-                    }
-                    String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
-                    className = className.replace('/', '.');
-                    Class<?> clazz = null;
+                    URL[] urls = new URL[0];
                     try {
-                        clazz = Class.forName(className, true, cl);
-                    } catch (ClassNotFoundException e) {
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
+                        urls = new URL[]{new URL("jar:file:" + file.getPath() + "!/")};
+                    } catch (MalformedURLException e) {
+                        LOGGER.error("Malformed URL from filepath {}", file.getPath(), e);
                     }
+                    PluginClassLoader cl = new PluginClassLoader(urls);
+                    cl.setPermissionsFile(permissionsFile);
 
-                    if (Plugin.class.isAssignableFrom(clazz)) {
-                        LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
+                    while (entries.hasMoreElements()) {
+                        LOGGER.debug("Loading plugin classes from jar");
+                        JarEntry jarEntry = entries.nextElement();
+                        if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
+                            continue;
+                        }
+                        String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
+                        className = className.replace('/', '.');
+                        Class<?> clazz = null;
                         try {
-                            Plugin plugin = (Plugin) clazz.newInstance();
-                            loadedPlugins.add(plugin);
+                            clazz = Class.forName(className, true, cl);
+                        } catch (ClassNotFoundException e) {
+                            LOGGER.error("Couldn't find class by name {}", className, e);
+                        }
 
-                            Map<String, Method> methods = new HashMap<>();
-                            for (Method method : clazz.getMethods()) {
-                                if (method.isAnnotationPresent(ExtensionMethod.class)) {
-                                    methods.put(method.getName(), method);
+                        assert clazz != null;
+                        if (Plugin.class.isAssignableFrom(clazz)) {
+                            LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
+                            try {
+                                Plugin plugin = (Plugin) clazz.newInstance();
+                                loadedPlugins.add(plugin);
+
+                                Map<String, Method> methods = new HashMap<>();
+                                for (Method method : clazz.getMethods()) {
+                                    if (method.isAnnotationPresent(ExtensionMethod.class)) {
+                                        methods.put(method.getName(), method);
+                                    }
                                 }
+                                extensions.put(plugin, methods);
+                            } catch (InstantiationException | IllegalAccessException e) {
+                                LOGGER.error("Error instanciating new Plugin class", e);
                             }
-                            extensions.put(plugin, methods);
-                        } catch (InstantiationException | IllegalAccessException e) {
-                            e.printStackTrace();
                         }
                     }
+                    cl.close();
+                } catch (IOException e) {
+                    LOGGER.error("Plugin Jar file can't be loaded", e);
                 }
+
             }
         }
         return loadedPlugins;

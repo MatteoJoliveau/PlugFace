@@ -7,7 +7,7 @@
     <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface</artifactId>
     <packaging>pom</packaging>
-    <version>0.2.0-RELEASE</version>
+    <version>0.2.1-RELEASE</version>
     <description>A Java general purpose plugin framework</description>
     <url>http://plugface.matteojoliveau.com/</url>
     <inceptionYear>2017</inceptionYear>
@@ -30,7 +30,7 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

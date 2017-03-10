@@ -54,6 +54,7 @@ public class DefaultPlugfaceContextTest {
         Assert.assertEquals(plugin, registry.get("test"));
 
         context.removePlugin("test");
+        System.out.println(context.hasPlugin("nonExistent"));
 
         Assert.assertFalse(context.hasPlugin("test"));
     }
