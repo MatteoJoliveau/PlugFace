@@ -27,15 +27,15 @@ THE SOFTWARE.
  */
 
 
-import com.matteojoliveau.plugface.PlugfaceContext;
-import com.matteojoliveau.plugface.Plugin;
-import com.matteojoliveau.plugface.PluginManager;
-import org.junit.Assert;
+import com.matteojoliveau.plugface.*;
 import org.junit.Test;
 
 import java.util.Map;
 
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class DefaultPlugfaceContextTest {
 
@@ -47,16 +47,31 @@ public class DefaultPlugfaceContextTest {
 
         context.addPlugin("test", plugin);
 
-        Assert.assertEquals(plugin, context.getPlugin("test"));
-        Assert.assertTrue(context.hasPlugin("test"));
+        try {
+            context.getPlugin("fail");
+            fail("Should have thrown NoSuchPluginException");
+        } catch (Exception e) {
+            assertTrue(e instanceof NoSuchPluginException);
+        }
+
+        verify(plugin).setName("test");
+
+        try {
+            context.removePlugin("fail");
+            fail("Should have thrown NoSuchPluginException");
+        } catch (Exception e) {
+            assertTrue(e instanceof NoSuchPluginException);
+        }
+
+        assertEquals(plugin, context.getPlugin("test"));
+        assertTrue(context.hasPlugin("test"));
 
         Map<String, Plugin> registry = context.getPluginMap();
-        Assert.assertEquals(plugin, registry.get("test"));
+        assertEquals(plugin, registry.get("test"));
 
-        context.removePlugin("test");
-        System.out.println(context.hasPlugin("nonExistent"));
-
-        Assert.assertFalse(context.hasPlugin("test"));
+        Plugin removed = context.removePlugin("test");
+        assertEquals(plugin, removed);
+        assertFalse(context.hasPlugin("test"));
     }
 
     @Test
@@ -67,14 +82,28 @@ public class DefaultPlugfaceContextTest {
 
         context.addPluginManager("test", manager);
 
-        Assert.assertEquals(manager, context.getPluginManager("test"));
-        Assert.assertTrue(context.hasPluginManger("test"));
+        try {
+            context.getPluginManager("fail");
+            fail("Should have thrown NoSuchPluginManagerException");
+        } catch (Exception e) {
+            assertTrue(e instanceof NoSuchPluginManagerException);
+        }
+
+        try {
+            context.removePluginManager("fail");
+            fail("Should have thrown NoSuchPluginManagerException");
+        } catch (Exception e) {
+            assertTrue(e instanceof NoSuchPluginManagerException);
+        }
+
+        assertEquals(manager, context.getPluginManager("test"));
+        assertTrue(context.hasPluginManger("test"));
 
         Map<String, PluginManager> registry = context.getPluginManagerMap();
-        Assert.assertEquals(manager, registry.get("test"));
+        assertEquals(manager, registry.get("test"));
 
-        context.removePluginManager("test");
-
-        Assert.assertFalse(context.hasPluginManger("test"));
+        PluginManager removed = context.removePluginManager("test");
+        assertEquals(manager, removed);
+        assertFalse(context.hasPluginManger("test"));
     }
 }

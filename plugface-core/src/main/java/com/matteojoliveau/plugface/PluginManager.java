@@ -26,248 +26,59 @@ THE SOFTWARE.
  * #L%
  */
 
-import com.matteojoliveau.plugface.annotations.ExtensionMethod;
-import com.matteojoliveau.plugface.security.SandboxSecurityPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.NotDirectoryException;
-import java.security.Policy;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.List;
+import java.util.Map;
 
-public class PluginManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PluginManager.class);
+public interface PluginManager {
+    void configurePlugin(Plugin plugin, Map<String, Object> configuration);
 
-    private PlugfaceContext context;
-    private String name;
-    private String pluginFolder;
-    private File permissionsFile;
-    private Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
+    void configurePlugin(String pluginName, Map<String, Object> configuration);
 
-    public PluginManager(PlugfaceContext context) {
-        this(UUID.randomUUID().toString(), context);
-        this.context = context;
+    void startPlugin(Plugin plugin);
 
-    }
+    void startPlugin(String pluginName);
 
-    public PluginManager(String managerName, PlugfaceContext context) {
-        context.addPluginManager(managerName, this);
-        this.context = context;
-        this.name = managerName;
-        Policy.setPolicy(new SandboxSecurityPolicy());
-        System.setSecurityManager(new SecurityManager());
-        LOGGER.debug("Instantiating PluginManager");
-    }
+    void stopPlugin(Plugin plugin);
 
-    public void configurePlugin(Plugin plugin, Map<String, Object> configuration) {
-        PluginConfiguration config = plugin.getPluginConfiguration();
-        config.updateConfiguration(configuration);
-        plugin.setPluginConfiguration(config);
-    }
+    void stopPlugin(String pluginName);
 
-    public void configurePlugin(String pluginName, Map<String, Object> configuration) {
-        Plugin plugin = context.getPlugin(pluginName);
-        configurePlugin(plugin, configuration);
-    }
+    void startAll();
 
-    public void startPlugin(Plugin plugin) {
-        plugin.start();
-    }
+    void stopAll();
 
-    public void startPlugin(String pluginName) {
-        Plugin plugin = context.getPlugin(pluginName);
-        plugin.start();
-    }
+    void restartPlugin(Plugin plugin);
 
-    public void stopPlugin(Plugin plugin) {
-        plugin.stop();
-    }
+    void restartPlugin(String pluginName);
 
-    public void stopPlugin(String pluginName) {
-        Plugin plugin = context.getPlugin(pluginName);
-        plugin.stop();
-    }
+    Object execExtension(Plugin plugin, String methodName, Object... parameters);
 
-    public void startAll() {
-        Map<String, Plugin> all = context.getPluginMap();
-        for (Plugin p : all.values()) {
-            p.start();
-        }
-    }
+    Object execExtension(String pluginName, String methodName, Object... parameters);
 
-    public void stopAll() {
-        Map<String, Plugin> all = context.getPluginMap();
-        for (Plugin p : all.values()) {
-            p.stop();
-        }
-    }
+    PlugfaceContext getContext();
 
-    public void restartPlugin(Plugin plugin) {
-        plugin.stop();
-        plugin.start();
-    }
+    List<Plugin> loadPlugins(String pluginFolder);
 
-    public void restartPlugin(String pluginName) {
-        Plugin plugin = context.getPlugin(pluginName);
-        restartPlugin(plugin);
-    }
+    List<Plugin> loadPlugins();
 
-    public Object execExtension(Plugin plugin, String methodName, Object... parameters) {
-        Method method;
-        try {
-            method = extensions.get(plugin).get(methodName);
-        } catch (NullPointerException e) {
-            throw new ExtensionMethodNotFound(methodName + " not found");
-        }
-        Object returned = null;
-        try {
-            returned = method.invoke(plugin, parameters);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            LOGGER.error("Can't invoke this method", e);
-        }
+    List<Plugin> loadPlugins(boolean autoregister);
 
-        return returned;
-    }
+    List<Plugin> loadPlugins(String pluginFolder, boolean autoregister);
 
-    public Object execExtension(String pluginName, String methodName, Object... parameters) {
-        Plugin plugin = context.getPlugin(pluginName);
-        return execExtension(plugin, methodName, parameters);
-    }
+    String getPluginFolder();
 
-    public PlugfaceContext getContext() {
-        return context;
-    }
+    void setPluginFolder(String pluginFolder);
 
-    public List<Plugin> loadPlugins(String pluginFolder) throws NotDirectoryException {
-        File folder = new File(pluginFolder);
-        LOGGER.debug("Loading from supplied plugin folder");
-        if (!folder.isDirectory()) {
-            throw new NotDirectoryException("Set a valid plugin directory.");
-        }
-        return load(folder);
-    }
+    File getPermissionsFile();
 
-    public List<Plugin> loadPlugins() throws NotDirectoryException {
-        File folder = new File(pluginFolder);
-        LOGGER.debug("Loading from previously set plugin folder");
-        if (!folder.isDirectory()) {
-            throw new NotDirectoryException("Set a valid plugin directory.");
-        }
-        return load(folder);
-    }
+    void setPermissionsFile(File permissionsFile);
 
-    private List<Plugin> load(File folder) {
-        List<Plugin> loadedPlugins = new ArrayList<>();
-        File[] files = folder.listFiles();
-        assert files != null;
-        for (File file : files) {
-            if (file.getName().endsWith(".jar")) {
-                LOGGER.debug("Opening plugin jar file");
-                try (JarFile pluginFile = new JarFile(file)) {
+    void setPermissionsFile(String fileName);
 
-                    Enumeration<JarEntry> entries = pluginFile.entries();
+    boolean hasExtension(String pluginName, String extensionName);
 
-                    URL[] urls = new URL[0];
-                    try {
-                        urls = new URL[]{new URL("jar:file:" + file.getPath() + "!/")};
-                    } catch (MalformedURLException e) {
-                        LOGGER.error("Malformed URL from filepath {}", file.getPath(), e);
-                    }
-                    PluginClassLoader cl = new PluginClassLoader(urls);
-                    cl.setPermissionsFile(permissionsFile);
+    boolean hasExtension(Plugin plugin, String extensionName);
 
-                    while (entries.hasMoreElements()) {
-                        LOGGER.debug("Loading plugin classes from jar");
-                        JarEntry jarEntry = entries.nextElement();
-                        if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
-                            continue;
-                        }
-                        String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
-                        className = className.replace('/', '.');
-                        Class<?> clazz = null;
-                        try {
-                            clazz = Class.forName(className, true, cl);
-                        } catch (ClassNotFoundException e) {
-                            LOGGER.error("Couldn't find class by name {}", className, e);
-                        }
-
-                        assert clazz != null;
-                        if (Plugin.class.isAssignableFrom(clazz)) {
-                            LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
-                            try {
-                                Plugin plugin = (Plugin) clazz.newInstance();
-                                loadedPlugins.add(plugin);
-
-                                Map<String, Method> methods = new HashMap<>();
-                                for (Method method : clazz.getMethods()) {
-                                    if (method.isAnnotationPresent(ExtensionMethod.class)) {
-                                        methods.put(method.getName(), method);
-                                    }
-                                }
-                                extensions.put(plugin, methods);
-                            } catch (InstantiationException | IllegalAccessException e) {
-                                LOGGER.error("Error instanciating new Plugin class", e);
-                            }
-                        }
-                    }
-                    cl.close();
-                } catch (IOException e) {
-                    LOGGER.error("Plugin Jar file can't be loaded", e);
-                }
-
-            }
-        }
-        return loadedPlugins;
-    }
-
-    public void registerPluginInContext(String pluginName, Plugin plugin) {
-        context.addPlugin(pluginName, plugin);
-    }
-
-    public Plugin removePluginFromContext(String pluginName) {
-        Plugin removed = context.removePlugin(pluginName);
-        return removed;
-    }
-
-    public String getPluginFolder() {
-        return pluginFolder;
-    }
-
-    public void setPluginFolder(String pluginFolder) {
-        this.pluginFolder = pluginFolder;
-    }
-
-    public File getPermissionsFile() {
-        return permissionsFile;
-    }
-
-    public void setPermissionsFile(File permissionsFile) {
-        this.permissionsFile = permissionsFile;
-    }
-
-    public void setPermissionsFile(String fileName) {
-        this.permissionsFile = new File(fileName);
-    }
-
-    public Map<Plugin, Map<String, Method>> getExtensions() {
-        return extensions;
-    }
-
-    @Override
-    public String toString() {
-        return "PluginManager{" +
-                " name='" + name + '\'' +
-                ", context=" + context +
-                '}';
-    }
-
-
+    String getName();
 }

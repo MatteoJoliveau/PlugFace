@@ -30,16 +30,10 @@ import com.matteojoliveau.plugface.PlugfaceContext;
 import com.matteojoliveau.plugface.Plugin;
 import com.matteojoliveau.plugface.PluginConfiguration;
 
-public abstract class DefaultPlugin implements Plugin {
+public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
 
-    private PluginConfiguration pluginConfiguration;
     private String name;
-    private PlugfaceContext context;
-    
-    public DefaultPlugin(String pluginName, PlugfaceContext context) {
-        this.context = context;
-        this.name = pluginName;
-    }
+    private PluginConfiguration pluginConfiguration;
 
     @Override
     public PluginConfiguration getPluginConfiguration() {
@@ -62,41 +56,29 @@ public abstract class DefaultPlugin implements Plugin {
     }
 
     @Override
-    public PlugfaceContext getContext() {
-        return context;
-    }
-
-    @Override
-    public void setContext(PlugfaceContext context) {
-        this.context = context;
-    }
-
-    @Override
     public boolean equals(Object o) {
+        if (!(o instanceof Plugin<?, ?>)) return false;
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+//        if (o == null || getClass() != o.getClass()) return false;
 
-        DefaultPlugin that = (DefaultPlugin) o;
+        DefaultPlugin<?, ?> that = (DefaultPlugin<?, ?>) o;
 
-        if (pluginConfiguration != null ? !pluginConfiguration.equals(that.pluginConfiguration) : that.pluginConfiguration != null)
-            return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return context != null ? context.equals(that.context) : that.context == null;
+        return pluginConfiguration != null ? pluginConfiguration.equals(that.pluginConfiguration) : that.pluginConfiguration == null;
     }
 
     @Override
     public int hashCode() {
-        int result = pluginConfiguration != null ? pluginConfiguration.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (context != null ? context.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (pluginConfiguration != null ? pluginConfiguration.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Plugin{" +
-                " name='" + name + '\'' +
-                ", context=" + context +
+        return "DefaultPlugin{" +
+                "name='" + name + '\'' +
+                ", pluginConfiguration=" + pluginConfiguration +
                 '}';
     }
 }

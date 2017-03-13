@@ -34,11 +34,14 @@ import java.net.*;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.Permissions;
+import java.security.SecurityPermission;
 import java.util.Properties;
 import java.util.jar.JarFile;
 
 public class PluginClassLoader extends URLClassLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(PluginClassLoader.class);
+    private static final char UNIX_SEPARATOR = '/';
+    private static final char WINDOWS_SEPARATOR = '\\';
     private File permissionsFile;
 
     public PluginClassLoader(URL jarFileUrl) {
@@ -57,7 +60,9 @@ public class PluginClassLoader extends URLClassLoader {
 
             final String[] properties = new String[]{
                     "permissions." + pluginFileName + ".files",
-                    "permissions." + pluginFileName + ".network"
+                    "permissions." + pluginFileName + ".network",
+                    "permissions." + pluginFileName + ".policyManagement",
+                    "permissions." + pluginFileName + ".runtime"
             };
 
             Properties prop = new Properties();
@@ -75,6 +80,10 @@ public class PluginClassLoader extends URLClassLoader {
                 LOGGER.error("Error reading properties", e);
             }
 
+            if (prop.isEmpty()) {
+                return permissions;
+            }
+
             for (String key : properties) {
                 if (prop.containsKey(key)) {
                     requiredPermissions = prop.getProperty(key);
@@ -90,33 +99,48 @@ public class PluginClassLoader extends URLClassLoader {
                             String[] params = s.split(" ");
                             permissions.add(new NetPermission(params[0]));
                         }
+                    } else if (key.equals(properties[2])) {
+                        for (String s : slices) {
+                            String[] params = s.split(" ");
+                            permissions.add(new SecurityPermission(params[0]));
+                        }
+                    } else if (key.equals(properties[3])) {
+                        for (String s : slices) {
+                            String[] params = s.split(" ");
+                            permissions.add(new RuntimePermission(params[0]));
+                        }
+
+
                     }
-
-
                 }
             }
         }
-
         return permissions;
     }
 
     private String retrieveFileNameFromCodeSource(CodeSource codeSource) {
-        URLConnection connection = null;
+        JarURLConnection connection = null;
         try {
-            connection = codeSource.getLocation().openConnection();
+            connection = (JarURLConnection) codeSource.getLocation().openConnection();
+
         } catch (IOException e) {
             LOGGER.error("Can't open a connection to the codesource", e);
         }
 
-        JarFile file = null;
-        try {
-            assert connection != null;
-            file = ((JarURLConnection) connection.getContent()).getJarFile();
-        } catch (IOException e) {
-            LOGGER.error("Error retrieving the Jar file", e);
+        if (connection == null) {
+            throw new IllegalStateException("Can't open a connection to the codesource");
         }
-        assert file != null;
-        return file.getName().substring(0, file.getName().length() - 4);
+
+        String file;
+        try {
+            file = getName(connection.getJarFile().getName());
+        } catch (IOException e) {
+            throw new IllegalStateException("Error reading JarFile: " + e.getMessage(), e);
+        }
+        if (file == null) {
+            throw new IllegalStateException("Error reading JarFile");
+        }
+        return file.substring(0, file.length() - 4);
     }
 
     public File getPermissionsFile() {
@@ -125,5 +149,22 @@ public class PluginClassLoader extends URLClassLoader {
 
     public void setPermissionsFile(File permissionsFile) {
         this.permissionsFile = permissionsFile;
+    }
+
+    private static String getName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfLastSeparator(filename);
+        return filename.substring(index + 1);
+    }
+
+    private static int indexOfLastSeparator(String filename) {
+        if (filename == null) {
+            return -1;
+        }
+        int lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR);
+        int lastWindowsPos = filename.lastIndexOf(WINDOWS_SEPARATOR);
+        return Math.max(lastUnixPos, lastWindowsPos);
     }
 }

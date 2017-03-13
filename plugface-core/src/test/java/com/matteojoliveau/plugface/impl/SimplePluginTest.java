@@ -1,4 +1,4 @@
-package com.matteojoliveau.plugface;
+package com.matteojoliveau.plugface.impl;
 
 /*-
  * #%L
@@ -26,20 +26,35 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.junit.Test;
 
-public interface Plugin<Input, Output> {
-    void start();
+import static org.junit.Assert.*;
 
-    void stop();
+public class SimplePluginTest {
 
-    Output execute(Input parameters);
+    @Test
+    public void execute() throws Exception {
 
-    PluginConfiguration getPluginConfiguration();
+        SimplePlugin plugin = new SimplePlugin() {
+            @Override
+            public void start() {
 
-    void setPluginConfiguration(PluginConfiguration configuration);
+            }
 
-    String getName();
+            @Override
+            public void stop() {
 
-    void setName(String name);
+            }
+        };
+
+        try {
+            plugin.execute(new Object());
+            fail("Should have thrown UnsupportedOperationException");
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+            assertEquals("This plugin can't execute", e.getMessage());
+        }
+
+    }
 
 }

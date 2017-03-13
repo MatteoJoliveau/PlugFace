@@ -1,4 +1,4 @@
-package com.matteojoliveau.plugface;
+package com.matteojoliveau.plugface.impl;
 
 /*-
  * #%L
@@ -26,20 +26,10 @@ THE SOFTWARE.
  * #L%
  */
 
+public abstract class SimplePlugin extends DefaultPlugin<Object,Object> {
 
-public interface Plugin<Input, Output> {
-    void start();
-
-    void stop();
-
-    Output execute(Input parameters);
-
-    PluginConfiguration getPluginConfiguration();
-
-    void setPluginConfiguration(PluginConfiguration configuration);
-
-    String getName();
-
-    void setName(String name);
-
+    @Override
+    public final Object execute(Object parameters) {
+        throw new UnsupportedOperationException("This plugin can't execute");
+    }
 }

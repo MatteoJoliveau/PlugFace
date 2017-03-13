@@ -30,5 +30,14 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.11</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

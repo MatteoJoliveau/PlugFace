@@ -46,7 +46,6 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public void addPlugin(String pluginName, Plugin plugin) {
-        plugin.setContext(this);
         plugin.setName(pluginName);
         pluginRegistry.put(pluginName, plugin);
 
@@ -73,7 +72,11 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public PluginManager getPluginManager(String managerName) throws NoSuchPluginManagerException {
-        return pluginManagerRegistry.get(managerName);
+        if(hasPluginManger(managerName)) {
+            return pluginManagerRegistry.get(managerName);
+        } else {
+            throw new NoSuchPluginManagerException(managerName + " not found");
+        }
     }
 
     @Override
@@ -87,8 +90,12 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     }
 
     @Override
-    public PluginManager removePluginManager(String managerName) throws NoSuchPluginManagerException {
-        return pluginManagerRegistry.remove(managerName);
+    public PluginManager removePluginManager(String managerName){
+        if(hasPluginManger(managerName)) {
+            return pluginManagerRegistry.remove(managerName);
+        } else {
+            throw new NoSuchPluginManagerException(managerName + " not found");
+        }
     }
 
     @Override

@@ -26,20 +26,15 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.junit.Test;
 
-public interface Plugin<Input, Output> {
-    void start();
+import static org.junit.Assert.*;
 
-    void stop();
+public class AbstractPluginManagerTest {
 
-    Output execute(Input parameters);
+    @Test
+    public void name() throws Exception {
 
-    PluginConfiguration getPluginConfiguration();
 
-    void setPluginConfiguration(PluginConfiguration configuration);
-
-    String getName();
-
-    void setName(String name);
-
+    }
 }
