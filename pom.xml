@@ -148,10 +148,9 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>mit</licenseName>
-                    <excludes>
-                        <exclude>*.properties</exclude>
-                        <exclude>*.txt</exclude>
-                    </excludes>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>
