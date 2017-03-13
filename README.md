@@ -1,11 +1,11 @@
 # PlugFace Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Snapshot-v0.2.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
+[![Version](https://img.shields.io/badge/Snapshot-v0.3.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
 [![GitHub release](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
-PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity.
+PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.
 
 ## Core Concepts
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
@@ -13,13 +13,15 @@ PlugFace is a simple, lightweight, high abstraction plugin framework for Java ap
 * A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
 
 ### Download
-PlugFace is currently distributed from a custom repository. 
+There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
+Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Wiki for the full list.
+
 To download the latest stable release in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
 
 ```xml
 <repository>
     <id>plugface-releases</id>
-    <name>PlugFace Releas Repository</name>
+    <name>PlugFace Release Repository</name>
     <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
 </repository>
 ```
@@ -29,27 +31,7 @@ Then add your dependency as usual:
 <dependency>
     <groupId>com.matteojoliveau.plugface</groupId>
     <artifactId>plugface-core</artifactId>
-    <version>0.2.0-RELEASE</version>
-</dependency>
-```
-
-If you want to try the latest dev build, you can use the snapshot repository.
-To download the latest snapshot in Maven, add the following snippet to your `pom.xml` file:
-
-```xml
-<repository>
-    <id>plugface-snapshots</id>
-    <name>PlugFace Snapshot Repository</name>
-    <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
-</repository>
-```
-
-Then add your dependency as usual:
-```xml
-<dependency>
-    <groupId>com.matteojoliveau.plugface</groupId>
-    <artifactId>plugface-core</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>${release.version}</version>
 </dependency>
 ```
 
@@ -64,7 +46,7 @@ repositories {
 Then add:
 ```gradle
 dependencies {
-    compile 'com.matteojoliveau.plugface:plugface-core:0.2.0-RELEASE'
+    compile 'com.matteojoliveau.plugface:plugface-core:$RELEASEVERSION'
 }
 ```
 
@@ -147,63 +129,7 @@ manager.startAll();
 ```
 You should see a wonderful *Hello I am a test plugin!* printing out. PlugFace is working!
 
-### Plugins Permissions
-PlugFace implements a sandbox to isolate Plugins from the application's environment. By default, Plugins run without any permission, so executing actions like trying to access files or the network will result in a SecurityException. You can manually assign permissions to each plugin by defining them in a permissions.properties file. The syntax is like the following:
-`permissions.pluginFileName.files=read /path/to/file`
-
-This snippet grants reading permissions on a file to the specified Plugin. The Plugin name is the name of the JAR file minus the extension, so for example if the file is called *plugin-1.0-RELEASE.jar* you will specify the property like:
-`permissions.plugin-1.0-RELEASE.files= read /path/to/file`
-
-Multiple permissions of the same type can be specified in a single property:
-`permissions.plugin-1.0-RELEASE.files= read /path/to/file1, write /path/to/file1, read /path/to/file2`
-
-***CURRENTLY SUPPORTED PERMISSIONS***
-* permissions.pluginName.files= 
-    * read /path/to/file
-    * write /path/to/file
-    * execute /path/to/file
-    * delete /path/to/file
-
-### Plugin Extensions
-
-One of the key elements of PlugFace is its reusability. It does not bind itself to a specific usecase, type of application or environment. However, each application has different needs, and therefore should have a more specific API that Plugins should implement in order to enhance functionality. But how could this be achieved without having to provide an SDK that Plugins should install and implement? Well, the solutions is called ** loosely coupled API with automatic method discovery **. 
-Which is just a fancy way to say "Java reflection and annotations working together".
-
-Let's see how this works.
-
-Imagine we have an application that require its plugins to expose a method called *sayHello()*, that accepts a `String` for the name of the person you want to greet and returns `void`. Using PlugFace's `ExtensionMethod` annotation, we can write this method in our Plugin class and mark it so that the application can discover it.
-So in our `Test` class we will add the method:
-
-```java
-package com.matteojoliveau.test;
-
-import com.matteojoliveau.plugface.PlugfaceContext;
-import com.matteojoliveau.plugface.Plugin;
-import com.matteojoliveau.plugface.PluginConfiguration;
-import com.matteojoliveau.plugface.annotations.ExtensionMethod;
-
-public class Test implements Plugin{
-    //something
-    
-    @ExtensionMethod
-    public String sayHello(String name) {
-        return "Hello " + name + "!";
-    }
-
-}
-```
-
-Now this method will be automagically discovered by our `PluginManager` at load time and registered into the manager. Now it is possible to invoke the method through the `PluginManager` by calling `execExtension()` like so:
-
-```java
-    //Somewhere in the application
-    
-    String greeting = (String) manager.execExtension("testPlugin", "sayHello", "Matteo");
-```
-The method `execExtension()` accepts three parameters: 
-* the name of the plugin that you want to call the method from
-* the name of the method that you want to call
-* a list of arguments for the method passed as varargs. If the method takes no argument, just pass `null`;
+Check out the [Quickstart](https://github.com/MatteoJoliveau/PlugFace/wiki/Getting-Started) and [How It Works](https://github.com/MatteoJoliveau/PlugFace/wiki/How-It-Works) guides for more detailed instructions.
 
 ### License
 Copyright 2017 Matteo Joliveau
