@@ -1,7 +1,7 @@
 # PlugFace Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Snapshot-v0.3.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
-[![GitHub release](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
+[![Version](https://img.shields.io/badge/Snapshot-v0.4.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
+[![GitHub release](https://img.shields.io/badge/Release-v0.3.0-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
@@ -51,88 +51,30 @@ dependencies {
 ```
 
 ### Example usage
-Let's consider a simple Plugin implementation:
-```java
-package com.matteojoliveau.test;
-
-import com.matteojoliveau.plugface.PlugfaceContext;
-import com.matteojoliveau.plugface.Plugin;
-import com.matteojoliveau.plugface.PluginConfiguration;
-import com.matteojoliveau.plugface.impl.DefaultPluginConfiguration;
-
-public class Test implements Plugin{
-    
-    private String name;
-    private PluginConfiguration pluginConfiguration;
-    private PlugfaceContext context;
-    
-    public Test() {
-        this.name = "testPlugin";
-        this.pluginConfiguration = new DefaultPluginConfiguration();
-    }
-
-    public void start() {
-        System.out.println("Hello I am a test plugin!");
-    }
-
-    public void stop() {
-        System.out.println("The test plugin is stopping...");
-    }
-
-    public PluginConfiguration getPluginConfiguration() {
-        return pluginConfiguration;
-    }
-
-    public void setPluginConfiguration(PluginConfiguration pluginConfiguration) {
-      this.pluginConfiguration = pluginConfiguration;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
-    }
-
-    public PlugfaceContext getContext() {
-        return context;
-    }
-    
-    public void setContext(PlugfaceContext context) {
-        this.context = context;
-    }
-}
-```
-
-Now let's simulate an application that loads the plugins from a folder and starts the test plugin:
+It's really easy to start using plugins in your application. You will just need a `PlugfaceContext`, a `PluginManager` and a folder that contains the plugins, packaged in Jar format.
 
 ```java
 //Somewhere in the application
+
 PlugfaceContext context = new DefaultPlugfaceContext();
 
-PluginManager manager = new PluginManager(context);
+PluginManager manager = new DefaultPluginManager(context);
+
 manager.setPluginFolder("/path/to/plugins");
-manager.setPermissionsFile("/path/to/permissions.properties"); //optional
-List<Plugin> loaded = null;
-try {
-    loaded = manager.loadPlugins();
-} catch (IOException e) {
-    e.printStackTrace();
-}
 
-for (Plugin p : loaded) {
-    context.addPlugin(p.getName(), p);
-}
+manager.setPermissionsFile("/path/to/permissions.properties"); //optional if your plugins require special permissions
 
+List<Plugin> loaded = manager.loadplugin(true); //true sets the autoregister fag, automatically inserting the 
+                                                //plugins in the context
 manager.startAll(); 
 ```
-You should see a wonderful *Hello I am a test plugin!* printing out. PlugFace is working!
+That's all, PlugFace is working!
 
 Check out the [Quickstart](https://github.com/MatteoJoliveau/PlugFace/wiki/Getting-Started) and [How It Works](https://github.com/MatteoJoliveau/PlugFace/wiki/How-It-Works) guides for more detailed instructions.
 
 ### License
-Copyright 2017 Matteo Joliveau
+*The MIT License*  
+**Copyright 2017 Matteo Joliveau**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
