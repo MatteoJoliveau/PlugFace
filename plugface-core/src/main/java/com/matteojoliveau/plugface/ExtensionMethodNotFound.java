@@ -25,7 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  * #L%
  */
-
+/**
+ * An exception thrown when trying to execute a non existent {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}.
+ * Should be thrown when a {@link com.matteojoliveau.plugface.annotations.ExtensionMethod} is being retrieved from a
+ * {@link PluginManager} but is not present in the extensions cache.
+ */
 public class ExtensionMethodNotFound extends RuntimeException {
     public ExtensionMethodNotFound() {
     }

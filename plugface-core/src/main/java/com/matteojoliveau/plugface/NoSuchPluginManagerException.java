@@ -26,7 +26,11 @@ THE SOFTWARE.
  * #L%
  */
 
-
+/**
+ * An exception thrown when trying to lookup for a non existent {@link PluginManager}.
+ * Should be thrown when a {@link PluginManager} is being retrieved from a
+ * {@link PlugfaceContext} but is not present in the registry.
+ */
 public class NoSuchPluginManagerException extends RuntimeException{
 
     public NoSuchPluginManagerException(String managerName) {

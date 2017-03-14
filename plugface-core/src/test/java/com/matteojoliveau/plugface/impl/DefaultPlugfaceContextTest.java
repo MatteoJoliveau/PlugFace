@@ -36,16 +36,18 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class DefaultPlugfaceContextTest {
 
     @Test
     public void pluginRegistry() throws Exception {
         Plugin plugin = mock(Plugin.class);
+        when(plugin.getName()).thenReturn("test");
 
         PlugfaceContext context = new DefaultPlugfaceContext();
 
-        context.addPlugin("test", plugin);
+        context.addPlugin(plugin);
 
         try {
             context.getPlugin("fail");
@@ -53,8 +55,6 @@ public class DefaultPlugfaceContextTest {
         } catch (Exception e) {
             assertTrue(e instanceof NoSuchPluginException);
         }
-
-        verify(plugin).setName("test");
 
         try {
             context.removePlugin("fail");
@@ -77,10 +77,11 @@ public class DefaultPlugfaceContextTest {
     @Test
     public void managerRegistry() throws Exception {
         PluginManager manager = mock(PluginManager.class);
+        when(manager.getName()).thenReturn("test");
 
         PlugfaceContext context = new DefaultPlugfaceContext();
 
-        context.addPluginManager("test", manager);
+        context.addPluginManager(manager);
 
         try {
             context.getPluginManager("fail");

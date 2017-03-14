@@ -31,8 +31,22 @@ import com.matteojoliveau.plugface.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link PlugfaceContext} implementing the
+ * management methods.
+ * It has two registries for registering active {@link Plugin} entities and
+ * {@link PluginManager} entities.
+ */
 public class DefaultPlugfaceContext implements PlugfaceContext{
+
+    /**
+     * Registry for {@link Plugin}
+     */
     private HashMap<String, Plugin> pluginRegistry = new HashMap<>();
+
+    /**
+     * Registry for {@link PluginManager}
+     */
     private HashMap<String, PluginManager> pluginManagerRegistry = new HashMap<>();
 
     @Override
@@ -45,9 +59,8 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     }
 
     @Override
-    public void addPlugin(String pluginName, Plugin plugin) {
-        plugin.setName(pluginName);
-        pluginRegistry.put(pluginName, plugin);
+    public void addPlugin(Plugin plugin) {
+        pluginRegistry.put(plugin.getName(), plugin);
 
     }
 
@@ -80,8 +93,8 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     }
 
     @Override
-    public void addPluginManager(String managerName, PluginManager manager) {
-        pluginManagerRegistry.put(managerName, manager);
+    public void addPluginManager(PluginManager manager) {
+        pluginManagerRegistry.put(manager.getName(), manager);
     }
 
     @Override

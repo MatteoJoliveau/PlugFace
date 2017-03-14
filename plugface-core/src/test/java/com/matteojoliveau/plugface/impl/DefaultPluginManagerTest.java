@@ -126,7 +126,7 @@ public class DefaultPluginManagerTest {
         manager.setPluginFolder(file.getAbsolutePath());
         List<Plugin> loaded = manager.loadPlugins(true);
         assertNotNull(loaded);
-        verify(context, atLeastOnce()).addPlugin(isA(String.class), isA(Plugin.class));
+        verify(context, atLeastOnce()).addPlugin(isA(Plugin.class));
         loaded = manager.loadPlugins(false);
         assertNotNull(loaded);
 
@@ -140,7 +140,7 @@ public class DefaultPluginManagerTest {
         File file = new File(classLoader.getResource("plugins").getFile());
         List<Plugin> loaded = manager.loadPlugins(file.getAbsolutePath(), true);
         assertNotNull(loaded);
-        verify(context, atLeastOnce()).addPlugin(isA(String.class), isA(Plugin.class));
+        verify(context, atLeastOnce()).addPlugin(isA(Plugin.class));
         loaded = manager.loadPlugins(file.getAbsolutePath(), false);
         assertNotNull(loaded);
 
@@ -152,7 +152,6 @@ public class DefaultPluginManagerTest {
         map.put("testPlugin", plugin);
 
         AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
-        context.addPlugin("testPlugin", plugin);
 
         when(context.getPlugin("testPlugin")).thenReturn(plugin);
         when(context.getPluginMap()).thenReturn(map);

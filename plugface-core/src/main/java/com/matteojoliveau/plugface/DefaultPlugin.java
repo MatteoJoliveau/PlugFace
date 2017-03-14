@@ -1,4 +1,4 @@
-package com.matteojoliveau.plugface.impl;
+package com.matteojoliveau.plugface;
 
 /*-
  * #%L
@@ -26,14 +26,40 @@ THE SOFTWARE.
  * #L%
  */
 
-import com.matteojoliveau.plugface.PlugfaceContext;
-import com.matteojoliveau.plugface.Plugin;
-import com.matteojoliveau.plugface.PluginConfiguration;
+import java.util.UUID;
 
+/**
+ * Abstract implementation of {@link Plugin} that provides
+ * base utility and lifecycle methods
+ * @param <I> the input type for {@link #execute(Object)}
+ * @param <O> the output type for {@link #execute(Object)}
+ */
 public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
 
-    private String name;
+    /**
+     * The unique identifier of the plugin
+     */
+    private final String name;
+
+    /**
+     * The configuration for the plugin
+     */
     private PluginConfiguration pluginConfiguration;
+
+    /**
+     * Construct a {@link DefaultPlugin} with a random
+     * UUID as name
+     * Should be overridden with a custom name that uniquely
+     * identifies the plugin
+     *
+     */
+    protected DefaultPlugin() {
+        this.name = UUID.randomUUID().toString();
+    }
+
+    protected DefaultPlugin(String name) {
+        this.name = name;
+    }
 
     @Override
     public PluginConfiguration getPluginConfiguration() {
@@ -48,11 +74,6 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

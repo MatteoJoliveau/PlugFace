@@ -36,28 +36,69 @@ import java.lang.reflect.Method;
 import java.security.Policy;
 import java.util.*;
 
-
+/**
+ * An abstract implementation of {@link PluginManager} that provides basic
+ * management functionalities.
+ * It delegates the plugin loading logic to its subclasses
+ */
 public abstract class AbstractPluginManager implements PluginManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPluginManager.class);
 
+    /**
+     * The context in which the manager lives
+     */
     private final PlugfaceContext context;
+
+    /**
+     * The unique identifier of the manager
+     */
     private final String name;
+
+    /**
+     * The folder from which to load the plugins
+     */
     private String pluginFolder;
+
+    /**
+     * The properties file from which to load the permissions
+     * to give to the plugins
+     */
     private File permissionsFile;
+
+    /**
+     * A cache that holds all the extension methods associated to a {@link Plugin}
+     *
+     * @see com.matteojoliveau.plugface.annotations.ExtensionMethod
+     */
     private final Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
 
+    /**
+     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
+     * with a randomly generated {@link UUID} as the name
+     *
+     * @param context the context in which the manager lives
+     */
     protected AbstractPluginManager(PlugfaceContext context) {
         this(UUID.randomUUID().toString(), context);
     }
 
+    /**
+     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
+     * with the specified name, also settings the {@link SandboxSecurityPolicy}
+     * and {@link SecurityManager} for the plugin sandbox
+     *
+     * @param managerName the name to give to the manager
+     * @param context     the context in which the manager lives
+     */
     protected AbstractPluginManager(String managerName, PlugfaceContext context) {
-        context.addPluginManager(managerName, this);
+        context.addPluginManager(this);
         this.context = context;
         this.name = managerName;
         Policy.setPolicy(new SandboxSecurityPolicy());
         System.setSecurityManager(new SecurityManager());
         LOGGER.debug("Instantiating DefaultPluginManager");
     }
+
 
     @Override
     public void configurePlugin(Plugin plugin, Map<String, Object> configuration) {
@@ -163,9 +204,10 @@ public abstract class AbstractPluginManager implements PluginManager {
     public final List<Plugin> loadPlugins() {
         return loadPlugins(false);
     }
+
     @Override
     public final List<Plugin> loadPlugins(boolean autoregister) {
-       return loadPlugins(pluginFolder, autoregister);
+        return loadPlugins(pluginFolder, autoregister);
     }
 
     @Override

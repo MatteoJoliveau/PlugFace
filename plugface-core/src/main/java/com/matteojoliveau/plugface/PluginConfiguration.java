@@ -28,11 +28,33 @@ THE SOFTWARE.
 
 import java.util.Map;
 
+/**
+ * Subclass of {@link Map} that holds a custom configuration for a plugin
+ * It is basically just a thin wrapper around the {@link Map} class.
+ */
 public interface PluginConfiguration extends Map<String, Object> {
 
+    /**
+     * Update the configuration by adding a new set of parameters from the
+     * provided {@link Map}
+     * @param configuration map of parameters to add
+     */
     void updateConfiguration(Map<String, Object> configuration);
 
+    /**
+     * Alternative to {@link Map#get(Object)}, returns a parameter from his name
+     * @param name the key associated to the parameter
+     * @param <T> the type of the parameter
+     * @return the parameter
+     */
     <T> T getParameter(String name);
 
+    /**
+     * Alternative to {@link Map#put(Object, Object)}, sets a parameter
+     * under the specified key
+     * @param name the key associated to the parameter
+     * @param value the parameter
+     * @param <T> the type of the parameter
+     */
     <T> void setParameter(String name, T value);
 }

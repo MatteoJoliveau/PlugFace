@@ -26,59 +26,219 @@ THE SOFTWARE.
  * #L%
  */
 
+
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <a href="https://github.com/MatteoJoliveau/PlugFace/wiki/Plugin-Manager">Plugin Manager</a>
+ * is used to manage and orchestrate plugins in an application. It allows basic configuration and
+ * lifecycle management of plugins.
+ *
+ * @see com.matteojoliveau.plugface.impl.DefaultPluginManager
+ * @see com.matteojoliveau.plugface.AbstractPluginManager
+ */
 public interface PluginManager {
+
+    /**
+     * Configure a plugin by adding the parameters defined in the configuration
+     * map to its {@link PluginConfiguration}
+     *
+     * @param plugin        the plugin to configure
+     * @param configuration a map containing the new parameters
+     */
     void configurePlugin(Plugin plugin, Map<String, Object> configuration);
 
+    /**
+     * Configure a plugin by adding the parameters defined in the configuration
+     * map to its {@link PluginConfiguration}. It retrieves automatically the plugin
+     * from the current context searching by name
+     *
+     * @param pluginName    the name of the plugin to configure
+     * @param configuration a map containing the new parameters
+     */
     void configurePlugin(String pluginName, Map<String, Object> configuration);
 
+    /**
+     * Starts a plugin by calling {@link Plugin#start()}
+     *
+     * @param plugin the plugin to start
+     */
     void startPlugin(Plugin plugin);
 
+    /**
+     * Starts a plugin by retrieving the plugin
+     * from the context and calling {@link Plugin#start()}
+     *
+     * @param pluginName the name of the plugin to start
+     */
     void startPlugin(String pluginName);
 
+    /**
+     * Stops a plugin by calling {@link Plugin#stop()}
+     *
+     * @param plugin the plugin to stop
+     */
     void stopPlugin(Plugin plugin);
 
+    /**
+     * Stops a plugin by retrieving the plugin
+     * from the context and calling {@link Plugin#stop()}
+     *
+     * @param pluginName the name of the plugin to stop
+     */
     void stopPlugin(String pluginName);
 
+    /**
+     * Starts all the plugin in the same context as
+     * the manager
+     */
     void startAll();
 
+    /**
+     * Stops all the plugin in the same context as
+     * the manager
+     */
     void stopAll();
 
+    /**
+     * Restarts a plugin by calling {@link Plugin#stop()} and {@link Plugin#start()}
+     * sequencially
+     *
+     * @param plugin the name of the plugin to start
+     */
     void restartPlugin(Plugin plugin);
 
+    /**
+     * Restarts a plugin by retrieving the plugin
+     * from the context and calling {@link Plugin#stop()} and {@link Plugin#start()}
+     * sequencially
+     *
+     * @param pluginName the name of the plugin to start
+     */
     void restartPlugin(String pluginName);
 
+    /**
+     * Execute a method marked with {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}
+     * in a {@link Plugin}
+     *
+     * @param plugin     the plugin on which to invoke the method
+     * @param methodName the name of the method
+     * @param parameters optional parameters that the method can require
+     * @return the object returned by the method
+     */
     Object execExtension(Plugin plugin, String methodName, Object... parameters);
 
+    /**
+     * Execute a method marked with {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}
+     * in a {@link Plugin} after retrieving the plugin from the context
+     *
+     * @param pluginName the name of the plugin on which to invoke the method
+     * @param methodName the name of the method
+     * @param parameters optional parameters that the method can require
+     * @return the object returned by the method
+     */
     Object execExtension(String pluginName, String methodName, Object... parameters);
 
+    /**
+     * Returns the current context
+     *
+     * @return the context on which the manager lives in
+     */
     PlugfaceContext getContext();
 
+    /**
+     * Loads all the plugins from the specified folder
+     *
+     * @param pluginFolder the folder from which to load plugins
+     * @return a list of the loaded plugins
+     */
     List<Plugin> loadPlugins(String pluginFolder);
 
+    /**
+     * Loads all the plugins from the predefined folder
+     *
+     * @return a list of the loaded plugins
+     * @see #setPluginFolder(String)
+     */
     List<Plugin> loadPlugins();
 
+    /**
+     * Loads all the plugins from the predefined folder
+     *
+     * @param autoregister true if the plugins must be automatically registered in the context
+     * @return a list of the loaded plugins
+     * @see #setPluginFolder(String)
+     */
     List<Plugin> loadPlugins(boolean autoregister);
 
+    /**
+     * Loads all the plugins from the specified folder
+     *
+     * @param pluginFolder the folder from which to load plugins
+     * @param autoregister true if the plugins must be automatically registered in the context
+     * @return a list of the loaded plugins
+     */
     List<Plugin> loadPlugins(String pluginFolder, boolean autoregister);
 
+    /**
+     * Returns the folder from which to load the plugins
+     *
+     * @return the folder from which to load the plugins
+     */
     String getPluginFolder();
 
+    /**
+     * Sets the folder from which to load the plugins
+     *
+     * @param pluginFolder the folder from which to load the plugins
+     */
     void setPluginFolder(String pluginFolder);
 
+    /**
+     * Returns the properties file that specifies the permissions for loaded plugins
+     *
+     * @return the properties file that specifies the permissions for loaded plugins
+     */
     File getPermissionsFile();
 
+    /**
+     * Sets the properties file that specifies the permissions for loaded plugins
+     *
+     * @param permissionsFile the properties file that specifies the permissions for loaded plugins
+     */
     void setPermissionsFile(File permissionsFile);
 
+    /**
+     * Sets the properties file that specifies the permissions for loaded plugins
+     *
+     * @param fileName the path of the properties file that specifies the permissions for loaded plugins
+     */
     void setPermissionsFile(String fileName);
 
+    /**
+     * Check whether a plugin exposes a specific {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}
+     *
+     * @param pluginName    the name of the plugin
+     * @param extensionName the name of the extension method
+     * @return true if the plugin exposes the method, false if it doesn't
+     */
     boolean hasExtension(String pluginName, String extensionName);
 
+    /**
+     * Check whether a plugin exposes a specific {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}
+     *
+     * @param plugin        the plugin
+     * @param extensionName the name of the extension method
+     * @return true if the plugin exposes the method, false if it doesn't
+     */
     boolean hasExtension(Plugin plugin, String extensionName);
 
+    /**
+     * Returns the name of the manager
+     *
+     * @return the name of the manager
+     */
     String getName();
 }

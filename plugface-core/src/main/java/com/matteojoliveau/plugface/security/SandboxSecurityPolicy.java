@@ -26,31 +26,52 @@ THE SOFTWARE.
  * #L%
  */
 
-import com.matteojoliveau.plugface.PluginClassLoader ;
+import com.matteojoliveau.plugface.PluginClassLoader;
 
 import java.security.*;
 
+/**
+ * Special set of {@link Policy} that wraps plugins in a sandbox, preventing
+ * malicious code from causing damages.
+ */
 public class SandboxSecurityPolicy extends Policy {
-    
+
     @Override
     public PermissionCollection getPermissions(ProtectionDomain domain) {
         if (isPlugin(domain)) {
             return pluginPermissions();
-        }
-        else {
+        } else {
             return applicationPermissions();
-        }        
+        }
     }
 
+    /**
+     * Checks wheter the loaded class is a plugin or not, by inspecting the {@link ClassLoader} of the
+     * {@link ProtectionDomain}
+     *
+     * @param domain the {@link ProtectionDomain} to verify
+     * @return true if the {@link ClassLoader} is of type {@link PluginClassLoader}, false if it's not
+     */
     private boolean isPlugin(ProtectionDomain domain) {
         return (domain.getClassLoader() instanceof PluginClassLoader);
     }
 
+    /**
+     * Return an empty set of {@link Permissions} for plugins
+     *
+     * @return a {@link PermissionCollection} with empty {@link Permissions}
+     */
     private PermissionCollection pluginPermissions() {
         Permissions permissions = new Permissions(); // No permissions
         return permissions;
     }
 
+    /**
+     * Return a set of {@link Permissions} for the main application, with all the permissions
+     * granted.
+     *
+     * @return a {@link PermissionCollection} with an {@link AllPermission} permission.
+     */
     private PermissionCollection applicationPermissions() {
         Permissions permissions = new Permissions();
         permissions.add(new AllPermission());

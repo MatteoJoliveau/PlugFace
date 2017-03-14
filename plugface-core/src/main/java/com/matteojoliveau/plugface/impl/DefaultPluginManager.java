@@ -44,16 +44,34 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * Concrete implementation of {@link PluginManager} that provides a default
+ * plugin loading logic.
+ */
 public final class DefaultPluginManager extends AbstractPluginManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPluginManager.class);
 
+    /**
+     * Construct a {@link DefaultPluginManager} from the specified {@link PlugfaceContext}
+     * with a randomly generated {@link UUID} as the name
+     *
+     * @param context the context in which the manager lives
+     */
     public DefaultPluginManager(PlugfaceContext context) {
         super(UUID.randomUUID().toString(), context);
 
     }
 
+    /**
+     * Construct a {@link DefaultPluginManager} in a {@link PlugfaceContext}
+     * with the specified name, also settings the {@link SandboxSecurityPolicy}
+     * and {@link SecurityManager} for the plugin sandbox
+     *
+     * @param managerName the name to give to the manager
+     * @param context     the context in which the manager lives
+     */
     public DefaultPluginManager(String managerName, PlugfaceContext context) {
-       super(managerName, context);
+        super(managerName, context);
     }
 
     @Override
@@ -65,8 +83,8 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         }
         List<Plugin> loaded = load(folder);
         if (autoregister) {
-            for (Plugin p: loaded) {
-                getContext().addPlugin(p.getName(), p);
+            for (Plugin p : loaded) {
+                getContext().addPlugin(p);
             }
             return loaded;
         } else {
@@ -74,6 +92,21 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         }
     }
 
+    /**
+     * Load all the plugins from the folder, checking the jar files name
+     * and error checking the process.
+     * <p>
+     *     Loading occurs by finding all the jar files in the folder, getting
+     *     all the {@link JarEntry} in the file and checking if the loaded classes
+     *     are a valid implementation of {@link Plugin}.
+     *     If so, add the class to the plugin list and check if there is any method
+     *     marked with {@link com.matteojoliveau.plugface.annotations.ExtensionMethod}, then add them
+     *     to the extension list. Extension methods will be accessible through Java reflection.
+     * </p>
+     *
+     * @param folder the folder from which to load the plugins
+     * @return the list of all the valid plugins found
+     */
     private List<Plugin> load(File folder) {
         List<Plugin> loadedPlugins = new ArrayList<>();
         File[] files = folder.listFiles();

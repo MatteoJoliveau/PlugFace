@@ -26,6 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
+import com.matteojoliveau.plugface.SimplePlugin;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -35,7 +36,7 @@ public class SimplePluginTest {
     @Test
     public void execute() throws Exception {
 
-        SimplePlugin plugin = new SimplePlugin() {
+        SimplePlugin plugin = new SimplePlugin("test") {
             @Override
             public void start() {
 

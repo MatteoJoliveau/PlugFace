@@ -28,32 +28,108 @@ THE SOFTWARE.
 
 import java.util.Map;
 
+/**
+ * Base interface for a context that holds the references to all the {@link PluginManager} and
+ * all the registered {@link Plugin} entities.
+ * Implementations should contain registries that holds the objects.
+ *
+ * @see com.matteojoliveau.plugface.impl.DefaultPlugfaceContext
+ */
 public interface PlugfaceContext {
     /*
         Plugins
     */
-    Plugin getPlugin(String pluginName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginException in body
 
-    void addPlugin(String pluginName, Plugin plugin);
+    /**
+     * Return the plugin identified by the specified name.
+     * ATTENTION: implementations should throw {@link NoSuchPluginException} if the plugin
+     * is not in the registry.
+     *
+     * @param pluginName the name of the plugin to look for
+     * @return the plugin identified by the provided name
+     */
+    Plugin getPlugin(String pluginName);
 
+    /**
+     * Add the provided plugin to the registry, identified by its name.
+     *
+     * @param plugin the plugin to register
+     */
+    void addPlugin(Plugin plugin);
+
+    /**
+     * Check if the registry contains the specified plugin.
+     *
+     * @param pluginName the name of the plugin to look for
+     * @return true if the plugin exists in the context, false if not
+     */
     boolean hasPlugin(String pluginName);
 
-    Plugin removePlugin(String pluginName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginException in body
+    /**
+     * Remove the specified plugin from the registry.
+     * ATTENTION: implementations should throw {@link NoSuchPluginException} if the plugin
+     * is not in the registry.
+     *
+     * @param pluginName the name of the plugin to remove
+     * @return the removed plugin
+     */
+    Plugin removePlugin(String pluginName);
 
+    /**
+     * Returns a {@link Map} of all the plugins registered in the
+     * context, identified by their names.
+     *
+     * @return a {@link Map} of names-plugins registered in the
+     * context
+     */
     Map<String, Plugin> getPluginMap();
 
     /*
         Plugin Managers
      */
 
-    PluginManager getPluginManager(String managerName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginManagerException in body
+    /**
+     * Return the manager identified by the specified name.
+     * ATTENTION: implementations should throw {@link NoSuchPluginManagerException} if the manager
+     * is not in the registry.
+     *
+     * @param managerName the name of the manager to look for
+     * @return the manager identified by the provided name
+     */
+    PluginManager getPluginManager(String managerName);
 
-    void addPluginManager(String managerName, PluginManager manager);
+    /**
+     * Add the provided manager to the registry, identified by its name.
+     *
+     * @param manager the plugin to register
+     */
+    void addPluginManager(PluginManager manager);
 
+    /**
+     * Check if the registry contains the specified manager.
+     *
+     * @param managerName the name of the manager to look for
+     * @return true if the manager exists in the context, false if not
+     */
     boolean hasPluginManger(String managerName);
 
-    PluginManager removePluginManager(String managerName); //TODO: JavaDoc should specify that this method must throw NoSuchPluginManagerException in body
+    /**
+     * Remove the specified manager from the registry.
+     * ATTENTION: implementations should throw {@link NoSuchPluginManagerException} if the manager
+     * is not in the registry.
+     *
+     * @param managerName the name of the manager to remove
+     * @return the removed manager
+     */
+    PluginManager removePluginManager(String managerName);
 
+    /**
+     * Returns a {@link Map} of all the managers registered in the
+     * context, identified by their names.
+     *
+     * @return a {@link Map} of names-managers registered in the
+     * context
+     */
     Map<String, PluginManager> getPluginManagerMap();
 
 

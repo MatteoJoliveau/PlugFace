@@ -31,6 +31,10 @@ import com.matteojoliveau.plugface.PluginConfiguration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link PluginConfiguration} extending {@link HashMap}
+ * for base functionalities
+ */
 public class DefaultPluginConfiguration extends HashMap<String, Object> implements PluginConfiguration {
     @Override
     public void updateConfiguration(Map<String, Object> configuration) {

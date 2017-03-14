@@ -26,20 +26,56 @@ THE SOFTWARE.
  * #L%
  */
 
-
+/**
+ * Defines a Plugin for PlugFace.
+ * <p>
+ * It is the main entry point of all plugins.
+ * It defines the base utility and lifecycle methods commons to all plugins.
+ * </p>
+ *
+ * @param <Input>  the input type for {@link #execute(Object)}
+ * @param <Output> the output type for {@link #execute(Object)}
+ * @see DefaultPlugin
+ * @see SimplePlugin
+ */
 public interface Plugin<Input, Output> {
+
+    /**
+     * Starts the execution of the plugin.
+     * Equivalent to a {@code public static void main()} for a standard application.
+     */
     void start();
 
+    /**
+     * Stops the execution of the plugin.
+     * Should contain the logic to gracefully stops the plugin.
+     */
     void stop();
 
+    /**
+     * Execute operations given parameter of type {@link Input} and returning
+     * an object of type {@link Output}
+     * @param parameters the parameters that the method accepts
+     * @return and object of type {@link Output}
+     */
     Output execute(Input parameters);
 
+    /**
+     * Returns the {@link PluginConfiguration} of the plugin
+     * @return the {@link PluginConfiguration} of the plugin
+     */
     PluginConfiguration getPluginConfiguration();
 
+    /**
+     * Sets the {@link PluginConfiguration} of the plugin
+     * @param configuration the {@link PluginConfiguration} for the plugin
+     */
     void setPluginConfiguration(PluginConfiguration configuration);
 
+    /**
+     * Returns the plugin name
+     * @return the plugin name
+     */
     String getName();
-
-    void setName(String name);
 
 }

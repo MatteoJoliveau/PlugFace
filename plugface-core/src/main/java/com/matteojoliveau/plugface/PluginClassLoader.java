@@ -30,28 +30,66 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.*;
-import java.security.CodeSource;
-import java.security.PermissionCollection;
-import java.security.Permissions;
-import java.security.SecurityPermission;
+import java.net.JarURLConnection;
+import java.net.NetPermission;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.security.*;
 import java.util.Properties;
-import java.util.jar.JarFile;
 
+/**
+ * Custom {@link URLClassLoader} that is used to load {@link Plugin} classes from Jar files.
+ * <p>
+ * It is used to give an empty set of permissions to plugins in {@link com.matteojoliveau.plugface.security.SandboxSecurityPolicy#isPlugin(ProtectionDomain)}
+ * so that plugins run in a protected sandbox.
+ * It also overrides the {@link URLClassLoader#getPermissions(CodeSource)} method so that
+ * custom permissions specified in a <i>permissions.properties</i> file can be applied to specific plugins.
+ * </p>
+ */
 public class PluginClassLoader extends URLClassLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(PluginClassLoader.class);
+
+    /**
+     * The default directory separator for Unix-like operating systems
+     */
     private static final char UNIX_SEPARATOR = '/';
+
+    /**
+     * The default directory separator for Windows operating systems
+     */
     private static final char WINDOWS_SEPARATOR = '\\';
+
+    /**
+     * The properties file containing custom permissions for plugins
+     */
     private File permissionsFile;
 
+    /**
+     * Construct a {@link PluginClassLoader} from an single {@link URL}
+     *
+     * @param jarFileUrl an Jar file {@link URL}
+     */
     public PluginClassLoader(URL jarFileUrl) {
         super(new URL[]{jarFileUrl});
     }
 
+    /**
+     * Construct a {@link PluginClassLoader} from an array of {@link URL}
+     *
+     * @param jarFileUrls the array of Jar file {@link URL}
+     */
     public PluginClassLoader(URL[] jarFileUrls) {
         super(jarFileUrls);
     }
 
+    /**
+     * Create a set of {@link Permission} for the specified {@link CodeSource}, given a
+     * {@link PluginClassLoader#permissionsFile}.
+     *
+     * @param codesource the {@link CodeSource} to give the permissions to
+     * @return a {@link PermissionCollection} whith all the appropriate permissions
+     * @see com.matteojoliveau.plugface.security.SandboxSecurityPolicy
+     */
     @Override
     protected PermissionCollection getPermissions(CodeSource codesource) {
         Permissions permissions = new Permissions();
@@ -61,7 +99,7 @@ public class PluginClassLoader extends URLClassLoader {
             final String[] properties = new String[]{
                     "permissions." + pluginFileName + ".files",
                     "permissions." + pluginFileName + ".network",
-                    "permissions." + pluginFileName + ".policyManagement",
+                    "permissions." + pluginFileName + ".security",
                     "permissions." + pluginFileName + ".runtime"
             };
 
@@ -118,6 +156,12 @@ public class PluginClassLoader extends URLClassLoader {
         return permissions;
     }
 
+    /**
+     * Retrieve the Jar file name without the .jar extension
+     *
+     * @param codeSource the {@link CodeSource} from which to retrieve the file name
+     * @return the file name without the .jar extension
+     */
     private String retrieveFileNameFromCodeSource(CodeSource codeSource) {
         JarURLConnection connection = null;
         try {
@@ -143,14 +187,29 @@ public class PluginClassLoader extends URLClassLoader {
         return file.substring(0, file.length() - 4);
     }
 
+    /**
+     * Returns the permissions.properties file
+     *
+     * @return the permissions.properties file
+     */
     public File getPermissionsFile() {
         return permissionsFile;
     }
 
+    /**
+     * Sets the permissions.properties file
+     * @param permissionsFile the new permissions.properties file
+     */
     public void setPermissionsFile(File permissionsFile) {
         this.permissionsFile = permissionsFile;
     }
 
+    /**
+     * Get the specific file name from a full path file name.
+     *
+     * @param filename the full path file name
+     * @return the name of the file
+     */
     private static String getName(String filename) {
         if (filename == null) {
             return null;
@@ -159,6 +218,12 @@ public class PluginClassLoader extends URLClassLoader {
         return filename.substring(index + 1);
     }
 
+    /**
+     * Operate on the full path file name by OS separation character
+     *
+     * @param filename the full path file name
+     * @return the position of the last element of the path (aka the simple file name)
+     */
     private static int indexOfLastSeparator(String filename) {
         if (filename == null) {
             return -1;

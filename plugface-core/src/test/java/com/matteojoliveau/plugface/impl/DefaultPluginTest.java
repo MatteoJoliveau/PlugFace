@@ -26,6 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
+import com.matteojoliveau.plugface.DefaultPlugin;
 import com.matteojoliveau.plugface.PlugfaceContext;
 import com.matteojoliveau.plugface.Plugin;
 import com.matteojoliveau.plugface.PluginConfiguration;
@@ -40,34 +41,7 @@ import static org.mockito.Mockito.mock;
 
 public class DefaultPluginTest {
 
-    private Plugin plugin;
-
-    @Before
-    public void setUp() throws Exception {
-        PlugfaceContext context = mock(PlugfaceContext.class);
-
-        Plugin plugin = new DefaultPlugin<Void, Void>() {
-            @Override
-            public void start() {
-                System.out.println("Starting test plugin");
-            }
-
-            @Override
-            public void stop() {
-                System.out.println("Stopping test plugin");
-            }
-
-            @Override
-            public Void execute(Void parameters) {
-                return null;
-            }
-
-        };
-
-        plugin.setName("testPlugin");
-
-        this.plugin = plugin;
-    }
+    private Plugin plugin = new TestPlugin();
 
     @Test
     public void pluginConfiguration() throws Exception {
@@ -81,10 +55,6 @@ public class DefaultPluginTest {
     @Test
     public void name() throws Exception {
         assertEquals("testPlugin", plugin.getName());
-
-        plugin.setName("secondTestPlugin");
-
-        assertEquals("secondTestPlugin", plugin.getName());
     }
 
     @Test
@@ -107,7 +77,7 @@ public class DefaultPluginTest {
     }
 
     private Plugin another() {
-        Plugin another = new DefaultPlugin<Void, Void>() {
+        Plugin another = new DefaultPlugin<Void, Void>("testPlugin") {
             @Override
             public void start() {
                 System.out.println("Starting test plugin");
@@ -125,14 +95,13 @@ public class DefaultPluginTest {
 
         };
 
-        another.setName("testPlugin");
 
         return another;
     }
 
     @Test
-    public void pippo() throws Exception {
-        Plugin<Collection<?>, Integer> plugin = new DefaultPlugin<Collection<?>, Integer>() {
+    public void testExecute() throws Exception {
+        Plugin<Collection<?>, Integer> plugin = new DefaultPlugin<Collection<?>, Integer>("plugin1") {
             @Override
             public void start() {
                 System.out.println("Starting test plugin");
@@ -150,7 +119,7 @@ public class DefaultPluginTest {
 
         };
 
-        Plugin plugin2 = new DefaultPlugin<Integer, Collection<? extends Number>>() {
+        Plugin plugin2 = new DefaultPlugin<Integer, Collection<? extends Number>>("plugin2") {
             @Override
             public void start() {
                 System.out.println("Starting test plugin");
@@ -170,5 +139,27 @@ public class DefaultPluginTest {
 
         assertEquals(Integer.valueOf(2), plugin.execute(Collections.nCopies(2, 5)));
 
+    }
+}
+
+class TestPlugin extends DefaultPlugin<Void, Void> {
+
+    public TestPlugin() {
+        super("testPlugin");
+    }
+
+    @Override
+    public void start() {
+        System.out.println("Starting test plugin");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("Stopping test plugin");
+    }
+
+    @Override
+    public Void execute(Void parameters) {
+        return null;
     }
 }

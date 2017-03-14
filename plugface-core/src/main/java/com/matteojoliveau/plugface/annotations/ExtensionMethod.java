@@ -31,6 +31,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation that marks an extension method in a {@link com.matteojoliveau.plugface.Plugin}.
+ * <p>
+ *     Plugin methods annotated with this annotation will be discovered and registered by a
+ *     {@link com.matteojoliveau.plugface.PluginManager}, and can be later invoked by calling
+ *     {@link com.matteojoliveau.plugface.PluginManager#execExtension(String, String, Object...)}.
+ *     Useful to specify extra methods that specific applications require their plugins to implement.
+ * </p>
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ExtensionMethod {
