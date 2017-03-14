@@ -6,7 +6,9 @@
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
 
-PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.
+PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.  
+
+**Browse the Javadoc [here](http://plugface.matteojoliveau.com//javadoc)**  
 
 ## Core Concepts
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
