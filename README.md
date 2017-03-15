@@ -8,7 +8,7 @@
 
 PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.  
 
-**Browse the Javadoc [here](http://plugface.matteojoliveau.com/javadoc)**  
+**Browse the Javadoc [here](https://plugface.org/apidocs/index.html)**  
 
 ## Core Concepts
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
@@ -37,7 +37,7 @@ repositories {
 Then add:
 ```gradle
 dependencies {
-    compile 'org.plugface:plugface-core:0.4.0-SNAPSHOT$RELEASEVERSION'
+    compile 'org.plugface:plugface-core:$RELEASEVERSION'
 }
 ```
 
