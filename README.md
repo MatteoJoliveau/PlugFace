@@ -8,7 +8,7 @@
 
 PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.  
 
-**Browse the Javadoc [here](http://plugface.matteojoliveau.com//javadoc)**  
+**Browse the Javadoc [here](http://plugface.matteojoliveau.com/javadoc)**  
 
 ## Core Concepts
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
@@ -67,7 +67,7 @@ manager.setPluginFolder("/path/to/plugins");
 
 manager.setPermissionsFile("/path/to/permissions.properties"); //optional if your plugins require special permissions
 
-List<Plugin> loaded = manager.loadPlugins(true); //true sets the autoregister fag, automatically inserting the 
+List<Plugin> loaded = manager.loadPlugins(true); //true sets the autoregister flag, automatically inserting the 
                                                 //plugins in the context
 manager.startAll(); 
 ```
