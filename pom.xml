@@ -52,9 +52,9 @@
     <distributionManagement>
         <repository>
             <uniqueVersion>false</uniqueVersion>
-            <id>nexus-releases</id>
-            <name>Nexus Releases</name>
-            <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
+            <id>maven-central</id>
+            <name>OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
             <layout>default</layout>
         </repository>
         <snapshotRepository>
@@ -102,9 +102,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <serverId>nexus-snapshots</serverId>
-                    <nexusUrl>https://nexus.matteojoliveau.com/repository/maven-snapshots/</nexusUrl>
-                    <skipStaging>true</skipStaging>
+                    <serverId>maven-central</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
             <plugin>
@@ -279,7 +279,7 @@
             <id>sign-artifact-for-release</id>
             <activation>
                 <property>
-                    <name>gpg.keyname</name>
+                    <name>Matteo Joliveau</name>
                 </property>
             </activation>
             <build>
@@ -298,7 +298,7 @@
                         </executions>
                         <configuration>
                             <keyname>Matteo Joliveau</keyname>
-                            <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                            <passphraseServerId>matteo-joliveau</passphraseServerId>
                         </configuration>
                     </plugin>
                 </plugins>
