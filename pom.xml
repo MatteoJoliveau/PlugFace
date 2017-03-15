@@ -29,6 +29,11 @@
         </developer>
     </developers>
 
+    <organization>
+        <name>PlugFace</name>
+        <url>https://plugface.org/</url>
+    </organization>
+
     <scm>
         <connection>scm:git:git://github.com/MatteoJoliveau/PlugFace.git</connection>
         <developerConnection>scm:git:ssh://github.com:MatteoJoliveau/MatteoJoliveau.git</developerConnection>
