@@ -10,7 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>plugface-core</artifactId>
-
+    <description>
+        PlugFace Core is the central piece of the framework.
+        It provides the core functionalities for creating and managing
+        plugins.
+    </description>
     <dependencies>
 
         <!--TESTING DEPENDENCIES-->

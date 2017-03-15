@@ -10,7 +10,12 @@
     <version>0.4.0-SNAPSHOT</version>
 
     <name>PlugFace Framework</name>
-    <description>A Java general purpose plugin framework</description>
+    <description>
+        PlugFace is the next generation framework for Java modular applications,
+        capable of turning a clunky software into an agile, hot swappable app.
+        It features a lightweight core (20 KB as of 0.2.0) and agnostic API, plugin autodiscovery,
+        centralized context management and simple API extension through annotations.
+    </description>
     <url>https://plugface.org/</url>
     <inceptionYear>2017</inceptionYear>
 
@@ -62,8 +67,8 @@
             <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
         </snapshotRepository>
         <site>
-            <id>nexus-sites</id>
-            <url>dav:https://nexus.matteojoliveau.com/repository/maven-sites/</url>
+            <id>github-pages</id>
+            <url>https://github.com/MatteoJoliveau/PlugFace</url>
         </site>
     </distributionManagement>
 
@@ -144,13 +149,16 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <dependencies>
+                <!--<dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <artifactId>wagon-ssh</artifactId>
                         <version>2.8</version>
                     </dependency>
-                </dependencies>
+                </dependencies>-->
+                <configuration>
+                    <locales>en,fr,it,es,de</locales>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -207,7 +215,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.4</version>
+                    <version>3.6</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -271,6 +279,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
         </plugins>
     </reporting>

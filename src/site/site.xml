@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
+name="PlugFace Core">
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <googleSearch>
+                <sitesearch/>
+            </googleSearch>
+        </fluidoSkin>
+    </custom>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.6</version>
+    </skin>
+
+    <body>
+        <menu ref="parent" />
+        <menu ref="modules" />
+        <menu ref="reports"/>
+        <menu name="Resources">
+            <item name="Wiki" href="https://github.com/MatteoJoliveau/PlugFace/wiki" target="_blank"/>
+            <item name="JavaDocs" href="/apidocs/index.html" target="_blank"/>
+            <item name="Issue Tracking" href="https://github.com/MatteoJoliveau/PlugFace/issues" target="_blank"/>
+            <item name="Project Roadmap" href="https://github.com/MatteoJoliveau/PlugFace/projects" target="_blank"/>
+            <item name="SonarQube Quality Check" href="https://sonarqube.vault101.ga/dashboard?id=org.plugface%3Aplugface"/>
+        </menu>
+        <menu name="Languages">
+            <item name="Italian" href="../it/"/>
+            <item name="French" href="../fr/"/>
+            <item name="German" href="../de/"/>
+            <item name="Spanish" href="../es/"/>
+        </menu>
+    </body>
+</project>
