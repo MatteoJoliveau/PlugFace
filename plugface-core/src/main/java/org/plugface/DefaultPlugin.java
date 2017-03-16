@@ -102,18 +102,12 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
         this.pluginStatus = pluginStatus;
     }
 
-    /**
-     * Sets {@link this#pluginEnabled} to {@link PluginStatus#ENABLED}
-     */
     @Override
     public void enable() {
         this.pluginEnabled = PluginStatus.ENABLED;
         this.pluginStatus = PluginStatus.READY;
     }
 
-    /**
-     * Sets {@link this#pluginEnabled} to {@link PluginStatus#DISABLED}
-     */
     @Override
     public void disable() {
         this.pluginEnabled = PluginStatus.DISABLED;
@@ -128,7 +122,6 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     public boolean equals(Object o) {
         if (!(o instanceof Plugin<?, ?>)) return false;
         if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
 
         DefaultPlugin<?, ?> that = (DefaultPlugin<?, ?>) o;
 
