@@ -34,9 +34,9 @@ import java.lang.annotation.Target;
 /**
  * Annotation that marks a plugin that depends on other plugins
  * <p>
- *     An annotation that marks a plugin specifying other plugins
- *     it depends on, meaning that it cannot run if these plugins
- *     are not injected into the {@link org.plugface.PluginConfiguration}
+ * An annotation that marks a plugin specifying other plugins
+ * it depends on, meaning that it cannot run if these plugins
+ * are not injected into the {@link org.plugface.PluginConfiguration}
  * </p>
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -46,6 +46,7 @@ public @interface Requires {
     /**
      * The list of plugin names that identifies
      * the plugins it depends on.
+     *
      * @return an array of plugin names
      */
     String[] requiredPlugins() default "";

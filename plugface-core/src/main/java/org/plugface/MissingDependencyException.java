@@ -31,6 +31,7 @@ import org.plugface.annotations.Requires;
 /**
  * An exception thrown by a plugin when it depends on another plugin
  * but this one is not injected into the {@link PluginConfiguration}
+ *
  * @see Requires
  */
 public class MissingDependencyException extends RuntimeException {

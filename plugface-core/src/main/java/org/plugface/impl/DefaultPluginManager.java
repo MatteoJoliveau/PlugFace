@@ -80,11 +80,8 @@ public final class DefaultPluginManager extends AbstractPluginManager {
             throw new InvalidPathException(pluginFolder, "Set a valid plugin directory");
         } else {
             List<Plugin> loaded;
-//            if (isDebug()) {
-//                loaded = loadDebug(folder);
-//            } else {
             loaded = load(folder);
-//            }
+
             if (autoregister) {
                 for (Plugin p : loaded) {
                     getContext().addPlugin(p);
@@ -205,25 +202,6 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         }
     }
 
-    //
-//    private List<Plugin> loadDebug(File folder) {
-//        List<Plugin> loadedPlugins = new ArrayList<>();
-//        Path path = folder.toPath();
-//        File[] files = folder.listFiles();
-//        assert files != null;
-//        URL url = null;
-//        try {
-//            url = folder.toURI().toURL();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//        assert url != null;
-//        PluginClassLoader cl = new PluginClassLoader(url);
-//        cl.setPermissionProperties(getPermissions());
-//
-//        return loadedPlugins;
-//    }
-
     private boolean checkPluginDependencies(Plugin plugin) {
         if (getPluginDependencies().containsKey(plugin)) {
             List<String> dep = getPluginDependencies().get(plugin);
@@ -242,22 +220,6 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         return true;
     }
 
-    //    private File findClassFile(File file) {
-//        if(file.isDirectory()) {
-//            if (file.canRead()){
-//                for (File f: file.listFiles()) {
-//                    if (f.isDirectory()) {
-//                        findClassFile(f);
-//                    } else {
-//                        if (f.getName().endsWith(".class")) {
-//                            return f;
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
-//    }
     @Override
     public String toString() {
         return "DefaultPluginManager{" +

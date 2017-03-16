@@ -254,6 +254,7 @@ public interface PluginManager {
      * If the {@link PluginStatus} of the plugin is not
      * "ERROR", sets it to "ENABLED"
      * meaning it is ready to be executed.
+     *
      * @param plugin the plugin
      * @return the new status of the plugin
      */
@@ -263,6 +264,7 @@ public interface PluginManager {
      * If the {@link PluginStatus} of the plugin is not
      * "ERROR", sets it to "DISABLED"
      * meaning it can't be executed.
+     *
      * @param plugin the plugin
      * @return the new status of the plugin
      */
@@ -272,6 +274,7 @@ public interface PluginManager {
      * If the {@link PluginStatus} of the plugin is not
      * "ERROR", sets it to "DISABLED"
      * meaning it can't be executed.
+     *
      * @param pluginName the name of the plugin
      * @return the new status of the plugin
      */
@@ -280,6 +283,7 @@ public interface PluginManager {
     /**
      * Check whether the manager is in debug
      * mode or not.
+     *
      * @return true if in debug mode, false if not
      */
     boolean isDebug();
@@ -288,6 +292,7 @@ public interface PluginManager {
      * Sets the debug mode.
      * If true, it will load plugins from a simple project
      * folder instead of a full fat Jar file
+     *
      * @param debug true to enable debug mode, false to disable it
      */
     void setDebug(boolean debug);

@@ -31,13 +31,15 @@ THE SOFTWARE.
  * {@link DefaultPlugin} and remove the {@code execute()} functionality.
  * Useful for plugins that just need to run and forget.
  */
-public abstract class SimplePlugin extends DefaultPlugin<Object,Object> {
+public abstract class SimplePlugin extends DefaultPlugin<Object, Object> {
 
     protected SimplePlugin(String name) {
         super(name);
     }
+
     /**
      * Throw {@link UnsupportedOperationException} if invoked
+     *
      * @param parameters the parameters that the method accepts
      * @return nothing
      */

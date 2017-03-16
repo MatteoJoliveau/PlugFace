@@ -35,10 +35,10 @@ import java.lang.annotation.Target;
 /**
  * Annotation that marks an extension method in a {@link org.plugface.Plugin}.
  * <p>
- *     Plugin methods annotated with this annotation will be discovered and registered by a
- *     {@link org.plugface.PluginManager}, and can be later invoked by calling
- *     {@link org.plugface.PluginManager#execExtension(String, String, Object...)}.
- *     Useful to specify extra methods that specific applications require their plugins to implement.
+ * Plugin methods annotated with this annotation will be discovered and registered by a
+ * {@link org.plugface.PluginManager}, and can be later invoked by calling
+ * {@link org.plugface.PluginManager#execExtension(String, String, Object...)}.
+ * Useful to specify extra methods that specific applications require their plugins to implement.
  * </p>
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -52,6 +52,10 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
      */
     private PluginStatus pluginStatus;
 
+    /**
+     * {@link PluginStatus#ENABLED} if the plugin is enabled,
+     * {@link PluginStatus#DISABLED} if it is disabled
+     */
     private PluginStatus pluginEnabled;
 
     /**
@@ -64,6 +68,11 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
         this.name = UUID.randomUUID().toString();
     }
 
+    /**
+     * Protected constructor to set the implementing plugin name
+     *
+     * @param name the new name of the plugin
+     */
     protected DefaultPlugin(String name) {
         this.name = name;
     }
@@ -83,23 +92,34 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
         return name;
     }
 
+    @Override
     public PluginStatus getStatus() {
         return pluginStatus;
     }
 
+    @Override
     public void setStatus(PluginStatus pluginStatus) {
         this.pluginStatus = pluginStatus;
     }
 
+    /**
+     * Sets {@link this#pluginEnabled} to {@link PluginStatus#ENABLED}
+     */
+    @Override
     public void enable() {
         this.pluginEnabled = PluginStatus.ENABLED;
         this.pluginStatus = PluginStatus.READY;
     }
 
+    /**
+     * Sets {@link this#pluginEnabled} to {@link PluginStatus#DISABLED}
+     */
+    @Override
     public void disable() {
         this.pluginEnabled = PluginStatus.DISABLED;
     }
 
+    @Override
     public boolean isEnabled() {
         return pluginEnabled.equals(PluginStatus.ENABLED);
     }

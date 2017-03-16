@@ -72,6 +72,11 @@ public abstract class AbstractPluginManager implements PluginManager {
      */
     private boolean debug;
 
+    /**
+     * Dependency graph that keeps track of the plugins a plugin
+     * has declared as dependencies through the {@link org.plugface.annotations.Requires}
+     * annotation
+     */
     private Map<Plugin, List<String>> pluginDependencies = new HashMap<>();
 
     /**
@@ -308,10 +313,22 @@ public abstract class AbstractPluginManager implements PluginManager {
         return name;
     }
 
+    /**
+     * Returns the extensions map with all the methods a plugin
+     * has defined as {@link ExtensionMethod}
+     *
+     * @return the extensions map
+     */
     protected Map<Plugin, Map<String, Method>> getExtensions() {
         return extensions;
     }
 
+    /**
+     * Returns the dependency graph of the plugins that have
+     * dependencies defined through {@link org.plugface.annotations.Requires}
+     *
+     * @return the map of the plugins defining dependencies and the name of the dependencies
+     */
     protected Map<Plugin, List<String>> getPluginDependencies() {
         return pluginDependencies;
     }

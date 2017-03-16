@@ -91,6 +91,7 @@ public interface Plugin<Input, Output> {
 
     /**
      * Sets the {@link PluginStatus} of the plugin
+     *
      * @param pluginStatus the new {@link PluginStatus} of the plugin
      */
     void setStatus(PluginStatus pluginStatus);
@@ -107,6 +108,7 @@ public interface Plugin<Input, Output> {
 
     /**
      * Check whether the plugin is enabled or not
+     *
      * @return true if the plugin is {@link PluginStatus#ENABLED}, false if it is {@link PluginStatus#DISABLED}
      */
     boolean isEnabled();

@@ -31,7 +31,7 @@ THE SOFTWARE.
  * Should be thrown when a {@link PluginManager} is being retrieved from a
  * {@link PlugfaceContext} but is not present in the registry.
  */
-public class NoSuchPluginManagerException extends RuntimeException{
+public class NoSuchPluginManagerException extends RuntimeException {
 
     public NoSuchPluginManagerException(String managerName) {
         super("No plugin manager found for: " + managerName);

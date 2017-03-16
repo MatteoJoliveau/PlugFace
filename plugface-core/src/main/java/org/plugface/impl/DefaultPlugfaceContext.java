@@ -37,7 +37,7 @@ import java.util.Map;
  * It has two registries for registering active {@link Plugin} entities and
  * {@link PluginManager} entities.
  */
-public class DefaultPlugfaceContext implements PlugfaceContext{
+public class DefaultPlugfaceContext implements PlugfaceContext {
 
     /**
      * Registry for {@link Plugin}
@@ -51,7 +51,7 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public Plugin getPlugin(String pluginName) {
-        if(hasPlugin(pluginName)) {
+        if (hasPlugin(pluginName)) {
             return pluginRegistry.get(pluginName);
         } else {
             throw new NoSuchPluginException(pluginName + " not found");
@@ -71,7 +71,7 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public Plugin removePlugin(String pluginName) {
-        if(hasPlugin(pluginName)) {
+        if (hasPlugin(pluginName)) {
             return pluginRegistry.remove(pluginName);
         } else {
             throw new NoSuchPluginException(pluginName + " not found");
@@ -85,7 +85,7 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
 
     @Override
     public PluginManager getPluginManager(String managerName) throws NoSuchPluginManagerException {
-        if(hasPluginManger(managerName)) {
+        if (hasPluginManger(managerName)) {
             return pluginManagerRegistry.get(managerName);
         } else {
             throw new NoSuchPluginManagerException(managerName + " not found");
@@ -103,8 +103,8 @@ public class DefaultPlugfaceContext implements PlugfaceContext{
     }
 
     @Override
-    public PluginManager removePluginManager(String managerName){
-        if(hasPluginManger(managerName)) {
+    public PluginManager removePluginManager(String managerName) {
+        if (hasPluginManger(managerName)) {
             return pluginManagerRegistry.remove(managerName);
         } else {
             throw new NoSuchPluginManagerException(managerName + " not found");
