@@ -31,6 +31,7 @@ import java.util.UUID;
 /**
  * Abstract implementation of {@link Plugin} that provides
  * base utility and lifecycle methods
+ *
  * @param <I> the input type for {@link #execute(Object)}
  * @param <O> the output type for {@link #execute(Object)}
  */
@@ -47,11 +48,15 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     private PluginConfiguration pluginConfiguration;
 
     /**
+     * The current status of the plugin
+     */
+    private PluginStatus pluginStatus;
+
+    /**
      * Construct a {@link DefaultPlugin} with a random
      * UUID as name
      * Should be overridden with a custom name that uniquely
      * identifies the plugin
-     *
      */
     protected DefaultPlugin() {
         this.name = UUID.randomUUID().toString();
@@ -74,6 +79,14 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     @Override
     public String getName() {
         return name;
+    }
+
+    public PluginStatus getStatus() {
+        return pluginStatus;
+    }
+
+    public void setStatus(PluginStatus pluginStatus) {
+        this.pluginStatus = pluginStatus;
     }
 
     @Override

@@ -55,6 +55,7 @@ public interface Plugin<Input, Output> {
     /**
      * Execute operations given parameter of type {@link Input} and returning
      * an object of type {@link Output}
+     *
      * @param parameters the parameters that the method accepts
      * @return and object of type {@link Output}
      */
@@ -62,20 +63,35 @@ public interface Plugin<Input, Output> {
 
     /**
      * Returns the {@link PluginConfiguration} of the plugin
+     *
      * @return the {@link PluginConfiguration} of the plugin
      */
     PluginConfiguration getPluginConfiguration();
 
     /**
      * Sets the {@link PluginConfiguration} of the plugin
+     *
      * @param configuration the {@link PluginConfiguration} for the plugin
      */
     void setPluginConfiguration(PluginConfiguration configuration);
 
     /**
      * Returns the plugin name
+     *
      * @return the plugin name
      */
     String getName();
 
+    /**
+     * Returns the current {@link PluginStatus} of the plugin
+     *
+     * @return the current {@link PluginStatus} of the plugin
+     */
+    PluginStatus getStatus();
+
+    /**
+     * Sets the {@link PluginStatus} of the plugin
+     * @param pluginStatus the new {@link PluginStatus} of the plugin
+     */
+    void setStatus(PluginStatus pluginStatus);
 }

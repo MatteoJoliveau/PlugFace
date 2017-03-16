@@ -30,6 +30,7 @@ import org.plugface.DefaultPlugin;
 import org.plugface.Plugin;
 import org.plugface.PluginConfiguration;
 import org.junit.Test;
+import org.plugface.PluginStatus;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -136,6 +137,15 @@ public class DefaultPluginTest {
         };
 
         assertEquals(Integer.valueOf(2), plugin.execute(Collections.nCopies(2, 5)));
+
+    }
+
+    @Test
+    public void testStatus() throws Exception {
+        for (PluginStatus status: PluginStatus.values()) {
+            plugin.setStatus(status);
+            assertEquals(status, plugin.getStatus());
+        }
 
     }
 }

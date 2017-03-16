@@ -148,8 +148,8 @@ public class PluginClassLoader extends URLClassLoader {
                             String[] params = s.split(" ");
                             permissions.add(new RuntimePermission(params[0]));
                         }
-
-
+                    } else {
+                        LOGGER.warn("{} is not a valid permission, skipping...");
                     }
                 }
             }
