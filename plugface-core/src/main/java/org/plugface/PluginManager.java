@@ -244,4 +244,46 @@ public interface PluginManager {
      * @return the name of the manager
      */
     String getName();
+
+    /**
+     * If the {@link PluginStatus} of the plugin is not
+     * "ERROR", sets it to "ENABLED"
+     * meaning it is ready to be executed.
+     *
+     * @param pluginName the name of the plugin
+     * @return the new status of the plugin
+     */
+    PluginStatus enablePlugin(String pluginName);
+
+    /**
+     * If the {@link PluginStatus} of the plugin is not
+     * "ERROR", sets it to "ENABLED"
+     * meaning it is ready to be executed.
+     * @param plugin the plugin
+     * @return the new status of the plugin
+     */
+    PluginStatus enablePlugin(Plugin plugin);
+
+    /**
+     * If the {@link PluginStatus} of the plugin is not
+     * "ERROR", sets it to "DISABLED"
+     * meaning it can't be executed.
+     * @param plugin the plugin
+     * @return the new status of the plugin
+     */
+    PluginStatus disablePlugin(Plugin plugin);
+
+    /**
+     * If the {@link PluginStatus} of the plugin is not
+     * "ERROR", sets it to "DISABLED"
+     * meaning it can't be executed.
+     * @param pluginName the name of the plugin
+     * @return the new status of the plugin
+     */
+    PluginStatus disablePlugin(String pluginName);
+
+
+
+
+
 }

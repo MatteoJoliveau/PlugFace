@@ -116,31 +116,41 @@ public abstract class AbstractPluginManager implements PluginManager {
 
     @Override
     public void startPlugin(Plugin plugin) {
-        plugin.start();
+        PluginStatus pluginStatus = plugin.getStatus();
+        if (pluginStatus.equals(PluginStatus.ENABLED) && !pluginStatus.equals(PluginStatus.RUNNING)) {
+            plugin.start();
+        } else {
+            LOGGER.warn("{} is {}. Can't be started", plugin.getName(), plugin.getStatus());
+        }
     }
 
     @Override
     public void startPlugin(String pluginName) {
         Plugin plugin = context.getPlugin(pluginName);
-        plugin.start();
+        startPlugin(plugin);
     }
 
     @Override
     public void stopPlugin(Plugin plugin) {
-        plugin.stop();
+        PluginStatus pluginStatus = plugin.getStatus();
+        if (pluginStatus.equals(PluginStatus.RUNNING)) {
+            plugin.stop();
+        } else {
+            LOGGER.warn("{} is not running. Can't be stopped", plugin.getName());
+        }
     }
 
     @Override
     public void stopPlugin(String pluginName) {
         Plugin plugin = context.getPlugin(pluginName);
-        plugin.stop();
+        stopPlugin(plugin);
     }
 
     @Override
     public void startAll() {
         Map<String, Plugin> all = context.getPluginMap();
         for (Plugin p : all.values()) {
-            p.start();
+            startPlugin(p);
         }
     }
 
@@ -148,20 +158,54 @@ public abstract class AbstractPluginManager implements PluginManager {
     public void stopAll() {
         Map<String, Plugin> all = context.getPluginMap();
         for (Plugin p : all.values()) {
-            p.stop();
+            stopPlugin(p);
         }
     }
 
     @Override
     public void restartPlugin(Plugin plugin) {
-        plugin.stop();
-        plugin.start();
+        stopPlugin(plugin);
+        startPlugin(plugin);
     }
 
     @Override
     public void restartPlugin(String pluginName) {
         Plugin plugin = context.getPlugin(pluginName);
         restartPlugin(plugin);
+    }
+
+    @Override
+    public PluginStatus enablePlugin(String pluginName) {
+        Plugin plugin = context.getPlugin(pluginName);
+        return enablePlugin(plugin);
+    }
+
+    @Override
+    public PluginStatus enablePlugin(Plugin plugin) {
+        PluginStatus pluginStatus = plugin.getStatus();
+        if (!pluginStatus.equals(PluginStatus.ERROR) && pluginStatus.equals(PluginStatus.DISABLED)) {
+            plugin.setStatus(PluginStatus.ENABLED);
+            return plugin.getStatus();
+        } else {
+            return pluginStatus;
+        }
+    }
+
+    @Override
+    public PluginStatus disablePlugin(Plugin plugin) {
+        PluginStatus pluginStatus = plugin.getStatus();
+        if (!pluginStatus.equals(PluginStatus.ERROR) && pluginStatus.equals(PluginStatus.ENABLED)) {
+            plugin.setStatus(PluginStatus.DISABLED);
+            return plugin.getStatus();
+        } else {
+            return pluginStatus;
+        }
+    }
+
+    @Override
+    public PluginStatus disablePlugin(String pluginName) {
+        Plugin plugin = context.getPlugin(pluginName);
+        return disablePlugin(plugin);
     }
 
     @Override
