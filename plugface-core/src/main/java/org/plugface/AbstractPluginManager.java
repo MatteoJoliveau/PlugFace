@@ -92,12 +92,12 @@ public abstract class AbstractPluginManager implements PluginManager {
      * @param context     the context in which the manager lives
      */
     protected AbstractPluginManager(String managerName, PlugfaceContext context) {
-        context.addPluginManager(this);
         this.context = context;
         this.name = managerName;
         Policy.setPolicy(new SandboxSecurityPolicy());
         System.setSecurityManager(new SecurityManager());
         LOGGER.debug("Instantiating DefaultPluginManager");
+        context.addPluginManager(this);
     }
 
 
@@ -117,8 +117,9 @@ public abstract class AbstractPluginManager implements PluginManager {
     @Override
     public void startPlugin(Plugin plugin) {
         PluginStatus pluginStatus = plugin.getStatus();
-        if (pluginStatus.equals(PluginStatus.ENABLED) && !pluginStatus.equals(PluginStatus.RUNNING)) {
+        if (plugin.isEnabled() && !pluginStatus.equals(PluginStatus.RUNNING)) {
             plugin.start();
+            plugin.setStatus(PluginStatus.RUNNING);
         } else {
             LOGGER.warn("{} is {}. Can't be started", plugin.getName(), plugin.getStatus());
         }
@@ -135,6 +136,7 @@ public abstract class AbstractPluginManager implements PluginManager {
         PluginStatus pluginStatus = plugin.getStatus();
         if (pluginStatus.equals(PluginStatus.RUNNING)) {
             plugin.stop();
+            plugin.setStatus(PluginStatus.STOPPED);
         } else {
             LOGGER.warn("{} is not running. Can't be stopped", plugin.getName());
         }
@@ -183,8 +185,8 @@ public abstract class AbstractPluginManager implements PluginManager {
     @Override
     public PluginStatus enablePlugin(Plugin plugin) {
         PluginStatus pluginStatus = plugin.getStatus();
-        if (!pluginStatus.equals(PluginStatus.ERROR) && pluginStatus.equals(PluginStatus.DISABLED)) {
-            plugin.setStatus(PluginStatus.ENABLED);
+        if (!pluginStatus.equals(PluginStatus.ERROR) && !plugin.isEnabled()) {
+            plugin.enable();
             return plugin.getStatus();
         } else {
             return pluginStatus;
@@ -194,8 +196,8 @@ public abstract class AbstractPluginManager implements PluginManager {
     @Override
     public PluginStatus disablePlugin(Plugin plugin) {
         PluginStatus pluginStatus = plugin.getStatus();
-        if (!pluginStatus.equals(PluginStatus.ERROR) && pluginStatus.equals(PluginStatus.ENABLED)) {
-            plugin.setStatus(PluginStatus.DISABLED);
+        if (!pluginStatus.equals(PluginStatus.ERROR) && plugin.isEnabled()) {
+            plugin.disable();
             return plugin.getStatus();
         } else {
             return pluginStatus;

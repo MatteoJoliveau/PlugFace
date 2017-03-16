@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.plugface.*;
 
 import java.io.File;
@@ -147,7 +148,7 @@ public class DefaultPluginManagerTest {
     }
 
     @Test
-    public void pluginOperations() throws Exception {
+    public void enabledPluginOperations() throws Exception {
         Map<String, Plugin> map = new HashMap<>();
         map.put("testPlugin", plugin);
 
@@ -156,21 +157,45 @@ public class DefaultPluginManagerTest {
         when(context.getPlugin("testPlugin")).thenReturn(plugin);
         when(context.getPluginMap()).thenReturn(map);
 
+        when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
+        when(plugin.isEnabled()).thenReturn(true);
+
         manager.startPlugin(plugin);
         manager.startPlugin("testPlugin");
         manager.startAll();
 
-        manager.restartPlugin(plugin);
-        manager.restartPlugin("testPlugin");
+        when(plugin.getStatus()).thenReturn(PluginStatus.RUNNING);
 
         manager.stopPlugin(plugin);
         manager.stopPlugin("testPlugin");
         manager.stopAll();
 
-        verify(plugin, times(5)).start();
-        verify(plugin, times(5)).stop();
+        verify(plugin, times(3)).start();
+        verify(plugin, times(3)).stop();
+        verify(plugin, times(6)).setStatus(isA(PluginStatus.class));
 
-        verify(context, times(3)).getPlugin("testPlugin");
+        verify(context, times(2)).getPlugin("testPlugin");
+
+    }
+
+    @Test
+    public void disabledPluginOperations() throws Exception {
+        Map<String, Plugin> map = new HashMap<>();
+        map.put("testPlugin", plugin);
+
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
+
+        when(context.getPlugin("testPlugin")).thenReturn(plugin);
+        when(context.getPluginMap()).thenReturn(map);
+
+        when(plugin.isEnabled()).thenReturn(false);
+
+        manager.startPlugin(plugin);
+        manager.startPlugin("testPlugin");
+        manager.startAll();
+
+        verify(plugin, never()).start();
+
     }
 
     @Test

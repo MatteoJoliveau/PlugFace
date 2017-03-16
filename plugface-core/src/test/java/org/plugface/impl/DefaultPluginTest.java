@@ -26,11 +26,8 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.DefaultPlugin;
-import org.plugface.Plugin;
-import org.plugface.PluginConfiguration;
+import org.plugface.*;
 import org.junit.Test;
-import org.plugface.PluginStatus;
 
 import java.util.Collection;
 import java.util.Collections;

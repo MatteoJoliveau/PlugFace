@@ -52,6 +52,8 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
      */
     private PluginStatus pluginStatus;
 
+    private PluginStatus pluginEnabled;
+
     /**
      * Construct a {@link DefaultPlugin} with a random
      * UUID as name
@@ -87,6 +89,19 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
 
     public void setStatus(PluginStatus pluginStatus) {
         this.pluginStatus = pluginStatus;
+    }
+
+    public void enable() {
+        this.pluginEnabled = PluginStatus.ENABLED;
+        this.pluginStatus = PluginStatus.READY;
+    }
+
+    public void disable() {
+        this.pluginEnabled = PluginStatus.DISABLED;
+    }
+
+    public boolean isEnabled() {
+        return pluginEnabled.equals(PluginStatus.ENABLED);
     }
 
     @Override

@@ -56,7 +56,7 @@ public final class DefaultPluginManager extends AbstractPluginManager {
      * @param context the context in which the manager lives
      */
     public DefaultPluginManager(PlugfaceContext context) {
-        super(UUID.randomUUID().toString(), context);
+        super(context);
 
     }
 
@@ -78,15 +78,16 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         LOGGER.debug("Loading from supplied plugin folder");
         if (!folder.isDirectory()) {
             throw new InvalidPathException(pluginFolder, "Set a valid plugin directory");
-        }
-        List<Plugin> loaded = load(folder);
-        if (autoregister) {
-            for (Plugin p : loaded) {
-                getContext().addPlugin(p);
-            }
-            return loaded;
         } else {
-            return loaded;
+            List<Plugin> loaded = load(folder);
+            if (autoregister) {
+                for (Plugin p : loaded) {
+                    getContext().addPlugin(p);
+                }
+                return loaded;
+            } else {
+                return loaded;
+            }
         }
     }
 
@@ -145,6 +146,8 @@ public final class DefaultPluginManager extends AbstractPluginManager {
                             LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
                             try {
                                 Plugin plugin = (Plugin) clazz.newInstance();
+                                plugin.setStatus(PluginStatus.READY);
+                                plugin.disable();
                                 loadedPlugins.add(plugin);
 
                                 Map<String, Method> methods = new HashMap<>();
