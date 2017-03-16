@@ -8,7 +8,7 @@
 
 PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.  
 
-**Browse the Javadoc [here](http://plugface.matteojoliveau.com/javadoc)**  
+**Browse the Javadoc [here](https://plugface.org/apidocs/index.html)**  
 
 ## Core Concepts
 * Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
@@ -19,20 +19,10 @@ PlugFace is a simple, lightweight, high abstraction plugin framework for Java ap
 There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
 Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Wiki for the full list.
 
-To download the latest stable release in Maven, add the following snippet to the `repositories` section of your `pom.xml` file:
-
-```xml
-<repository>
-    <id>plugface-releases</id>
-    <name>PlugFace Release Repository</name>
-    <url>https://nexus.matteojoliveau.com/repository/maven-releases/</url>
-</repository>
-```
-
-Then add your dependency as usual:
+To download the latest stable release in Maven, add the following snippet to the `<dependencies>` section of your pom.xml:
 ```xml
 <dependency>
-    <groupId>com.matteojoliveau.plugface</groupId>
+    <groupId>org.plugface</groupId>
     <artifactId>plugface-core</artifactId>
     <version>${release.version}</version>
 </dependency>
@@ -41,15 +31,13 @@ Then add your dependency as usual:
 For Gradle, add the following lines to `build.gradle`:
 ```gradle
 repositories {
-    maven {
-        url "https://nexus.matteojoliveau.com/repository/maven-releases/"
-    }
+    mavenCentral()
 }
 ```
 Then add:
 ```gradle
 dependencies {
-    compile 'com.matteojoliveau.plugface:plugface-core:$RELEASEVERSION'
+    compile 'org.plugface:plugface-core:$RELEASEVERSION'
 }
 ```
 
