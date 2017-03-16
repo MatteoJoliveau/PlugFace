@@ -32,9 +32,13 @@ import org.mockito.Mockito;
 import org.plugface.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -93,24 +97,28 @@ public class DefaultPluginManagerTest {
     }
 
     @Test
-    public void loadPlugins() {
+    public void loadPlugins() throws IOException {
         AbstractPluginManager manager = new DefaultPluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPermissionsFile(classLoader.getResource("permissions.properties").getFile());
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
+        manager.setPermissions(prop);
         File file = new File(classLoader.getResource("plugins").getFile());
         manager.setPluginFolder(file.getAbsolutePath());
         List<Plugin> loaded = manager.loadPlugins();
         assertNotNull(loaded);
         assertTrue(loaded.get(0) != null);
         PluginClassLoader pcl = (PluginClassLoader) loaded.get(0).getClass().getClassLoader();
-        assertEquals(manager.getPermissionsFile(), pcl.getPermissionsFile());
+        assertEquals(manager.getPermissions(), pcl.getPermissionProperties());
     }
 
     @Test
-    public void loadPluginsString() {
+    public void loadPluginsString() throws IOException {
         AbstractPluginManager manager = new DefaultPluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPermissionsFile(classLoader.getResource("permissions.properties").getFile());
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
+        manager.setPermissions(prop);
         File file = new File(classLoader.getResource("plugins").getFile());
         List<Plugin> loaded = manager.loadPlugins(file.getAbsolutePath());
         assertNotNull(loaded);
@@ -122,7 +130,9 @@ public class DefaultPluginManagerTest {
     public void loadPluginsAutoregister() throws Exception {
         AbstractPluginManager manager = new DefaultPluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPermissionsFile(classLoader.getResource("permissions.properties").getFile());
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
+        manager.setPermissions(prop);
         File file = new File(classLoader.getResource("plugins").getFile());
         manager.setPluginFolder(file.getAbsolutePath());
         List<Plugin> loaded = manager.loadPlugins(true);
@@ -137,7 +147,9 @@ public class DefaultPluginManagerTest {
     public void loadPluginsAutoregisterString() throws Exception {
         AbstractPluginManager manager = new DefaultPluginManager(context);
         ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPermissionsFile(classLoader.getResource("permissions.properties").getFile());
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
+        manager.setPermissions(prop);
         File file = new File(classLoader.getResource("plugins").getFile());
         List<Plugin> loaded = manager.loadPlugins(file.getAbsolutePath(), true);
         assertNotNull(loaded);
@@ -245,6 +257,21 @@ public class DefaultPluginManagerTest {
     }
 
 //    @Test
+    public void debugLoadPluginTest() throws Exception {
+        AbstractPluginManager manager = new DefaultPluginManager(context);
+        manager.setDebug(true);
+        ClassLoader classLoader = getClass().getClassLoader();
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
+        manager.setPermissions(prop);
+        manager.setPluginFolder("C:\\Users\\Matteo\\IdeaProjects\\test2\\target\\classes");
+        List<Plugin> loaded = manager.loadPlugins(true);
+        assertNotNull(loaded);
+        verify(context, atLeastOnce()).addPlugin(isA(Plugin.class));
+
+    }
+
+    //    @Test
 //    public void test() {
 //        PlugfaceContext context = new DefaultPlugfaceContext();
 //        AbstractPluginManager manager = new DefaultPluginManager(context);

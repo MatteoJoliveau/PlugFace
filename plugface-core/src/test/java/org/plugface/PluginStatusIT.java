@@ -57,27 +57,40 @@ public class PluginStatusIT {
     @Test
     public void enableTest() throws Exception {
         for (Plugin p: context.getPluginMap().values()) {
-            assertNotNull(p);
-            p.enable();
-            assertTrue(p.isEnabled());
+            if (!p.getName().equals("dependentPlugin")) {
+                assertNotNull(p);
+                manager.enablePlugin(p);
+                assertTrue(p.isEnabled());
+            }
         }
     }
 
     @Test
     public void startStopTest() throws Exception {
         for (Plugin p: context.getPluginMap().values()) {
-            assertNotNull(p);
-            p.enable();
-            assertTrue(p.isEnabled());
-            manager.startPlugin(p);
-            assertEquals(PluginStatus.RUNNING, p.getStatus());
-            manager.stopPlugin(p);
-            assertEquals(PluginStatus.STOPPED, p.getStatus());
+            if (!p.getName().equals("dependentPlugin")) {
+                assertNotNull(p);
+                manager.enablePlugin(p);
+                assertTrue(p.isEnabled());
+                manager.startPlugin(p);
+                assertEquals(PluginStatus.RUNNING, p.getStatus());
+                manager.stopPlugin(p);
+                assertEquals(PluginStatus.STOPPED, p.getStatus());
 
-            p.disable();
-            manager.startPlugin(p);
-            assertFalse(p.isEnabled());
-            assertNotEquals(PluginStatus.RUNNING, p.getStatus());
+                manager.disablePlugin(p);
+                manager.startPlugin(p);
+                assertFalse(p.isEnabled());
+                assertNotEquals(PluginStatus.RUNNING, p.getStatus());
+            }
         }
+    }
+
+    @Test(expected = MissingDependencyException.class)
+    public void missingDependenciesTest() throws Exception {
+        for (Plugin p: context.getPluginMap().values()) {
+            assertNotNull(p);
+            manager.enablePlugin(p);
+        }
+
     }
 }

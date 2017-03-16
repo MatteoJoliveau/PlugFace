@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 import org.plugface.*;
 import org.junit.Test;
+import org.plugface.annotations.Requires;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -133,6 +134,9 @@ public class DefaultPluginTest {
 
         };
 
+        Class<? extends Plugin> aClass = plugin.getClass();
+        boolean annotationPresent = plugin.getClass().isAnnotationPresent(Requires.class);
+        System.out.print(annotationPresent + aClass.toString());
         assertEquals(Integer.valueOf(2), plugin.execute(Collections.nCopies(2, 5)));
 
     }
@@ -147,6 +151,7 @@ public class DefaultPluginTest {
     }
 }
 
+@Requires(requiredPlugins = {"ciao"})
 class TestPlugin extends DefaultPlugin<Void, Void> {
 
     public TestPlugin() {

@@ -27,6 +27,7 @@ THE SOFTWARE.
  */
 
 import org.plugface.*;
+import org.plugface.annotations.Requires;
 import org.plugface.annotations.ExtensionMethod;
 import org.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
@@ -57,7 +58,6 @@ public final class DefaultPluginManager extends AbstractPluginManager {
      */
     public DefaultPluginManager(PlugfaceContext context) {
         super(context);
-
     }
 
     /**
@@ -79,7 +79,12 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         if (!folder.isDirectory()) {
             throw new InvalidPathException(pluginFolder, "Set a valid plugin directory");
         } else {
-            List<Plugin> loaded = load(folder);
+            List<Plugin> loaded;
+//            if (isDebug()) {
+//                loaded = loadDebug(folder);
+//            } else {
+            loaded = load(folder);
+//            }
             if (autoregister) {
                 for (Plugin p : loaded) {
                     getContext().addPlugin(p);
@@ -95,12 +100,15 @@ public final class DefaultPluginManager extends AbstractPluginManager {
      * Load all the plugins from the folder, checking the jar files name
      * and error checking the process.
      * <p>
-     *     Loading occurs by finding all the jar files in the folder, getting
-     *     all the {@link JarEntry} in the file and checking if the loaded classes
-     *     are a valid implementation of {@link Plugin}.
-     *     If so, add the class to the plugin list and check if there is any method
-     *     marked with {@link ExtensionMethod}, then add them
-     *     to the extension list. Extension methods will be accessible through Java reflection.
+     * Loading occurs by finding all the jar files in the folder, getting
+     * all the {@link JarEntry} in the file and checking if the loaded classes
+     * are a valid implementation of {@link Plugin}.
+     * If so, add the class to the plugin list and check if there is any method
+     * marked with {@link ExtensionMethod}, then add them
+     * to the extension list. Extension methods will be accessible through Java reflection.
+     * <p>
+     * If {@link AbstractPluginManager#debug} is set to true, it will load plugins from a simple project
+     * folder instead of a full fat Jar file
      * </p>
      *
      * @param folder the folder from which to load the plugins
@@ -124,7 +132,8 @@ public final class DefaultPluginManager extends AbstractPluginManager {
                         LOGGER.error("Malformed URL from filepath {}", file.getPath(), e);
                     }
                     PluginClassLoader cl = new PluginClassLoader(urls);
-                    cl.setPermissionsFile(getPermissionsFile());
+
+                    cl.setPermissionProperties(getPermissions());
 
                     while (entries.hasMoreElements()) {
                         LOGGER.debug("Loading plugin classes from jar");
@@ -144,6 +153,7 @@ public final class DefaultPluginManager extends AbstractPluginManager {
                         assert clazz != null;
                         if (Plugin.class.isAssignableFrom(clazz)) {
                             LOGGER.debug("{} class loaded as Plugin", clazz.getSimpleName());
+
                             try {
                                 Plugin plugin = (Plugin) clazz.newInstance();
                                 plugin.setStatus(PluginStatus.READY);
@@ -157,6 +167,14 @@ public final class DefaultPluginManager extends AbstractPluginManager {
                                     }
                                 }
                                 getExtensions().put(plugin, methods);
+
+                                if (clazz.isAnnotationPresent(Requires.class)) {
+                                    Requires dependsAnnotation = clazz.getAnnotation(Requires.class);
+                                    String[] dependencies = dependsAnnotation.requiredPlugins();
+                                    List<String> requiredDepPlugins = new ArrayList<>();
+                                    Collections.addAll(requiredDepPlugins, dependencies);
+                                    getPluginDependencies().put(plugin, requiredDepPlugins);
+                                }
                             } catch (InstantiationException | IllegalAccessException e) {
                                 LOGGER.error("Error instanciating new Plugin class", e);
                             }
@@ -172,6 +190,74 @@ public final class DefaultPluginManager extends AbstractPluginManager {
         return loadedPlugins;
     }
 
+    @Override
+    public PluginStatus enablePlugin(String pluginName) {
+        Plugin plugin = getContext().getPlugin(pluginName);
+        return this.enablePlugin(plugin);
+    }
+
+    @Override
+    public PluginStatus enablePlugin(Plugin plugin) {
+        if (checkPluginDependencies(plugin)) {
+            return super.enablePlugin(plugin);
+        } else {
+            throw new MissingDependencyException(getPluginDependencies().get(plugin).toString());
+        }
+    }
+
+    //
+//    private List<Plugin> loadDebug(File folder) {
+//        List<Plugin> loadedPlugins = new ArrayList<>();
+//        Path path = folder.toPath();
+//        File[] files = folder.listFiles();
+//        assert files != null;
+//        URL url = null;
+//        try {
+//            url = folder.toURI().toURL();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        assert url != null;
+//        PluginClassLoader cl = new PluginClassLoader(url);
+//        cl.setPermissionProperties(getPermissions());
+//
+//        return loadedPlugins;
+//    }
+
+    private boolean checkPluginDependencies(Plugin plugin) {
+        if (getPluginDependencies().containsKey(plugin)) {
+            List<String> dep = getPluginDependencies().get(plugin);
+            return areDependenciesPresent(dep);
+        } else return true;
+    }
+
+    private boolean areDependenciesPresent(Collection<String> dependencies) {
+        for (String s : dependencies) {
+            if ("".equals(s)) {
+                return true;
+            } else if (!getContext().hasPlugin(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //    private File findClassFile(File file) {
+//        if(file.isDirectory()) {
+//            if (file.canRead()){
+//                for (File f: file.listFiles()) {
+//                    if (f.isDirectory()) {
+//                        findClassFile(f);
+//                    } else {
+//                        if (f.getName().endsWith(".class")) {
+//                            return f;
+//                        }
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
     @Override
     public String toString() {
         return "DefaultPluginManager{" +

@@ -26,12 +26,11 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.security.SandboxSecurityPolicy;
 import org.plugface.annotations.ExtensionMethod;
+import org.plugface.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Policy;
@@ -64,7 +63,16 @@ public abstract class AbstractPluginManager implements PluginManager {
      * The properties file from which to load the permissions
      * to give to the plugins
      */
-    private File permissionsFile;
+    private Properties permissionsProperties;
+
+    /**
+     * If true, the manager is in
+     * debug mode and will load plugins from a simple project
+     * folder instead of a full fat Jar file
+     */
+    private boolean debug;
+
+    private Map<Plugin, List<String>> pluginDependencies = new HashMap<>();
 
     /**
      * A cache that holds all the extension methods associated to a {@link Plugin}
@@ -268,20 +276,14 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
-    public File getPermissionsFile() {
-        return permissionsFile;
+    public Properties getPermissions() {
+        return permissionsProperties;
     }
 
     @Override
-    public void setPermissionsFile(File permissionsFile) {
-        this.permissionsFile = permissionsFile;
+    public void setPermissions(Properties permissions) {
+        this.permissionsProperties = permissions;
     }
-
-    @Override
-    public void setPermissionsFile(String fileName) {
-        this.permissionsFile = new File(fileName);
-    }
-
 
     @Override
     public boolean hasExtension(String pluginName, String extensionName) {
@@ -293,6 +295,14 @@ public abstract class AbstractPluginManager implements PluginManager {
         return false;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -302,13 +312,19 @@ public abstract class AbstractPluginManager implements PluginManager {
         return extensions;
     }
 
+    protected Map<Plugin, List<String>> getPluginDependencies() {
+        return pluginDependencies;
+    }
+
     @Override
     public String toString() {
         return "AbstractPluginManager{" +
                 "context=" + context +
                 ", name='" + name + '\'' +
                 ", pluginFolder='" + pluginFolder + '\'' +
-                ", permissionsFile=" + permissionsFile +
+                ", permissionsProperties=" + permissionsProperties +
+                ", debug=" + debug +
+                ", extensions=" + extensions +
                 '}';
     }
 }

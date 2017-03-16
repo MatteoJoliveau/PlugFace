@@ -61,9 +61,9 @@ public class PluginClassLoader extends URLClassLoader {
     private static final char WINDOWS_SEPARATOR = '\\';
 
     /**
-     * The properties file containing custom permissions for plugins
+     * The properties containing custom permissions for plugins
      */
-    private File permissionsFile;
+    private Properties permissionProperties;
 
     /**
      * Construct a {@link PluginClassLoader} from an single {@link URL}
@@ -85,7 +85,7 @@ public class PluginClassLoader extends URLClassLoader {
 
     /**
      * Create a set of {@link Permission} for the specified {@link CodeSource}, given a
-     * {@link PluginClassLoader#permissionsFile}.
+     * {@link PluginClassLoader#permissionProperties}.
      *
      * @param codesource the {@link CodeSource} to give the permissions to
      * @return a {@link PermissionCollection} whith all the appropriate permissions
@@ -94,7 +94,7 @@ public class PluginClassLoader extends URLClassLoader {
     @Override
     protected PermissionCollection getPermissions(CodeSource codesource) {
         Permissions permissions = new Permissions();
-        if (permissionsFile != null) {
+        if (permissionProperties != null) {
             String pluginFileName = retrieveFileNameFromCodeSource(codesource);
 
             final String[] properties = new String[]{
@@ -104,28 +104,15 @@ public class PluginClassLoader extends URLClassLoader {
                     "permissions." + pluginFileName + ".runtime"
             };
 
-            Properties prop = new Properties();
             String requiredPermissions;
 
-            InputStream input = null;
-            try {
-                input = new FileInputStream(permissionsFile);
-            } catch (FileNotFoundException e) {
-                LOGGER.error("Permission file not found", e);
-            }
-            try {
-                prop.load(input);
-            } catch (IOException e) {
-                LOGGER.error("Error reading properties", e);
-            }
-
-            if (prop.isEmpty()) {
+            if (permissionProperties.isEmpty()) {
                 return permissions;
             }
 
             for (String key : properties) {
-                if (prop.containsKey(key)) {
-                    requiredPermissions = prop.getProperty(key);
+                if (permissionProperties.containsKey(key)) {
+                    requiredPermissions = permissionProperties.getProperty(key);
                     String[] slices = requiredPermissions.split(", ");
 
                     if (key.equals(properties[0])) {
@@ -188,21 +175,12 @@ public class PluginClassLoader extends URLClassLoader {
         return file.substring(0, file.length() - 4);
     }
 
-    /**
-     * Returns the permissions.properties file
-     *
-     * @return the permissions.properties file
-     */
-    public File getPermissionsFile() {
-        return permissionsFile;
+    public Properties getPermissionProperties() {
+        return permissionProperties;
     }
 
-    /**
-     * Sets the permissions.properties file
-     * @param permissionsFile the new permissions.properties file
-     */
-    public void setPermissionsFile(File permissionsFile) {
-        this.permissionsFile = permissionsFile;
+    public void setPermissionProperties(Properties permissionProperties) {
+        this.permissionProperties = permissionProperties;
     }
 
     /**

@@ -31,8 +31,10 @@ import org.plugface.annotations.ExtensionMethod;
 import org.plugface.impl.DefaultPluginManager;
 
 import java.io.File;
+import java.security.Permission;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * <a href="https://github.com/MatteoJoliveau/PlugFace/wiki/Plugin-Manager">Plugin Manager</a>
@@ -204,21 +206,14 @@ public interface PluginManager {
      *
      * @return the properties file that specifies the permissions for loaded plugins
      */
-    File getPermissionsFile();
+    Properties getPermissions();
 
     /**
      * Sets the properties file that specifies the permissions for loaded plugins
      *
-     * @param permissionsFile the properties file that specifies the permissions for loaded plugins
+     * @param permissions the properties file that specifies the permissions for loaded plugins
      */
-    void setPermissionsFile(File permissionsFile);
-
-    /**
-     * Sets the properties file that specifies the permissions for loaded plugins
-     *
-     * @param fileName the path of the properties file that specifies the permissions for loaded plugins
-     */
-    void setPermissionsFile(String fileName);
+    void setPermissions(Properties permissions);
 
     /**
      * Check whether a plugin exposes a specific {@link ExtensionMethod}
@@ -282,8 +277,19 @@ public interface PluginManager {
      */
     PluginStatus disablePlugin(String pluginName);
 
+    /**
+     * Check whether the manager is in debug
+     * mode or not.
+     * @return true if in debug mode, false if not
+     */
+    boolean isDebug();
 
-
-
+    /**
+     * Sets the debug mode.
+     * If true, it will load plugins from a simple project
+     * folder instead of a full fat Jar file
+     * @param debug true to enable debug mode, false to disable it
+     */
+    void setDebug(boolean debug);
 
 }

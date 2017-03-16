@@ -1,12 +1,21 @@
-# WELCOME TO PLUGFACE
+#WILLKOMMEN ZU PLUGFACE
 
-PlugFace is the next generation framework for Java modular applications, capable of turning a clunky software into an agile, hot swappable app. It features a lightweight core and agnostic API, plugin autodiscovery, centralized context management and simple API extension through annotations.
+PlugFace ist die nächste Generation-Framework für Java modulare  Applikationen, es kann, eine schlechte
+Software in einer agile, Hot-Swap-App verwandeln . Es ist ausgestattet mit leichtem Kern und Agnostiker 
+API, automatische Erkennung Plugin, zentrale Kontextmanagement und einfache API-Erweiterung durch 
+Anmerkungen.
 
-## Core Concepts
-* Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
-* `PluginManager` utility class to load, configure and register plugins. It should be the primary way for applications to manage the PlugFace echosystems.
-* A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
-* A sandbox that encloses plugins in a safe zone without permission to access the real world.
-* A permission system to grant extra functionalities to plugins, such as reading and writing files or accessing the network.
-* An expansion mechanism to extend the API in a per-application base, without the need to download additional SDKs or libraries.
+## Kernkonzepte
 
+* Einfache Interface Plugin, das eine einheitliche API bietet, um Plugins zu starten, stoppen und 
+konfigurieren
+* `PluginManager` Utility-Klasse, um Plugins zu laden, konfigurieren und registrieren. Es sollt der wichtigste 
+Weg für Anwendungen sein, um die PlugFace Echosystem zu verwalten.
+* PlugfaceContext`, das fungiert als Repository für Plugins und registrierte Manager. Es enthält den Hinweis 
+auf alle `PluginManager` Instanzen und auf den Plugins, die registriert worden haben.
+* Eine Sandbox, das Plugins in einem sicheren Bereich zusammenfasst, ohne zugriffsberechtigung auf die 
+reale Welt. 
+* Ein Berechtigung-System, um zusätzlichen Funktionalitäten zu Plugins erteilen, wie das Lesen und 
+Schreiben von Dateien oder das Netzzugangs.
+* Eine Erweiterungsmechanismus, um die API auf der Grundlage spezifischen Applikationen zu verbreiten, 
+ohne die Notwendigkeit SDK  zu downloaden, oder zusätzliche Bibliotheken zu benutzen.
