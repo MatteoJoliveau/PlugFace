@@ -41,10 +41,14 @@
 
     <scm>
         <connection>scm:git:git://github.com/MatteoJoliveau/PlugFace.git</connection>
-        <developerConnection>scm:git:ssh://github.com:MatteoJoliveau/MatteoJoliveau.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/MatteoJoliveau/PlugFace.git</developerConnection>
         <url>https://github.com/MatteoJoliveau/PlugFace/tree/master</url>
     </scm>
 
+    <issueManagement>
+        <url>https://github.com/MatteoJoliveau/PlugFace/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
     <modules>
         <module>plugface-core</module>
     </modules>
@@ -198,6 +202,23 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keyname>Matteo Joliveau</keyname>
+                    <passphraseServerId>matteo-joliveau</passphraseServerId>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
