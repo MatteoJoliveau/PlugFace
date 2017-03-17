@@ -53,8 +53,6 @@ PluginManager manager = new DefaultPluginManager(context);
 
 manager.setPluginFolder("/path/to/plugins");
 
-manager.setPermissionsFile("/path/to/permissions.properties"); //optional if your plugins require special permissions
-
 List<Plugin> loaded = manager.loadPlugins(true); //true sets the autoregister flag, automatically inserting the 
                                                 //plugins in the context
 manager.startAll(); 
