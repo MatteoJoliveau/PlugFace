@@ -323,7 +323,7 @@ public class DefaultPluginManagerTest {
 
 class ManagerTestPlugin extends SimplePlugin implements Iterable {
 
-    public ManagerTestPlugin() {
+    ManagerTestPlugin() {
         super("testPlugin");
     }
 

@@ -30,9 +30,5 @@ import org.junit.Test;
 
 public class AbstractPluginManagerTest {
 
-    @Test
-    public void name() throws Exception {
-
-
-    }
+    //TODO: maybe some more test that are not included in DefaultPluginTest?
 }

@@ -56,6 +56,6 @@ public class SimplePluginTest {
             assertEquals("This plugin can't execute", e.getMessage());
         }
 
-    }
 
+    }
 }
