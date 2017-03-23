@@ -9,9 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>PlugFace Core</name>
     <artifactId>plugface-core</artifactId>
     <description>
-        PlugFace Core is the central piece of the framework.
+        PlugFace Core is the central piece of the PlugFace framework.
         It provides the core functionalities for creating and managing
         plugins.
     </description>

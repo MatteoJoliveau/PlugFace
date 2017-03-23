@@ -13,7 +13,7 @@
     <description>
         PlugFace is the next generation framework for Java modular applications,
         capable of turning a clunky software into an agile, hot swappable app.
-        It features a lightweight core (20 KB as of 0.2.0) and agnostic API, plugin autodiscovery,
+        It features a lightweight core and agnostic API, plugin autodiscovery,
         centralized context management and simple API extension through annotations.
     </description>
     <url>https://plugface.org/</url>
@@ -302,11 +302,6 @@
     <profiles>
         <profile>
             <id>sign-artifact</id>
-            <activation>
-                <property>
-                    <name>Matteo Joliveau</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>

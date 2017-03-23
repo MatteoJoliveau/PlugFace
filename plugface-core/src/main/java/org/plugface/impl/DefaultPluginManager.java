@@ -136,7 +136,7 @@ public final class DefaultPluginManager extends AbstractPluginManager {
                     cl.setPermissionProperties(getPermissions());
 
                     while (entries.hasMoreElements()) {
-                        LOGGER.debug("Loading plugin classes from jar");
+                        LOGGER.debug("Loading plugin classes from jar"); //TODO
                         JarEntry jarEntry = entries.nextElement();
                         if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
                             continue;
