@@ -292,4 +292,27 @@ public interface PluginManager {
      */
     void setDebug(boolean debug);
 
+    /**
+     * Check if a plugin is a valid implementation of a class or interface.
+     * @param plugin the plugin to check
+     * @param apiClass the class that the plugin should implement
+     * @return true if the plugin is castable to the given class, false if not
+     */
+    boolean isPluginImplementingApi(Plugin plugin, Class<?> apiClass);
+
+    /**
+     * Check if a plugin is a valid implementation of a class or interface.
+     * @param pluginName the name of the plugin to check
+     * @param apiClass the class that the plugin should implement
+     * @return true if the plugin is castable to the given class, false if not
+     */
+    boolean isPluginImplementingApi(String pluginName, Class<?> apiClass);
+
+    /**
+     * Return a list of plugins that implements a class or interface
+     * @param apiClass the class that the plugin should implement
+     * @return a list of plugin that implement the given class
+     */
+    List<Plugin> getAllImplementingPlugin(Class<?> apiClass);
+
 }

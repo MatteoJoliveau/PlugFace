@@ -246,6 +246,28 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
+    public boolean isPluginImplementingApi(Plugin plugin, Class<?> apiClass) {
+        return apiClass.isAssignableFrom(plugin.getClass());
+    }
+
+    @Override
+    public boolean isPluginImplementingApi(String pluginName, Class<?> apiClass) {
+        Plugin plugin = getContext().getPlugin(pluginName);
+        return apiClass.isAssignableFrom(plugin.getClass());
+    }
+
+    @Override
+    public List<Plugin> getAllImplementingPlugin(Class<?> apiClass) {
+        List<Plugin> plugins = new ArrayList<>();
+        for (Plugin p : getContext().getPluginMap().values()) {
+            if (apiClass.isAssignableFrom(p.getClass())) {
+                plugins.add(p);
+            }
+        }
+        return plugins;
+    }
+
+    @Override
     public PlugfaceContext getContext() {
         return context;
     }

@@ -35,10 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -225,8 +222,8 @@ public class DefaultPluginManagerTest {
         List<Plugin> loaded = manager.loadPlugins(true);
         Plugin test = null;
 
-        for (Plugin p: loaded) {
-            if (p.getName().equals("anotherPlugin")){
+        for (Plugin p : loaded) {
+            if (p.getName().equals("anotherPlugin")) {
                 test = p;
             }
         }
@@ -256,7 +253,7 @@ public class DefaultPluginManagerTest {
         assertEquals(manager2.toString(), manager.toString());
     }
 
-//    @Test
+    //    @Test
     public void debugLoadPluginTest() throws Exception {
         AbstractPluginManager manager = new DefaultPluginManager(context);
         manager.setDebug(true);
@@ -269,6 +266,38 @@ public class DefaultPluginManagerTest {
         assertNotNull(loaded);
         verify(context, atLeastOnce()).addPlugin(isA(Plugin.class));
 
+    }
+
+    @Test
+    public void pluginApiImplementationCheckTest() throws Exception {
+        Plugin iterablePlugin = new ManagerTestPlugin();
+        Plugin randomPlugin = new SimplePlugin("randomPlugin") {
+
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void stop() {
+
+            }
+        };
+
+        PlugfaceContext context2 = new DefaultPlugfaceContext();
+        PluginManager manager = new DefaultPluginManager(context2);
+        context2.addPlugin(iterablePlugin);
+        context2.addPlugin(randomPlugin);
+
+        boolean comparable = manager.isPluginImplementingApi(iterablePlugin, Comparable.class);
+        boolean iterable = manager.isPluginImplementingApi(iterablePlugin.getName(), Iterable.class);
+        List<Plugin> implementingPlugins = manager.getAllImplementingPlugin(Iterable.class);
+        assertFalse(comparable);
+        assertTrue(iterable);
+
+        assertNotNull(implementingPlugins);
+        assertEquals(1, implementingPlugins.size());
+        assertEquals(iterablePlugin, implementingPlugins.get(0));
     }
 
     //    @Test
@@ -290,4 +319,26 @@ public class DefaultPluginManagerTest {
 //        test.start();
 //
 //    }
+}
+
+class ManagerTestPlugin extends SimplePlugin implements Iterable {
+
+    public ManagerTestPlugin() {
+        super("testPlugin");
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public Iterator iterator() {
+        return null;
+    }
 }
