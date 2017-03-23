@@ -1,7 +1,6 @@
 # PlugFace Framework
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Snapshot-v0.5.0--SNAPSHOT-green.svg)](https://nexus.matteojoliveau.com/#browse/browse/components:maven-snapshots)
-[![GitHub release](https://img.shields.io/badge/Release-v0.4.1-blue.svg)](https://github.com/MatteoJoliveau/PlugFace/releases/latest)
+[![Maven Central](https://img.shields.io/maven-central/v/org.plugface/plugface.svg)](https://search.maven.org/#search|ga|1|plugface)
 [![Build Status](https://travis-ci.org/MatteoJoliveau/PlugFace.svg?branch=master)](https://travis-ci.org/MatteoJoliveau/PlugFace)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
