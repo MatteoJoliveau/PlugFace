@@ -12,7 +12,7 @@
     <name>PlugFace Core</name>
     <artifactId>plugface-core</artifactId>
     <description>
-        PlugFace Core is the central piece of the PlugFace framework.
+        PlugFace Core is the central piece of the PlugFace Framework.
         It provides the core functionalities for creating and managing
         plugins.
     </description>
