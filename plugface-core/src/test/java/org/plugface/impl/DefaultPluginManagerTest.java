@@ -314,6 +314,9 @@ public class DefaultPluginManagerTest {
             }
         };
 
+        randomPlugin.setStatus(PluginStatus.READY);
+        randomPlugin.enable();
+
         PluginContext context2 = new DefaultPluginContext();
         PluginManager manager = new DefaultPluginManager("managerOne", context2);
         context2.addPlugin(iterablePlugin);
@@ -337,6 +340,8 @@ class ManagerTestPlugin extends SimplePlugin implements Iterable {
 
     ManagerTestPlugin() {
         super("testPlugin");
+        setStatus(PluginStatus.READY);
+        enable();
     }
 
     @Override

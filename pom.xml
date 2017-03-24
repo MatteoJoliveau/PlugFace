@@ -51,7 +51,6 @@
     </issueManagement>
     <modules>
         <module>plugface-core</module>
-        <module>plugfacedemo</module>
     </modules>
 
     <properties>

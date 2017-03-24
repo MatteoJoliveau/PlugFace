@@ -26,6 +26,8 @@ THE SOFTWARE.
  * #L%
  */
 
+import com.sun.org.apache.regexp.internal.RE;
+import org.plugface.PluginStatus;
 import org.plugface.SimplePlugin;
 import org.junit.Test;
 
@@ -72,8 +74,10 @@ public class SimplePluginTest {
 
             }
         };
+        plugin.setStatus(PluginStatus.READY);
+        plugin.disable();
 
-        System.out.println(plugin);
-
+        String expected = "SimplePlugin{name='test', pluginConfiguration={}, pluginStatus=READY, pluginEnabled=false}";
+        assertEquals(expected, plugin.toString());
     }
 }

@@ -52,9 +52,9 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     /**
      * The current status of the plugin
      */
-    private PluginStatus pluginStatus = PluginStatus.READY;
+    private PluginStatus pluginStatus;
 
-    private PluginStatus pluginEnabled = PluginStatus.DISABLED;
+    private PluginStatus pluginEnabled;
 
     /**
      * Construct a {@link DefaultPlugin} with a random
