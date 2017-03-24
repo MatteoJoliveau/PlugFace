@@ -58,4 +58,22 @@ public class SimplePluginTest {
 
 
     }
+
+    @Test
+    public void toStringTest() throws Exception {
+        SimplePlugin plugin = new SimplePlugin("test") {
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void stop() {
+
+            }
+        };
+
+        System.out.println(plugin);
+
+    }
 }

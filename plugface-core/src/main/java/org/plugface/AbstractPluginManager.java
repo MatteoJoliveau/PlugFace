@@ -35,6 +35,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Policy;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An abstract implementation of {@link PluginManager} that provides basic
@@ -83,16 +87,6 @@ public abstract class AbstractPluginManager implements PluginManager {
 
     /**
      * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
-     * with a randomly generated {@link UUID} as the name
-     *
-     * @param context the context in which the manager lives
-     */
-    protected AbstractPluginManager(PluginContext context) {
-        this(UUID.randomUUID().toString(), context);
-    }
-
-    /**
-     * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
      * with the specified name, also settings the {@link SandboxSecurityPolicy}
      * and {@link SecurityManager} for the plugin sandbox
      *
@@ -106,6 +100,7 @@ public abstract class AbstractPluginManager implements PluginManager {
         System.setSecurityManager(new SecurityManager());
         LOGGER.debug("Instantiating DefaultPluginManager");
         context.addPluginManager(this);
+        pluginHealthCheck();
     }
 
 
@@ -337,6 +332,25 @@ public abstract class AbstractPluginManager implements PluginManager {
     protected Map<Plugin, List<String>> getPluginDependencies() {
         return pluginDependencies;
     }
+
+    protected void pluginHealthCheck() {
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+        scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
+            private final Logger CHECKLOGGER = LoggerFactory.getLogger(AbstractPluginManager.class);
+
+            @Override
+            public void run() {
+                for (Plugin p : context.getPluginMap().values()) {
+                    if (p.getStatus().equals(PluginStatus.ERROR)) {
+                        CHECKLOGGER.error("Plugin {} is in error.", p.getName());
+                        p.disable();
+                    }
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
 
     @Override
     public String toString() {

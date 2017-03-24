@@ -83,7 +83,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void setFolder() {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
 
         String testFolder = "test/folder";
         manager.setPluginFolder(testFolder);
@@ -93,7 +93,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPlugins() throws IOException {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -109,7 +109,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsString() throws IOException {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -123,7 +123,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsAutoregister() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -140,7 +140,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsAutoregisterString() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -207,7 +207,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void getContext() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
 
         assertEquals(context, manager.getContext());
     }
@@ -253,7 +253,7 @@ public class DefaultPluginManagerTest {
 
     //    @Test
     public void debugLoadPluginTest() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         manager.setDebug(true);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
@@ -283,7 +283,7 @@ public class DefaultPluginManagerTest {
         };
 
         PluginContext context2 = new DefaultPluginContext();
-        PluginManager manager = new DefaultPluginManager(context2);
+        PluginManager manager = new DefaultPluginManager("managerOne", context2);
         context2.addPlugin(iterablePlugin);
         context2.addPlugin(randomPlugin);
 
@@ -298,25 +298,39 @@ public class DefaultPluginManagerTest {
         assertEquals(iterablePlugin, implementingPlugins.get(0));
     }
 
-    //    @Test
-//    public void test() {
-//        PluginContext context = new DefaultPluginContext();
-//        AbstractPluginManager manager = new DefaultPluginManager(context);
-//
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        manager.setPluginFolder(new File(classLoader.getResource("plugins").getFile()).getAbsolutePath());
-//        manager.loadPlugins(true);
-//        Plugin test = context.getPlugin("testPlugin");
-//        Plugin another = context.getPlugin("anotherPlugin");
-//
-//        Map<String, Object> conf = new HashMap<>();
-//        conf.put("otherPlugin", another);
-//        conf.put("passingString", "Hello! I'm a string travelling across plugins!");
-//        manager.configurePlugin(test, conf);
-//
-//        test.start();
-//
-//    }
+    @Test
+    public void pluginHealthCheckTest() throws Exception {
+        Plugin iterablePlugin = new ManagerTestPlugin();
+        Plugin randomPlugin = new SimplePlugin("randomPlugin") {
+
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void stop() {
+
+            }
+        };
+
+        PluginContext context2 = new DefaultPluginContext();
+        PluginManager manager = new DefaultPluginManager("managerOne", context2);
+        context2.addPlugin(iterablePlugin);
+        context2.addPlugin(randomPlugin);
+
+        manager.enablePlugin(iterablePlugin);
+        manager.enablePlugin(randomPlugin);
+
+        manager.startAll();
+
+        for (Plugin p : context2.getPluginMap().values()) {
+            assertEquals(PluginStatus.RUNNING, p.getStatus());
+        }
+
+        iterablePlugin.setStatus(PluginStatus.ERROR);
+        randomPlugin.setStatus(PluginStatus.ERROR);
+    }
 }
 
 class ManagerTestPlugin extends SimplePlugin implements Iterable {

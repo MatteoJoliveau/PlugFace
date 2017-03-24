@@ -45,4 +45,14 @@ public abstract class SimplePlugin extends DefaultPlugin<Object,Object> {
     public final Object execute(Object parameters) {
         throw new UnsupportedOperationException("This plugin can't execute");
     }
+
+    @Override
+    public String toString() {
+        return "SimplePlugin{" +
+                "name='" + getName() + '\'' +
+                ", pluginConfiguration=" + getPluginConfiguration() +
+                ", pluginStatus=" + getStatus() +
+                ", pluginEnabled=" + isEnabled() +
+                "}";
+    }
 }

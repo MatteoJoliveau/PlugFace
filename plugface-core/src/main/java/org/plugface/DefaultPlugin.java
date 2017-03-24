@@ -26,6 +26,8 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.impl.DefaultPluginConfiguration;
+
 import java.util.UUID;
 
 /**
@@ -45,14 +47,14 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     /**
      * The configuration for the plugin
      */
-    private PluginConfiguration pluginConfiguration;
+    private PluginConfiguration pluginConfiguration = new DefaultPluginConfiguration();
 
     /**
      * The current status of the plugin
      */
-    private PluginStatus pluginStatus;
+    private PluginStatus pluginStatus = PluginStatus.READY;
 
-    private PluginStatus pluginEnabled;
+    private PluginStatus pluginEnabled = PluginStatus.DISABLED;
 
     /**
      * Construct a {@link DefaultPlugin} with a random
@@ -105,7 +107,6 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     public boolean equals(Object o) {
         if (!(o instanceof Plugin<?, ?>)) return false;
         if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
 
         DefaultPlugin<?, ?> that = (DefaultPlugin<?, ?>) o;
 
@@ -125,6 +126,8 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
         return "DefaultPlugin{" +
                 "name='" + name + '\'' +
                 ", pluginConfiguration=" + pluginConfiguration +
+                ", pluginStatus=" + pluginStatus +
+                ", pluginEnabled=" + pluginEnabled +
                 '}';
     }
 }
