@@ -47,7 +47,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     /**
      * The context in which the manager lives
      */
-    private final PlugfaceContext context;
+    private final PluginContext context;
 
     /**
      * The unique identifier of the manager
@@ -82,24 +82,24 @@ public abstract class AbstractPluginManager implements PluginManager {
     private final Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
 
     /**
-     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
+     * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
      * with a randomly generated {@link UUID} as the name
      *
      * @param context the context in which the manager lives
      */
-    protected AbstractPluginManager(PlugfaceContext context) {
+    protected AbstractPluginManager(PluginContext context) {
         this(UUID.randomUUID().toString(), context);
     }
 
     /**
-     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
+     * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
      * with the specified name, also settings the {@link SandboxSecurityPolicy}
      * and {@link SecurityManager} for the plugin sandbox
      *
      * @param managerName the name to give to the manager
      * @param context     the context in which the manager lives
      */
-    protected AbstractPluginManager(String managerName, PlugfaceContext context) {
+    protected AbstractPluginManager(String managerName, PluginContext context) {
         this.context = context;
         this.name = managerName;
         Policy.setPolicy(new SandboxSecurityPolicy());
@@ -268,7 +268,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
-    public PlugfaceContext getContext() {
+    public PluginContext getContext() {
         return context;
     }
 

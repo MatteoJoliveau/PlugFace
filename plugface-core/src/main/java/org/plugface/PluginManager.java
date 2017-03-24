@@ -30,8 +30,6 @@ THE SOFTWARE.
 import org.plugface.annotations.ExtensionMethod;
 import org.plugface.impl.DefaultPluginManager;
 
-import java.io.File;
-import java.security.Permission;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -151,7 +149,7 @@ public interface PluginManager {
      *
      * @return the context on which the manager lives in
      */
-    PlugfaceContext getContext();
+    PluginContext getContext();
 
     /**
      * Loads all the plugins from the specified folder

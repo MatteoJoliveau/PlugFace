@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.plugface.impl.DefaultPlugfaceContext;
+import org.plugface.impl.DefaultPluginContext;
 import org.plugface.impl.DefaultPluginManager;
 
 import java.io.File;
@@ -36,7 +36,7 @@ import java.io.File;
 import static org.junit.Assert.*;
 
 public class PluginStatusIT {
-    private PlugfaceContext context = new DefaultPlugfaceContext();
+    private PluginContext context = new DefaultPluginContext();
     private PluginManager manager;
     @Before
     public void setUp() throws Exception {

@@ -36,14 +36,14 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DefaultPlugfaceContextTest {
+public class DefaultPluginContextTest {
 
     @Test
     public void pluginRegistry() throws Exception {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getName()).thenReturn("test");
 
-        PlugfaceContext context = new DefaultPlugfaceContext();
+        PluginContext context = new DefaultPluginContext();
 
         context.addPlugin(plugin);
 
@@ -77,7 +77,7 @@ public class DefaultPlugfaceContextTest {
         PluginManager manager = mock(PluginManager.class);
         when(manager.getName()).thenReturn("test");
 
-        PlugfaceContext context = new DefaultPlugfaceContext();
+        PluginContext context = new DefaultPluginContext();
 
         context.addPluginManager(manager);
 

@@ -32,12 +32,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Default implementation of {@link PlugfaceContext} implementing the
+ * Default implementation of {@link PluginContext} implementing the
  * management methods.
  * It has two registries for registering active {@link Plugin} entities and
  * {@link PluginManager} entities.
  */
-public class DefaultPlugfaceContext implements PlugfaceContext{
+public class DefaultPluginContext implements PluginContext {
 
     /**
      * Registry for {@link Plugin}

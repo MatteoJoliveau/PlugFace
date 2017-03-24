@@ -28,12 +28,10 @@ THE SOFTWARE.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.plugface.*;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -43,12 +41,12 @@ import static org.mockito.Mockito.*;
 
 public class DefaultPluginManagerTest {
 
-    private PlugfaceContext context;
+    private PluginContext context;
     private Plugin plugin;
 
     @Before
     public void setUp() throws Exception {
-        this.context = mock(PlugfaceContext.class);
+        this.context = mock(PluginContext.class);
         this.plugin = mock(Plugin.class);
     }
 
@@ -284,7 +282,7 @@ public class DefaultPluginManagerTest {
             }
         };
 
-        PlugfaceContext context2 = new DefaultPlugfaceContext();
+        PluginContext context2 = new DefaultPluginContext();
         PluginManager manager = new DefaultPluginManager(context2);
         context2.addPlugin(iterablePlugin);
         context2.addPlugin(randomPlugin);
@@ -302,7 +300,7 @@ public class DefaultPluginManagerTest {
 
     //    @Test
 //    public void test() {
-//        PlugfaceContext context = new DefaultPlugfaceContext();
+//        PluginContext context = new DefaultPluginContext();
 //        AbstractPluginManager manager = new DefaultPluginManager(context);
 //
 //        ClassLoader classLoader = getClass().getClassLoader();
