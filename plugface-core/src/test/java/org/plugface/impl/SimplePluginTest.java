@@ -26,10 +26,9 @@ THE SOFTWARE.
  * #L%
  */
 
-import com.sun.org.apache.regexp.internal.RE;
+import org.junit.Test;
 import org.plugface.PluginStatus;
 import org.plugface.SimplePlugin;
-import org.junit.Test;
 
 import static org.junit.Assert.*;
 
