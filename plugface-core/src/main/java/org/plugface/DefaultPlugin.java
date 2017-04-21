@@ -62,6 +62,7 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
      * Should be overridden with a custom name that uniquely
      * identifies the plugin
      */
+    
 
     protected DefaultPlugin(String name) {
         this.name = name;

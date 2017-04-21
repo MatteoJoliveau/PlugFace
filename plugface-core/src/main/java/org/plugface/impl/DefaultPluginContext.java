@@ -39,6 +39,9 @@ import java.util.Map;
  */
 public class DefaultPluginContext implements PluginContext {
 
+    private final Object pluginLock = new Object();
+    private final Object managerLock = new Object();
+
     /**
      * Registry for {@link Plugin}
      */
@@ -51,8 +54,10 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public Plugin getPlugin(String pluginName) {
-        if(hasPlugin(pluginName)) {
-            return pluginRegistry.get(pluginName);
+        if (hasPlugin(pluginName)) {
+            synchronized (pluginLock) {
+                return pluginRegistry.get(pluginName);
+            }
         } else {
             throw new NoSuchPluginException(pluginName + " not found");
         }
@@ -60,19 +65,24 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public void addPlugin(Plugin plugin) {
-        pluginRegistry.put(plugin.getName(), plugin);
-
+        synchronized (pluginLock) {
+            pluginRegistry.put(plugin.getName(), plugin);
+        }
     }
 
     @Override
     public boolean hasPlugin(String pluginName) {
-        return pluginRegistry.containsKey(pluginName);
+        synchronized (pluginLock) {
+            return pluginRegistry.containsKey(pluginName);
+        }
     }
 
     @Override
     public Plugin removePlugin(String pluginName) {
-        if(hasPlugin(pluginName)) {
-            return pluginRegistry.remove(pluginName);
+        if (hasPlugin(pluginName)) {
+            synchronized (pluginLock) {
+                return pluginRegistry.remove(pluginName);
+            }
         } else {
             throw new NoSuchPluginException(pluginName + " not found");
         }
@@ -80,12 +90,14 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public Map<String, Plugin> getPluginMap() {
-        return pluginRegistry;
+        synchronized (pluginLock) {
+            return pluginRegistry;
+        }
     }
 
     @Override
     public PluginManager getPluginManager(String managerName) throws NoSuchPluginManagerException {
-        if(hasPluginManger(managerName)) {
+        if (hasPluginManger(managerName)) {
             return pluginManagerRegistry.get(managerName);
         } else {
             throw new NoSuchPluginManagerException(managerName + " not found");
@@ -94,18 +106,24 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public void addPluginManager(PluginManager manager) {
-        pluginManagerRegistry.put(manager.getName(), manager);
+        synchronized (managerLock) {
+            pluginManagerRegistry.put(manager.getName(), manager);
+        }
     }
 
     @Override
     public boolean hasPluginManger(String managerName) {
-        return pluginManagerRegistry.containsKey(managerName);
+        synchronized (managerLock) {
+            return pluginManagerRegistry.containsKey(managerName);
+        }
     }
 
     @Override
-    public PluginManager removePluginManager(String managerName){
-        if(hasPluginManger(managerName)) {
-            return pluginManagerRegistry.remove(managerName);
+    public PluginManager removePluginManager(String managerName) {
+        if (hasPluginManger(managerName)) {
+            synchronized (managerLock) {
+                return pluginManagerRegistry.remove(managerName);
+            }
         } else {
             throw new NoSuchPluginManagerException(managerName + " not found");
         }
@@ -113,6 +131,8 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public Map<String, PluginManager> getPluginManagerMap() {
-        return pluginManagerRegistry;
+        synchronized (managerLock) {
+            return pluginManagerRegistry;
+        }
     }
 }

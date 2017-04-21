@@ -134,8 +134,8 @@ public class AbstractPluginManagerTest {
 
         AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
 
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
         when(context.getPluginMap()).thenReturn(map);
+        when(context.getPlugin("testPlugin")).thenReturn(plugin);
 
         when(plugin.isEnabled()).thenReturn(false);
 
