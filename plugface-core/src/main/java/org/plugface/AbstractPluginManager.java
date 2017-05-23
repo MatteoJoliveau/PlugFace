@@ -343,7 +343,7 @@ public abstract class AbstractPluginManager implements PluginManager {
             public void run() {
                 for (Plugin p : context.getPluginMap().values()) {
                     if (p.getStatus().equals(PluginStatus.ERROR)) {
-                        CHECKLOGGER.error("Plugin {} is in error.", p.getName());
+                        CHECKLOGGER.error("HEALTH CHECK - Plugin {} is in error.", p.getName());
                         p.disable();
                     }
                 }

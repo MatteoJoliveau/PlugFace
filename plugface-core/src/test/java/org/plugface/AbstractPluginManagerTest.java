@@ -232,12 +232,12 @@ public class AbstractPluginManagerTest {
 
             @Override
             public void start() {
-
+                System.out.println("Started");
             }
 
             @Override
             public void stop() {
-
+                System.out.println("Stopped");
             }
         };
 
@@ -260,6 +260,12 @@ public class AbstractPluginManagerTest {
 
         iterablePlugin.setStatus(PluginStatus.ERROR);
         randomPlugin.setStatus(PluginStatus.ERROR);
+
+        Thread.sleep(500);
+
+        for (Plugin p : context2.getPluginMap().values()) {
+            assertFalse(p.isEnabled());
+        }
     }
 }
 
