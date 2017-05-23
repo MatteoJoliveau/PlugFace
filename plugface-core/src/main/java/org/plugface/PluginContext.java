@@ -26,7 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.impl.DefaultPlugfaceContext;
+import org.plugface.impl.DefaultPluginContext;
 
 import java.util.Map;
 
@@ -35,9 +35,9 @@ import java.util.Map;
  * all the registered {@link Plugin} entities.
  * Implementations should contain registries that holds the objects.
  *
- * @see DefaultPlugfaceContext
+ * @see DefaultPluginContext
  */
-public interface PlugfaceContext {
+public interface PluginContext {
     /*
         Plugins
     */

@@ -35,6 +35,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Policy;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An abstract implementation of {@link PluginManager} that provides basic
@@ -47,7 +51,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     /**
      * The context in which the manager lives
      */
-    private final PlugfaceContext context;
+    private final PluginContext context;
 
     /**
      * The unique identifier of the manager
@@ -82,30 +86,21 @@ public abstract class AbstractPluginManager implements PluginManager {
     private final Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
 
     /**
-     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
-     * with a randomly generated {@link UUID} as the name
-     *
-     * @param context the context in which the manager lives
-     */
-    protected AbstractPluginManager(PlugfaceContext context) {
-        this(UUID.randomUUID().toString(), context);
-    }
-
-    /**
-     * Construct an {@link AbstractPluginManager} in a {@link PlugfaceContext}
+     * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
      * with the specified name, also settings the {@link SandboxSecurityPolicy}
      * and {@link SecurityManager} for the plugin sandbox
      *
      * @param managerName the name to give to the manager
      * @param context     the context in which the manager lives
      */
-    protected AbstractPluginManager(String managerName, PlugfaceContext context) {
+    protected AbstractPluginManager(String managerName, PluginContext context) {
         this.context = context;
         this.name = managerName;
         Policy.setPolicy(new SandboxSecurityPolicy());
         System.setSecurityManager(new SecurityManager());
         LOGGER.debug("Instantiating DefaultPluginManager");
         context.addPluginManager(this);
+        pluginHealthCheck();
     }
 
 
@@ -246,7 +241,29 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
-    public PlugfaceContext getContext() {
+    public boolean isPluginImplementingApi(Plugin plugin, Class<?> apiClass) {
+        return apiClass.isAssignableFrom(plugin.getClass());
+    }
+
+    @Override
+    public boolean isPluginImplementingApi(String pluginName, Class<?> apiClass) {
+        Plugin plugin = getContext().getPlugin(pluginName);
+        return apiClass.isAssignableFrom(plugin.getClass());
+    }
+
+    @Override
+    public List<Plugin> getAllImplementingPlugin(Class<?> apiClass) {
+        List<Plugin> plugins = new ArrayList<>();
+        for (Plugin p : getContext().getPluginMap().values()) {
+            if (apiClass.isAssignableFrom(p.getClass())) {
+                plugins.add(p);
+            }
+        }
+        return plugins;
+    }
+
+    @Override
+    public PluginContext getContext() {
         return context;
     }
 
@@ -315,6 +332,25 @@ public abstract class AbstractPluginManager implements PluginManager {
     protected Map<Plugin, List<String>> getPluginDependencies() {
         return pluginDependencies;
     }
+
+    protected void pluginHealthCheck() {
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+        scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
+            private final Logger CHECKLOGGER = LoggerFactory.getLogger(AbstractPluginManager.class);
+
+            @Override
+            public void run() {
+                for (Plugin p : context.getPluginMap().values()) {
+                    if (p.getStatus().equals(PluginStatus.ERROR)) {
+                        CHECKLOGGER.error("HEALTH CHECK - Plugin {} is in error.", p.getName());
+                        p.disable();
+                    }
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
 
     @Override
     public String toString() {

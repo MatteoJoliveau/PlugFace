@@ -26,8 +26,9 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.SimplePlugin;
 import org.junit.Test;
+import org.plugface.PluginStatus;
+import org.plugface.SimplePlugin;
 
 import static org.junit.Assert.*;
 
@@ -56,6 +57,26 @@ public class SimplePluginTest {
             assertEquals("This plugin can't execute", e.getMessage());
         }
 
+
     }
 
+    @Test
+    public void toStringTest() throws Exception {
+        SimplePlugin plugin = new SimplePlugin("test") {
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void stop() {
+
+            }
+        };
+        plugin.setStatus(PluginStatus.READY);
+        plugin.disable();
+
+        String expected = "SimplePlugin{name='test', pluginConfiguration={}, pluginStatus=READY, pluginEnabled=false}";
+        assertEquals(expected, plugin.toString());
+    }
 }

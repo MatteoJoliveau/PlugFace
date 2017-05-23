@@ -51,24 +51,14 @@ public final class DefaultPluginManager extends AbstractPluginManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPluginManager.class);
 
     /**
-     * Construct a {@link DefaultPluginManager} from the specified {@link PlugfaceContext}
-     * with a randomly generated {@link UUID} as the name
-     *
-     * @param context the context in which the manager lives
-     */
-    public DefaultPluginManager(PlugfaceContext context) {
-        super(context);
-    }
-
-    /**
-     * Construct a {@link DefaultPluginManager} in a {@link PlugfaceContext}
+     * Construct a {@link DefaultPluginManager} in a {@link PluginContext}
      * with the specified name, also settings the {@link SandboxSecurityPolicy}
      * and {@link SecurityManager} for the plugin sandbox
      *
      * @param managerName the name to give to the manager
      * @param context     the context in which the manager lives
      */
-    public DefaultPluginManager(String managerName, PlugfaceContext context) {
+    public DefaultPluginManager(String managerName, PluginContext context) {
         super(managerName, context);
     }
 

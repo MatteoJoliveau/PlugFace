@@ -30,8 +30,6 @@ THE SOFTWARE.
 import org.plugface.annotations.ExtensionMethod;
 import org.plugface.impl.DefaultPluginManager;
 
-import java.io.File;
-import java.security.Permission;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -151,7 +149,7 @@ public interface PluginManager {
      *
      * @return the context on which the manager lives in
      */
-    PlugfaceContext getContext();
+    PluginContext getContext();
 
     /**
      * Loads all the plugins from the specified folder
@@ -291,5 +289,28 @@ public interface PluginManager {
      * @param debug true to enable debug mode, false to disable it
      */
     void setDebug(boolean debug);
+
+    /**
+     * Check if a plugin is a valid implementation of a class or interface.
+     * @param plugin the plugin to check
+     * @param apiClass the class that the plugin should implement
+     * @return true if the plugin is castable to the given class, false if not
+     */
+    boolean isPluginImplementingApi(Plugin plugin, Class<?> apiClass);
+
+    /**
+     * Check if a plugin is a valid implementation of a class or interface.
+     * @param pluginName the name of the plugin to check
+     * @param apiClass the class that the plugin should implement
+     * @return true if the plugin is castable to the given class, false if not
+     */
+    boolean isPluginImplementingApi(String pluginName, Class<?> apiClass);
+
+    /**
+     * Return a list of plugins that implements a class or interface
+     * @param apiClass the class that the plugin should implement
+     * @return a list of plugin that implement the given class
+     */
+    List<Plugin> getAllImplementingPlugin(Class<?> apiClass);
 
 }

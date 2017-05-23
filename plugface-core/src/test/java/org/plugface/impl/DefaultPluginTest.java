@@ -69,7 +69,9 @@ public class DefaultPluginTest {
 
     @Test
     public void toStringTest() throws Exception {
+        String expected = "DefaultPlugin{name='testPlugin', pluginConfiguration={}, pluginStatus=READY, pluginEnabled=DISABLED}";
         assertEquals(another().toString(), plugin.toString());
+        assertEquals(expected, plugin.toString());
 
     }
 
@@ -91,6 +93,9 @@ public class DefaultPluginTest {
             }
 
         };
+
+        another.disable();
+        another.setStatus(PluginStatus.READY);
 
 
         return another;
@@ -116,7 +121,7 @@ public class DefaultPluginTest {
 
         };
 
-        Plugin plugin2 = new DefaultPlugin<Integer, Collection<? extends Number>>("plugin2") {
+        new DefaultPlugin<Integer, Collection<? extends Number>>("plugin2") {
             @Override
             public void start() {
                 System.out.println("Starting test plugin");
@@ -149,13 +154,16 @@ public class DefaultPluginTest {
         }
 
     }
+
 }
 
 @Requires(requiredPlugins = {"ciao"})
 class TestPlugin extends DefaultPlugin<Void, Void> {
 
-    public TestPlugin() {
+    TestPlugin() {
         super("testPlugin");
+        setStatus(PluginStatus.READY);
+        disable();
     }
 
     @Override

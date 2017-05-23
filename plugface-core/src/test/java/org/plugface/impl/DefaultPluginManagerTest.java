@@ -28,17 +28,12 @@ THE SOFTWARE.
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.plugface.*;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,59 +41,18 @@ import static org.mockito.Mockito.*;
 
 public class DefaultPluginManagerTest {
 
-    private PlugfaceContext context;
+    private PluginContext context;
     private Plugin plugin;
 
     @Before
     public void setUp() throws Exception {
-        this.context = mock(PlugfaceContext.class);
+        this.context = mock(PluginContext.class);
         this.plugin = mock(Plugin.class);
     }
 
     @Test
-    public void configurePlugin() throws Exception {
-        PluginConfiguration pluginConfig = mock(PluginConfiguration.class);
-        Map<String, Object> config = new HashMap<>();
-        when(plugin.getPluginConfiguration()).thenReturn(pluginConfig);
-
-        AbstractPluginManager manager = new DefaultPluginManager("manager", context);
-
-        manager.configurePlugin(plugin, config);
-
-        verify(pluginConfig).updateConfiguration(eq(config));
-        verify(plugin).setPluginConfiguration(eq(pluginConfig));
-    }
-
-    @Test
-    public void configurePluginByName() throws Exception {
-        Plugin plugin = mock(Plugin.class);
-        PluginConfiguration pluginConfig = mock(PluginConfiguration.class);
-        Map<String, Object> config = new HashMap<>();
-        when(plugin.getPluginConfiguration()).thenReturn(pluginConfig);
-        when(context.getPlugin("test")).thenReturn(plugin);
-
-        AbstractPluginManager manager = new DefaultPluginManager("manager", context);
-
-        manager.configurePlugin("test", config);
-
-        verify(pluginConfig).updateConfiguration(eq(config));
-        verify(plugin).setPluginConfiguration(eq(pluginConfig));
-
-    }
-
-    @Test
-    public void setFolder() {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
-
-        String testFolder = "test/folder";
-        manager.setPluginFolder(testFolder);
-
-        assertEquals(testFolder, manager.getPluginFolder());
-    }
-
-    @Test
     public void loadPlugins() throws IOException {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -114,7 +68,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsString() throws IOException {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -128,7 +82,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsAutoregister() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -145,7 +99,7 @@ public class DefaultPluginManagerTest {
 
     @Test
     public void loadPluginsAutoregisterString() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
         prop.load(new FileInputStream(classLoader.getResource("permissions.properties").getFile()));
@@ -159,106 +113,10 @@ public class DefaultPluginManagerTest {
 
     }
 
-    @Test
-    public void enabledPluginOperations() throws Exception {
-        Map<String, Plugin> map = new HashMap<>();
-        map.put("testPlugin", plugin);
 
-        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
-
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
-        when(context.getPluginMap()).thenReturn(map);
-
-        when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
-        when(plugin.isEnabled()).thenReturn(true);
-
-        manager.startPlugin(plugin);
-        manager.startPlugin("testPlugin");
-        manager.startAll();
-
-        when(plugin.getStatus()).thenReturn(PluginStatus.RUNNING);
-
-        manager.stopPlugin(plugin);
-        manager.stopPlugin("testPlugin");
-        manager.stopAll();
-
-        verify(plugin, times(3)).start();
-        verify(plugin, times(3)).stop();
-        verify(plugin, times(6)).setStatus(isA(PluginStatus.class));
-
-        verify(context, times(2)).getPlugin("testPlugin");
-
-    }
-
-    @Test
-    public void disabledPluginOperations() throws Exception {
-        Map<String, Plugin> map = new HashMap<>();
-        map.put("testPlugin", plugin);
-
-        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
-
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
-        when(context.getPluginMap()).thenReturn(map);
-
-        when(plugin.isEnabled()).thenReturn(false);
-
-        manager.startPlugin(plugin);
-        manager.startPlugin("testPlugin");
-        manager.startAll();
-
-        verify(plugin, never()).start();
-
-    }
-
-    @Test
-    public void getContext() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
-
-        assertEquals(context, manager.getContext());
-    }
-
-    @Test
-    public void extensionsTest() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager("testManager", context);
-        ClassLoader classLoader = getClass().getClassLoader();
-        manager.setPluginFolder(new File(classLoader.getResource("plugins").getFile()).getAbsolutePath());
-        List<Plugin> loaded = manager.loadPlugins(true);
-        Plugin test = null;
-
-        for (Plugin p: loaded) {
-            if (p.getName().equals("anotherPlugin")){
-                test = p;
-            }
-        }
-
-        when(context.getPlugin("anotherPlugin")).thenReturn(test);
-
-        String s2 = (String) manager.execExtension("anotherPlugin", "test");
-        String s1 = (String) manager.execExtension(test, "test");
-        assertNotNull(s1);
-        assertNotNull(s2);
-        assertEquals("Test", s1);
-        assertEquals(s1, s2);
-
-        try {
-            manager.execExtension(test, "fail");
-        } catch (Exception e) {
-            assertTrue(e instanceof ExtensionMethodNotFound);
-            assertEquals("fail not found", e.getMessage());
-        }
-    }
-
-    @Test
-    public void toStringTest() throws Exception {
-        PluginManager manager = new DefaultPluginManager("testManager", context);
-        PluginManager manager2 = new DefaultPluginManager("testManager", context);
-        assertNotNull(manager.toString());
-        assertEquals(manager2.toString(), manager.toString());
-    }
-
-//    @Test
+    //    @Test
     public void debugLoadPluginTest() throws Exception {
-        AbstractPluginManager manager = new DefaultPluginManager(context);
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
         manager.setDebug(true);
         ClassLoader classLoader = getClass().getClassLoader();
         Properties prop = new Properties();
@@ -270,24 +128,6 @@ public class DefaultPluginManagerTest {
         verify(context, atLeastOnce()).addPlugin(isA(Plugin.class));
 
     }
-
-    //    @Test
-//    public void test() {
-//        PlugfaceContext context = new DefaultPlugfaceContext();
-//        AbstractPluginManager manager = new DefaultPluginManager(context);
-//
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        manager.setPluginFolder(new File(classLoader.getResource("plugins").getFile()).getAbsolutePath());
-//        manager.loadPlugins(true);
-//        Plugin test = context.getPlugin("testPlugin");
-//        Plugin another = context.getPlugin("anotherPlugin");
-//
-//        Map<String, Object> conf = new HashMap<>();
-//        conf.put("otherPlugin", another);
-//        conf.put("passingString", "Hello! I'm a string travelling across plugins!");
-//        manager.configurePlugin(test, conf);
-//
-//        test.start();
-//
-//    }
 }
+
+
