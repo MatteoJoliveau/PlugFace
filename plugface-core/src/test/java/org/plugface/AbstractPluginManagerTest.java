@@ -96,15 +96,15 @@ public class AbstractPluginManagerTest {
         assertEquals(testFolder, manager.getPluginFolder());
     }
 
-//    @Test TODO:why line 106 goes in return type error asking for a map?
+    @Test
     public void enabledPluginOperations() throws Exception {
         Map<String, Plugin> map = new HashMap<>();
         map.put("testPlugin", plugin);
 
         AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
 
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
         when(context.getPluginMap()).thenReturn(map);
+        when(context.getPlugin("testPlugin")).thenReturn(plugin);
 
         when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
         when(plugin.isEnabled()).thenReturn(true);
@@ -129,21 +129,24 @@ public class AbstractPluginManagerTest {
 
     @Test
     public void disabledPluginOperations() throws Exception {
-        Map<String, Plugin> map = new HashMap<>();
-        map.put("testPlugin", plugin);
+        synchronized (this) {
+            Map<String, Plugin> map = new HashMap<>();
+            map.put("testPlugin", plugin);
 
-        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
+            AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
 
-        when(context.getPluginMap()).thenReturn(map);
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
+            when(context.getPluginMap()).thenReturn(map);
+            when(context.getPlugin("testPlugin")).thenReturn(plugin);
 
-        when(plugin.isEnabled()).thenReturn(false);
+            when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
+            when(plugin.isEnabled()).thenReturn(false);
 
-        manager.startPlugin(plugin);
-        manager.startPlugin("testPlugin");
-        manager.startAll();
+            manager.startPlugin(plugin);
+            manager.startPlugin("testPlugin");
+            manager.startAll();
 
-        verify(plugin, never()).start();
+            verify(plugin, never()).start();
+        }
 
     }
 
