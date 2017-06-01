@@ -96,18 +96,18 @@ public interface Plugin<Input, Output> {
     void setStatus(PluginStatus pluginStatus);
 
     /**
-     * Sets a private field to {@link PluginStatus#ENABLED}
+     * Sets a private field to true
      */
     void enable();
 
     /**
-     * Sets a private field to {@link PluginStatus#DISABLED}
+     * Sets a private field to true
      */
     void disable();
 
     /**
      * Check whether the plugin is enabled or not
-     * @return true if the plugin is {@link PluginStatus#ENABLED}, false if it is {@link PluginStatus#DISABLED}
+     * @return true if the plugin is enabled, false if it is disabled
      */
     boolean isEnabled();
 

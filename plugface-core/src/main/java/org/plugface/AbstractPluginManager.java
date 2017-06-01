@@ -35,9 +35,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Policy;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -76,6 +76,8 @@ public abstract class AbstractPluginManager implements PluginManager {
      */
     private boolean debug;
 
+    private ThreadFactory hcThreadFactory = null;
+
     private Map<Plugin, List<String>> pluginDependencies = new HashMap<>();
 
     /**
@@ -84,6 +86,7 @@ public abstract class AbstractPluginManager implements PluginManager {
      * @see ExtensionMethod
      */
     private final Map<Plugin, Map<String, Method>> extensions = new HashMap<>();
+    private ScheduledExecutorService scheduledExecutorService;
 
     /**
      * Construct an {@link AbstractPluginManager} in a {@link PluginContext}
@@ -196,6 +199,19 @@ public abstract class AbstractPluginManager implements PluginManager {
         }
     }
 
+    public Map<String, Boolean> enableAllPlugins() {
+        HashMap<String, Boolean> outcome = new HashMap<>();
+        for (Plugin plugin : context.getPluginMap().values()) {
+            if (!plugin.getStatus().equals(PluginStatus.ERROR) && !plugin.isEnabled()) {
+                plugin.enable();
+                outcome.put(plugin.getName(), true);
+            } else {
+                outcome.put(plugin.getName(), false);
+            }
+        }
+        return outcome;
+    }
+
     @Override
     public PluginStatus disablePlugin(Plugin plugin) {
         PluginStatus pluginStatus = plugin.getStatus();
@@ -211,6 +227,19 @@ public abstract class AbstractPluginManager implements PluginManager {
     public PluginStatus disablePlugin(String pluginName) {
         Plugin plugin = context.getPlugin(pluginName);
         return disablePlugin(plugin);
+    }
+
+    public Map<String, Boolean> disableAllPlugins() {
+        HashMap<String, Boolean> outcome = new HashMap<>();
+        for (Plugin plugin : context.getPluginMap().values()) {
+            if (!plugin.getStatus().equals(PluginStatus.ERROR) && plugin.isEnabled()) {
+                plugin.disable();
+                outcome.put(plugin.getName(), true);
+            } else {
+                outcome.put(plugin.getName(), false);
+            }
+        }
+        return outcome;
     }
 
     @Override
@@ -252,11 +281,12 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
-    public List<Plugin> getAllImplementingPlugin(Class<?> apiClass) {
-        List<Plugin> plugins = new ArrayList<>();
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getAllImplementingPlugin(Class<T> apiClass) {
+        List<T> plugins = new ArrayList<>();
         for (Plugin p : getContext().getPluginMap().values()) {
             if (apiClass.isAssignableFrom(p.getClass())) {
-                plugins.add(p);
+                plugins.add((T) p);
             }
         }
         return plugins;
@@ -334,7 +364,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     protected void pluginHealthCheck() {
-        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(getHealthCheckThreadFactory());
 
         scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
             private final Logger CHECKLOGGER = LoggerFactory.getLogger(AbstractPluginManager.class);
@@ -349,6 +379,31 @@ public abstract class AbstractPluginManager implements PluginManager {
                 }
             }
         }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    public void stopHealthCheck() {
+        if (!scheduledExecutorService.isShutdown()) {
+            scheduledExecutorService.shutdown();
+        }
+    }
+
+    private synchronized ThreadFactory getHealthCheckThreadFactory() {
+        if (hcThreadFactory != null) {
+            return hcThreadFactory;
+        } else {
+            return new ThreadFactory() {
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread thread = Executors.defaultThreadFactory().newThread(r);
+                    thread.setDaemon(true);
+                    return thread;
+                }
+            };
+        }
+    }
+
+    public synchronized void setHealthCheckThreadFactory(ThreadFactory threadFactory) {
+        this.hcThreadFactory = threadFactory;
     }
 
 

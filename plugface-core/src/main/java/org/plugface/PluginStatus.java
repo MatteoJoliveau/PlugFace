@@ -31,8 +31,6 @@ THE SOFTWARE.
  */
 public enum PluginStatus {
     READY,
-    ENABLED,
-    DISABLED,
     RUNNING,
     STOPPED,
     ERROR

@@ -311,6 +311,6 @@ public interface PluginManager {
      * @param apiClass the class that the plugin should implement
      * @return a list of plugin that implement the given class
      */
-    List<Plugin> getAllImplementingPlugin(Class<?> apiClass);
+    <T> List<T> getAllImplementingPlugin(Class<T> apiClass);
 
 }

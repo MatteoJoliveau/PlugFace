@@ -32,10 +32,12 @@ import org.plugface.impl.DefaultPluginContext;
 import org.plugface.impl.DefaultPluginManager;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -98,13 +100,7 @@ public class AbstractPluginManagerTest {
 
     @Test
     public void enabledPluginOperations() throws Exception {
-        Map<String, Plugin> map = new HashMap<>();
-        map.put("testPlugin", plugin);
-
-        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
-
-        when(context.getPluginMap()).thenReturn(map);
-        when(context.getPlugin("testPlugin")).thenReturn(plugin);
+        AbstractPluginManager manager = configurePluginOperations();
 
         when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
         when(plugin.isEnabled()).thenReturn(true);
@@ -128,15 +124,31 @@ public class AbstractPluginManagerTest {
     }
 
     @Test
+    public void enableAll() throws Exception {
+        AbstractPluginManager manager = configurePluginOperations();
+
+        when(plugin.getStatus()).thenReturn(PluginStatus.READY);
+        when(plugin.isEnabled()).thenReturn(false);
+
+        Map<String, Boolean> results = manager.enableAllPlugins();
+        assertTrue(results.get("testPlugin"));
+    }
+
+    @Test
+    public void enableAllShouldFailIfPluginIsInError() throws Exception {
+        AbstractPluginManager manager = configurePluginOperations();
+
+        when(plugin.getStatus()).thenReturn(PluginStatus.ERROR);
+        when(plugin.isEnabled()).thenReturn(false);
+
+        Map<String, Boolean> results = manager.enableAllPlugins();
+        assertFalse(results.get("testPlugin"));
+    }
+
+    @Test
     public void disabledPluginOperations() throws Exception {
         synchronized (this) {
-            Map<String, Plugin> map = new HashMap<>();
-            map.put("testPlugin", plugin);
-
-            AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
-
-            when(context.getPluginMap()).thenReturn(map);
-            when(context.getPlugin("testPlugin")).thenReturn(plugin);
+            AbstractPluginManager manager = configurePluginOperations();
 
             when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
             when(plugin.isEnabled()).thenReturn(false);
@@ -148,6 +160,53 @@ public class AbstractPluginManagerTest {
             verify(plugin, never()).start();
         }
 
+    }
+
+    @Test
+    public void disableAll() throws Exception {
+        AbstractPluginManager manager = configurePluginOperations();
+        when(plugin.getStatus()).thenReturn(PluginStatus.RUNNING);
+        when(plugin.isEnabled()).thenReturn(true);
+
+        Map<String, Boolean> results = manager.disableAllPlugins();
+        assertTrue(results.get("testPlugin"));
+    }
+
+    private AbstractPluginManager configurePluginOperations() {
+        Map<String, Plugin> map = new HashMap<>();
+        map.put("testPlugin", plugin);
+
+        AbstractPluginManager manager = new DefaultPluginManager("managerOne", context);
+
+        when(context.getPluginMap()).thenReturn(map);
+        when(context.getPlugin("testPlugin")).thenReturn(plugin);
+
+        when(plugin.getName()).thenReturn("testPlugin");
+        return manager;
+    }
+
+    @Test
+    public void stopHealthCheck() throws Exception {
+        DefaultPluginManager manager = new DefaultPluginManager("manager-1", context);
+        Field scheduledExecutorService = AbstractPluginManager.class.getDeclaredField("scheduledExecutorService");
+        scheduledExecutorService.setAccessible(true);
+
+        assertFalse(((ScheduledExecutorService) scheduledExecutorService.get(manager)).isShutdown());
+
+        manager.stopHealthCheck();
+
+        assertTrue(((ScheduledExecutorService) scheduledExecutorService.get(manager)).isShutdown());
+    }
+
+    @Test
+    public void disableAllshouldFailIfPluginIsInError() throws Exception {
+        AbstractPluginManager manager = configurePluginOperations();
+
+        when(plugin.getStatus()).thenReturn(PluginStatus.ERROR);
+        when(plugin.isEnabled()).thenReturn(true);
+
+        Map<String, Boolean> results = manager.disableAllPlugins();
+        assertFalse(results.get("testPlugin"));
     }
 
     @Test
@@ -219,7 +278,7 @@ public class AbstractPluginManagerTest {
 
         boolean comparable = manager.isPluginImplementingApi(iterablePlugin, Comparable.class);
         boolean iterable = manager.isPluginImplementingApi(iterablePlugin.getName(), Iterable.class);
-        List<Plugin> implementingPlugins = manager.getAllImplementingPlugin(Iterable.class);
+        List<Iterable> implementingPlugins = manager.getAllImplementingPlugin(Iterable.class);
         assertFalse(comparable);
         assertTrue(iterable);
 
@@ -264,7 +323,7 @@ public class AbstractPluginManagerTest {
         iterablePlugin.setStatus(PluginStatus.ERROR);
         randomPlugin.setStatus(PluginStatus.ERROR);
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         for (Plugin p : context2.getPluginMap().values()) {
             assertFalse(p.isEnabled());

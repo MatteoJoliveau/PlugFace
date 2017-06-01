@@ -54,18 +54,17 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
      */
     private PluginStatus pluginStatus;
 
-    private PluginStatus pluginEnabled;
+    private boolean pluginEnabled;
 
     /**
-     * Construct a {@link DefaultPlugin} with a random
-     * UUID as name
-     * Should be overridden with a custom name that uniquely
-     * identifies the plugin
+     * Construct a {@link DefaultPlugin} with the specified
+     * name.
+     * @param name the name of the plugin
      */
-    
-
     protected DefaultPlugin(String name) {
         this.name = name;
+        this.pluginStatus = PluginStatus.READY;
+        this.pluginEnabled = false;
     }
 
     @Override
@@ -92,16 +91,15 @@ public abstract class DefaultPlugin<I, O> implements Plugin<I, O> {
     }
 
     public void enable() {
-        this.pluginEnabled = PluginStatus.ENABLED;
-        this.pluginStatus = PluginStatus.READY;
+        this.pluginEnabled = true;
     }
 
     public void disable() {
-        this.pluginEnabled = PluginStatus.DISABLED;
+        this.pluginEnabled = false;
     }
 
     public boolean isEnabled() {
-        return pluginEnabled.equals(PluginStatus.ENABLED);
+        return pluginEnabled;
     }
 
     @Override

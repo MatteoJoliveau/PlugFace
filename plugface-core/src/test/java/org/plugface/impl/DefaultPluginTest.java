@@ -69,7 +69,7 @@ public class DefaultPluginTest {
 
     @Test
     public void toStringTest() throws Exception {
-        String expected = "DefaultPlugin{name='testPlugin', pluginConfiguration={}, pluginStatus=READY, pluginEnabled=DISABLED}";
+        String expected = "DefaultPlugin{name='testPlugin', pluginConfiguration={}, pluginStatus=READY, pluginEnabled=false}";
         assertEquals(another().toString(), plugin.toString());
         assertEquals(expected, plugin.toString());
 
