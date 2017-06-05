@@ -323,7 +323,7 @@ public class AbstractPluginManagerTest {
         iterablePlugin.setStatus(PluginStatus.ERROR);
         randomPlugin.setStatus(PluginStatus.ERROR);
 
-        Thread.sleep(500);
+         Thread.sleep(1500);
 
         for (Plugin p : context2.getPluginMap().values()) {
             assertFalse(p.isEnabled());
