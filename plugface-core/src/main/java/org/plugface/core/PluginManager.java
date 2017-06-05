@@ -268,6 +268,13 @@ public interface PluginManager {
     PluginStatus enablePlugin(Plugin plugin);
 
     /**
+     * Enable all plugins iteratively.
+     * @return a map of {@link Map} of {@link Plugin} names and Booleans, the Boolean is true if
+     * the plugin has been successfully enabled, false if not
+     */
+    Map<String, Boolean> enableAll();
+
+    /**
      * If the {@link PluginStatus} of the plugin is not
      * "ERROR", sets it to "DISABLED"
      * meaning it can't be executed.
@@ -284,6 +291,13 @@ public interface PluginManager {
      * @return the new status of the plugin
      */
     PluginStatus disablePlugin(String pluginName);
+
+    /**
+     * Disable all plugins iteratively.
+     * @return a map of {@link Map} of {@link Plugin} names and Booleans, the Boolean is true if
+     * the plugin has been successfully disabled, false if not
+     */
+    Map<String, Boolean> disableAll();
 
     /**
      * Check whether the manager is in debug

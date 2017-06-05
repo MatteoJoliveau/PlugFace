@@ -199,7 +199,8 @@ public abstract class AbstractPluginManager implements PluginManager {
         }
     }
 
-    public Map<String, Boolean> enableAllPlugins() {
+    @Override
+    public Map<String, Boolean> enableAll() {
         HashMap<String, Boolean> outcome = new HashMap<>();
         for (Plugin plugin : context.getPluginMap().values()) {
             if (!plugin.getStatus().equals(PluginStatus.ERROR) && !plugin.isEnabled()) {
@@ -229,7 +230,8 @@ public abstract class AbstractPluginManager implements PluginManager {
         return disablePlugin(plugin);
     }
 
-    public Map<String, Boolean> disableAllPlugins() {
+    @Override
+    public Map<String, Boolean> disableAll() {
         HashMap<String, Boolean> outcome = new HashMap<>();
         for (Plugin plugin : context.getPluginMap().values()) {
             if (!plugin.getStatus().equals(PluginStatus.ERROR) && plugin.isEnabled()) {

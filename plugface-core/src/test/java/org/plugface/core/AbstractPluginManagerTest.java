@@ -130,7 +130,7 @@ public class AbstractPluginManagerTest {
         when(plugin.getStatus()).thenReturn(PluginStatus.READY);
         when(plugin.isEnabled()).thenReturn(false);
 
-        Map<String, Boolean> results = manager.enableAllPlugins();
+        Map<String, Boolean> results = manager.enableAll();
         assertTrue(results.get("testPlugin"));
     }
 
@@ -141,7 +141,7 @@ public class AbstractPluginManagerTest {
         when(plugin.getStatus()).thenReturn(PluginStatus.ERROR);
         when(plugin.isEnabled()).thenReturn(false);
 
-        Map<String, Boolean> results = manager.enableAllPlugins();
+        Map<String, Boolean> results = manager.enableAll();
         assertFalse(results.get("testPlugin"));
     }
 
@@ -168,7 +168,7 @@ public class AbstractPluginManagerTest {
         when(plugin.getStatus()).thenReturn(PluginStatus.RUNNING);
         when(plugin.isEnabled()).thenReturn(true);
 
-        Map<String, Boolean> results = manager.disableAllPlugins();
+        Map<String, Boolean> results = manager.disableAll();
         assertTrue(results.get("testPlugin"));
     }
 
@@ -205,7 +205,7 @@ public class AbstractPluginManagerTest {
         when(plugin.getStatus()).thenReturn(PluginStatus.ERROR);
         when(plugin.isEnabled()).thenReturn(true);
 
-        Map<String, Boolean> results = manager.disableAllPlugins();
+        Map<String, Boolean> results = manager.disableAll();
         assertFalse(results.get("testPlugin"));
     }
 
