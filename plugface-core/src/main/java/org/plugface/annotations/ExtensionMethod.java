@@ -27,6 +27,8 @@ THE SOFTWARE.
  */
 
 
+import org.plugface.Plugin;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,6 +36,8 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation that marks an extension method in a {@link org.plugface.Plugin}.
+ * @deprecated since 0.6.0 in favour of the {@link org.plugface.PluginManager#isPluginImplementingApi(Plugin, Class)}
+ * functionality
  * <p>
  *     Plugin methods annotated with this annotation will be discovered and registered by a
  *     {@link org.plugface.PluginManager}, and can be later invoked by calling
@@ -43,5 +47,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Deprecated
 public @interface ExtensionMethod {
 }

@@ -93,9 +93,7 @@ public final class DefaultPluginManager extends AbstractPluginManager {
      * Loading occurs by finding all the jar files in the folder, getting
      * all the {@link JarEntry} in the file and checking if the loaded classes
      * are a valid implementation of {@link Plugin}.
-     * If so, add the class to the plugin list and check if there is any method
-     * marked with {@link ExtensionMethod}, then add them
-     * to the extension list. Extension methods will be accessible through Java reflection.
+     * If so, add the class to the plugin list.
      * <p>
      * If {@link AbstractPluginManager#debug} is set to true, it will load plugins from a simple project
      * folder instead of a full fat Jar file

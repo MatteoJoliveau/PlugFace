@@ -243,6 +243,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
+    @Deprecated
     public Object execExtension(Plugin plugin, String methodName, Object... parameters) {
         Method method;
         if (!extensions.containsKey(plugin)) {
@@ -264,6 +265,7 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
+    @Deprecated
     public Object execExtension(String pluginName, String methodName, Object... parameters) {
         Plugin plugin = context.getPlugin(pluginName);
         return execExtension(plugin, methodName, parameters);
@@ -333,11 +335,13 @@ public abstract class AbstractPluginManager implements PluginManager {
     }
 
     @Override
+    @Deprecated
     public boolean hasExtension(String pluginName, String extensionName) {
         return hasExtension(context.getPlugin(pluginName), extensionName);
     }
 
     @Override
+    @Deprecated
     public boolean hasExtension(Plugin plugin, String extensionName) {
         return false;
     }

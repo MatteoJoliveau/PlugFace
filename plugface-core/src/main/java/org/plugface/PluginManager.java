@@ -123,7 +123,9 @@ public interface PluginManager {
     void restartPlugin(String pluginName);
 
     /**
-     * Execute a method marked with {@link ExtensionMethod}
+     * @deprecated since 0.6.0, use the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+     * and {@link PluginManager#getAllImplementingPlugin(Class)} to provide additional plugin functionalities
+     * instead.
      * in a {@link Plugin}
      *
      * @param plugin     the plugin on which to invoke the method
@@ -131,17 +133,20 @@ public interface PluginManager {
      * @param parameters optional parameters that the method can require
      * @return the object returned by the method
      */
+    @Deprecated
     Object execExtension(Plugin plugin, String methodName, Object... parameters);
 
     /**
-     * Execute a method marked with {@link ExtensionMethod}
-     * in a {@link Plugin} after retrieving the plugin from the context
+     * @deprecated since 0.6.0, use the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+     * and {@link PluginManager#getAllImplementingPlugin(Class)} to provide additional plugin functionalities
+     * instead.
      *
      * @param pluginName the name of the plugin on which to invoke the method
      * @param methodName the name of the method
      * @param parameters optional parameters that the method can require
      * @return the object returned by the method
      */
+    @Deprecated
     Object execExtension(String pluginName, String methodName, Object... parameters);
 
     /**
@@ -214,21 +219,27 @@ public interface PluginManager {
     void setPermissions(Properties permissions);
 
     /**
-     * Check whether a plugin exposes a specific {@link ExtensionMethod}
+     * @deprecated since 0.6.0, use the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+     * and {@link PluginManager#getAllImplementingPlugin(Class)} to provide additional plugin functionalities
+     * instead.
      *
      * @param pluginName    the name of the plugin
      * @param extensionName the name of the extension method
      * @return true if the plugin exposes the method, false if it doesn't
      */
+    @Deprecated
     boolean hasExtension(String pluginName, String extensionName);
 
     /**
-     * Check whether a plugin exposes a specific {@link ExtensionMethod}
+     * @deprecated since 0.6.0, use the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+     * and {@link PluginManager#getAllImplementingPlugin(Class)} to provide additional plugin functionalities
+     * instead.
      *
      * @param plugin        the plugin
      * @param extensionName the name of the extension method
      * @return true if the plugin exposes the method, false if it doesn't
      */
+    @Deprecated
     boolean hasExtension(Plugin plugin, String extensionName);
 
     /**

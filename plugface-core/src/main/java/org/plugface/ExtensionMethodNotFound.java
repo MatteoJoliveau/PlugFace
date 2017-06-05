@@ -32,7 +32,10 @@ import org.plugface.annotations.ExtensionMethod;
  * An exception thrown when trying to execute a non existent {@link ExtensionMethod}.
  * Should be thrown when a {@link ExtensionMethod} is being retrieved from a
  * {@link PluginManager} but is not present in the extensions cache.
+ * @deprecated since 0.6.0 in favour of the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+ * functionality
  */
+@Deprecated
 public class ExtensionMethodNotFound extends RuntimeException {
     public ExtensionMethodNotFound() {
     }
