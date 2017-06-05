@@ -102,8 +102,8 @@ public class AbstractPluginManagerTest {
     public void enabledPluginOperations() throws Exception {
         AbstractPluginManager manager = configurePluginOperations();
 
-        when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
         when(plugin.isEnabled()).thenReturn(true);
+        when(plugin.getStatus()).thenReturn(PluginStatus.STOPPED);
 
         manager.startPlugin(plugin);
         manager.startPlugin("testPlugin");
