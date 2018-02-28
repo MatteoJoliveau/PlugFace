@@ -69,7 +69,7 @@
         </repository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <site>
             <id>github-pages</id>
