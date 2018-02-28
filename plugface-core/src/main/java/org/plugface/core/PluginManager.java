@@ -1,5 +1,6 @@
 package org.plugface.core;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 public interface PluginManager {
@@ -14,6 +15,6 @@ public interface PluginManager {
 
     <T> T removePlugin(T plugin);
 
-    Collection<Object> loadPlugins(PluginSource source) throws IllegalAccessException, InstantiationException;
+    Collection<Object> loadPlugins(PluginSource source) throws Exception;
 
 }

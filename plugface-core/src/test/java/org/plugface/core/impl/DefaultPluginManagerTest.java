@@ -4,8 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.plugface.core.PluginContext;
 import org.plugface.core.PluginSource;
-import org.plugface.core.annotations.Plugin;
+import org.plugface.core.internal.DependencyResolver;
+import org.plugface.core.internal.tree.DependencyNode;
+import org.plugface.core.plugins.TestPlugin;
+import org.plugface.core.internal.AnnotationProcessor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,15 +21,19 @@ public class DefaultPluginManagerTest {
 
     private final PluginContext mockContext = mock(PluginContext.class);
 
+    private final AnnotationProcessor mockProcessor = mock(AnnotationProcessor.class);
+
     private final PluginSource mockSource = mock(PluginSource.class);
+
+    private final DependencyResolver mockResolver = mock(DependencyResolver.class);
 
     private DefaultPluginManager manager;
 
     private final TestPlugin plugin = new TestPlugin();
 
     @Before
-    public void setUp() {
-        manager = new DefaultPluginManager(mockContext);
+    public void setUp() throws Exception {
+        manager = new DefaultPluginManager(mockContext, mockProcessor, mockResolver);
 
         when(mockContext.removePlugin(eq(plugin))).thenReturn(plugin);
         when(mockContext.removePlugin(eq("test"))).thenReturn(plugin);
@@ -72,7 +80,7 @@ public class DefaultPluginManagerTest {
     }
 
     @Test
-    public void shouldLoadPluginsFromSource() throws InstantiationException, IllegalAccessException {
+    public void shouldLoadPluginsFromSource() throws Exception {
         final Collection<Object> plugins = manager.loadPlugins(mockSource);
         assertFalse(plugins.isEmpty());
 
@@ -83,7 +91,5 @@ public class DefaultPluginManagerTest {
         assertNotNull(fromContext);
     }
 
-    @Plugin("test")
-    public static class TestPlugin {}
 
 }

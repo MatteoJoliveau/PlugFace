@@ -1,6 +1,6 @@
-package org.plugface.core.impl;
+package org.plugface.core.internal;
 
-final class PluginDependency {
+public final class PluginDependency {
     private final Class<?> dependencyClass;
     private final boolean optional;
 
@@ -9,11 +9,11 @@ final class PluginDependency {
         this.optional = optional;
     }
 
-    Class<?> getDependencyClass() {
+    public Class<?> getDependencyClass() {
         return dependencyClass;
     }
 
-    boolean isOptional() {
+    public boolean isOptional() {
         return optional;
     }
 

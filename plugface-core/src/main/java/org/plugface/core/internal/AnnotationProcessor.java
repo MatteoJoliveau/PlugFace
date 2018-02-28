@@ -1,22 +1,27 @@
-package org.plugface.core.impl;
+package org.plugface.core.internal;
 
 import org.plugface.core.annotations.Plugin;
 import org.plugface.core.annotations.Require;
+import org.plugface.core.internal.tree.DependencyNode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 
-class PluginUtils {
+public class AnnotationProcessor {
 
-    static <T> String getPluginName(T plugin) {
-        final Plugin annotation = getPluginAnnotation(plugin.getClass());
+    public static <T> String getPluginName(T plugin) {
+        return getPluginName(plugin.getClass());
+    }
+
+    public static <T> String getPluginName(Class<T> plugin) {
+        final Plugin annotation = getPluginAnnotation(plugin);
         final String name = annotation.value();
         return "".equalsIgnoreCase(name) ? null : name;
     }
 
-    static boolean hasDependencies(Class<?> pluginClass) {
+    public boolean hasDependencies(Class<?> pluginClass) {
         getPluginAnnotation(pluginClass);
 
         final Constructor<?>[] constructors = pluginClass.getConstructors();
@@ -40,15 +45,15 @@ class PluginUtils {
         return false;
     }
 
-    static Collection<PluginDependency> getDependencies(Class<?> pluginClass) {
-        getPluginAnnotation(pluginClass);
+    public Collection<DependencyNode> getDependencies(Class<?> pluginClass) {
+        final String name = getPluginName(pluginClass);
         final Constructor<?>[] constructors = pluginClass.getConstructors();
         if (constructors.length == 0) {
             throw new IllegalArgumentException(String.format("Class %s doesn't have a public constructor. Class: %s", pluginClass.getSimpleName(), pluginClass.getName()));
         }
 
         for (Constructor<?> constructor : constructors) {
-            final Collection<PluginDependency> dependencies = new ArrayList<>();
+            final Collection<DependencyNode> dependencies = new ArrayList<>();
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             final Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
             boolean hasRequire = false;
@@ -59,7 +64,7 @@ class PluginUtils {
                     if (Require.class.equals(annotation.annotationType())) {
                         hasRequire = true;
                         Require ann = (Require) annotation;
-                        final PluginDependency dep = new PluginDependency(param, ann.optional());
+                        final DependencyNode dep = new DependencyNode(getPluginName(param), param, ann.optional());
                         dependencies.add(dep);
 
                     }
@@ -80,6 +85,4 @@ class PluginUtils {
         }
         return annotation;
     }
-
-
 }

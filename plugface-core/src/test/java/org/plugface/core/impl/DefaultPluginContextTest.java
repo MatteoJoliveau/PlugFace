@@ -3,8 +3,10 @@ package org.plugface.core.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.plugface.core.annotations.Plugin;
+import org.plugface.core.factory.PluginSources;
+import org.plugface.core.plugins.TestPlugin;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,8 +68,5 @@ public class DefaultPluginContextTest {
         assertTrue(registry.containsKey("test"));
         assertEquals(plugin, test);
     }
-
-    @Plugin("test")
-    private static class TestPlugin {}
 
 }

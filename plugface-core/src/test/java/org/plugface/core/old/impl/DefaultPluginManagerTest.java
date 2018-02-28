@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.plugface.core.old.AbstractPluginManager;
 import org.plugface.core.old.Plugin;
-import org.plugface.core.old.PluginClassLoader;
+import org.plugface.core.internal.PluginClassLoader;
 import org.plugface.core.old.PluginContext;
 
 import java.io.File;

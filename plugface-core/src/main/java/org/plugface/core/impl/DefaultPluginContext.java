@@ -1,6 +1,7 @@
 package org.plugface.core.impl;
 
 import org.plugface.core.PluginContext;
+import org.plugface.core.internal.AnnotationProcessor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +45,7 @@ public class DefaultPluginContext implements PluginContext {
 
     @Override
     public <T> void addPlugin(T plugin) {
-        final String name = PluginUtils.getPluginName(plugin);
+        final String name = AnnotationProcessor.getPluginName(plugin);
         if (registry.containsKey(name) || registry.containsValue(plugin)) {
             throw new IllegalArgumentException("Plugin already registered");
         }
@@ -54,7 +55,7 @@ public class DefaultPluginContext implements PluginContext {
     @Override
     @Nullable
     public <T> T removePlugin(T plugin) {
-        final String name = PluginUtils.getPluginName(plugin);
+        final String name = AnnotationProcessor.getPluginName(plugin);
         return removePlugin(name);
     }
 
@@ -76,4 +77,6 @@ public class DefaultPluginContext implements PluginContext {
     public <T> boolean hasPlugin(Class<T> pluginClass) {
         return getPlugin(pluginClass) != null;
     }
+
+
 }

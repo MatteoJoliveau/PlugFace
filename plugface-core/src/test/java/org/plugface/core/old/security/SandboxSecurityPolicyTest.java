@@ -26,7 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.old.PluginClassLoader;
+import org.plugface.core.internal.PluginClassLoader;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -27,6 +27,7 @@ THE SOFTWARE.
  */
 
 import org.plugface.core.MissingDependencyException;
+import org.plugface.core.internal.PluginClassLoader;
 import org.plugface.core.old.annotations.Requires;
 import org.plugface.core.old.annotations.ExtensionMethod;
 import org.plugface.core.old.*;

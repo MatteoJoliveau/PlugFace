@@ -1,4 +1,4 @@
-package org.plugface.core.old;
+package org.plugface.core.internal;
 
 /*-
  * #%L
@@ -26,12 +26,12 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.core.old.Plugin;
 import org.plugface.core.old.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FilePermission;
-import java.io.IOException;
+import java.io.*;
 import java.net.JarURLConnection;
 import java.net.NetPermission;
 import java.net.URL;
