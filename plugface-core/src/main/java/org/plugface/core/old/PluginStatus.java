@@ -1,10 +1,10 @@
-package org.plugface.core.impl;
+package org.plugface.core.old;
 
 /*-
  * #%L
  * plugface-core
  * %%
- * Copyright (C) 2017 Matteo Joliveau
+ * Copyright (C) 2017 PlugFace
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,13 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.PluginConfiguration;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Default implementation of {@link PluginConfiguration} extending {@link HashMap}
- * for base functionalities
+ * The different states a plugin can be in.
  */
-public class DefaultPluginConfiguration extends HashMap<String, Object> implements PluginConfiguration {
-    @Override
-    public void updateConfiguration(Map<String, Object> configuration) {
-        putAll(configuration);
-    }
+public enum PluginStatus {
+    READY,
+    RUNNING,
+    STOPPED,
+    ERROR
 
-    @Override
-    public Object getParameter(String name) {
-        return get(name);
-    }
-
-    @Override
-    public void setParameter(String name, Object value) {
-        put(name, value);
-    }
 }

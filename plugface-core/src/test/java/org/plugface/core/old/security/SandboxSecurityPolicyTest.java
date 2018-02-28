@@ -1,4 +1,4 @@
-package org.plugface.core.impl;
+package org.plugface.core.old.security;
 
 /*-
  * #%L
@@ -26,35 +26,42 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.PluginConfiguration;
+import org.plugface.core.old.PluginClassLoader;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.security.CodeSource;
+import java.security.PermissionCollection;
+import java.security.ProtectionDomain;
 
-public class DefaultPluginConfigurationTest {
+import static org.mockito.Mockito.mock;
+
+public class SandboxSecurityPolicyTest {
 
     @Test
-    public void updateConfiguration() throws Exception {
-        PluginConfiguration config = new DefaultPluginConfiguration();
-        Map<String, Object> params = new HashMap<>();
-        params.put("ParamOne", 1);
-        params.put("ParamTwo", 2);
-        params.put("ParamThree", 3);
-        params.put("ParamFour", 4);
+    public void getPluginPermissions() throws Exception {
+        CodeSource cs = mock(CodeSource.class);
+        ProtectionDomain domain = new ProtectionDomain(cs, null, new PluginClassLoader(new URL[0]), null);
 
-        config.updateConfiguration(params);
+        SandboxSecurityPolicy policy = new SandboxSecurityPolicy();
 
-        Assert.assertEquals(params, config);
+        PermissionCollection permissions = policy.getPermissions(domain);
+        Assert.assertFalse(permissions.elements().hasMoreElements());
+
     }
 
+
+
     @Test
-    public void setParams() throws Exception {
-        PluginConfiguration config = new DefaultPluginConfiguration();
+    public void getApplicationPermissions() throws Exception {
+        CodeSource cs = mock(CodeSource.class);
+        ProtectionDomain domain = new ProtectionDomain(cs, null, new URLClassLoader(new URL[0]), null);
 
-        config.setParameter("ParamOne", "One");
+        SandboxSecurityPolicy policy = new SandboxSecurityPolicy();
 
-        Assert.assertEquals("One", config.getParameter("ParamOne"));
+        PermissionCollection permissions = policy.getPermissions(domain);
+        Assert.assertTrue(permissions.elements().hasMoreElements());
     }
 }

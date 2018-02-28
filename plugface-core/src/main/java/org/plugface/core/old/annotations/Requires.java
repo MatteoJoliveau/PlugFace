@@ -1,10 +1,10 @@
-package org.plugface.core;
+package org.plugface.core.old.annotations;
 
 /*-
  * #%L
  * plugface-core
  * %%
- * Copyright (C) 2017 Matteo Joliveau
+ * Copyright (C) 2017 PlugFace
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,35 +26,29 @@ THE SOFTWARE.
  * #L%
  */
 
-import java.util.Map;
+import org.plugface.core.old.PluginConfiguration;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Subclass of {@link Map} that holds a custom configuration for a plugin
- * It is basically just a thin wrapper around the {@link Map} class.
+ * Annotation that marks a plugin that depends on other plugins
+ * <p>
+ *     An annotation that marks a plugin specifying other plugins
+ *     it depends on, meaning that it cannot run if these plugins
+ *     are not injected into the {@link PluginConfiguration}
+ * </p>
  */
-public interface PluginConfiguration extends Map<String, Object> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Requires {
 
     /**
-     * Update the configuration by adding a new set of parameters from the
-     * provided {@link Map}
-     * @param configuration map of parameters to add
+     * The list of plugin names that identifies
+     * the plugins it depends on.
+     * @return an array of plugin names
      */
-    void updateConfiguration(Map<String, Object> configuration);
-
-    /**
-     * Alternative to {@link Map#get(Object)}, returns a parameter from his name
-     * @param name the key associated to the parameter
-     * @param <T> the type of the parameter
-     * @return the parameter
-     */
-    <T> T getParameter(String name);
-
-    /**
-     * Alternative to {@link Map#put(Object, Object)}, sets a parameter
-     * under the specified key
-     * @param name the key associated to the parameter
-     * @param value the parameter
-     * @param <T> the type of the parameter
-     */
-    <T> void setParameter(String name, T value);
+    String[] requiredPlugins() default "";
 }

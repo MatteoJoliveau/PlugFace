@@ -26,20 +26,17 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.annotations.Requires;
+import org.plugface.core.annotations.Require;
 
 /**
  * An exception thrown by a plugin when it depends on another plugin
- * but this one is not injected into the {@link PluginConfiguration}
- * @see Requires
+ * but this one has not been loaded
+ * @see Require
  */
 public class MissingDependencyException extends RuntimeException {
 
-    public MissingDependencyException(String missingDependency) {
-        super(missingDependency + " not found, is required for this plugin to work");
+    public MissingDependencyException(String message, Object... args) {
+        super(String.format(message, args));
     }
 
-    public MissingDependencyException(String missingDependency, Throwable cause) {
-        super(missingDependency + " not found, is required for this plugin to work", cause);
-    }
 }

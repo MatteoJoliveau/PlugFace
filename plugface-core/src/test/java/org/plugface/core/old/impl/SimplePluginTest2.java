@@ -1,4 +1,4 @@
-package org.plugface.core.impl;
+package org.plugface.core.old.impl;
 
 /*-
  * #%L
@@ -27,12 +27,12 @@ THE SOFTWARE.
  */
 
 import org.junit.Test;
-import org.plugface.core.PluginStatus;
-import org.plugface.core.SimplePlugin;
+import org.plugface.core.old.PluginStatus;
+import org.plugface.core.old.SimplePlugin;
 
 import static org.junit.Assert.*;
 
-public class SimplePluginTest {
+public class SimplePluginTest2 {
 
     @Test
     public void execute() throws Exception {

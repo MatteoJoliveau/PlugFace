@@ -1,9 +1,9 @@
 package org.plugface.spring;
 
-import org.plugface.core.NoSuchPluginManagerException;
-import org.plugface.core.Plugin;
-import org.plugface.core.PluginManager;
-import org.plugface.core.impl.DefaultPluginContext;
+import org.plugface.core.old.NoSuchPluginManagerException;
+import org.plugface.core.old.Plugin;
+import org.plugface.core.old.PluginManager;
+import org.plugface.core.old.impl.DefaultPluginContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

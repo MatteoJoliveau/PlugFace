@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -26,8 +26,8 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.annotations.ExtensionMethod;
-import org.plugface.core.security.SandboxSecurityPolicy;
+import org.plugface.core.old.annotations.ExtensionMethod;
+import org.plugface.core.old.security.SandboxSecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

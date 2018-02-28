@@ -1,10 +1,10 @@
-package org.plugface.core.annotations;
+package org.plugface.core.old;
 
 /*-
  * #%L
  * plugface-core
  * %%
- * Copyright (C) 2017 PlugFace
+ * Copyright (C) 2017 Matteo Joliveau
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,22 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.PluginConfiguration;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Annotation that marks a plugin that depends on other plugins
- * <p>
- *     An annotation that marks a plugin specifying other plugins
- *     it depends on, meaning that it cannot run if these plugins
- *     are not injected into the {@link PluginConfiguration}
- * </p>
+ * An exception thrown when trying to lookup for a non existent {@link PluginManager}.
+ * Should be thrown when a {@link PluginManager} is being retrieved from a
+ * {@link PluginContext} but is not present in the registry.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Requires {
+public class NoSuchPluginManagerException extends RuntimeException{
 
-    /**
-     * The list of plugin names that identifies
-     * the plugins it depends on.
-     * @return an array of plugin names
-     */
-    String[] requiredPlugins() default "";
+    public NoSuchPluginManagerException(String managerName) {
+        super("No plugin manager found for: " + managerName);
+    }
+
+    public NoSuchPluginManagerException(String managerName, Throwable cause) {
+        super("No plugin manager found for: " + managerName, cause);
+    }
+
+    public NoSuchPluginManagerException(String managerName, String message, Throwable cause) {
+        super(message, cause);
+    }
 }

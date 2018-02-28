@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old.annotations;
 
 /*-
  * #%L
@@ -26,22 +26,28 @@ THE SOFTWARE.
  * #L%
  */
 
+
+import org.plugface.core.old.Plugin;
+import org.plugface.core.old.PluginManager;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * An exception thrown when trying to lookup for a non existent {@link PluginManager}.
- * Should be thrown when a {@link PluginManager} is being retrieved from a
- * {@link PluginContext} but is not present in the registry.
+ * Annotation that marks an extension method in a {@link Plugin}.
+ * @deprecated since 0.6.0 in favour of the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+ * functionality
+ * <p>
+ *     Plugin methods annotated with this annotation will be discovered and registered by a
+ *     {@link PluginManager}, and can be later invoked by calling
+ *     {@link PluginManager#execExtension(String, String, Object...)}.
+ *     Useful to specify extra methods that specific applications require their plugins to implement.
+ * </p>
  */
-public class NoSuchPluginManagerException extends RuntimeException{
-
-    public NoSuchPluginManagerException(String managerName) {
-        super("No plugin manager found for: " + managerName);
-    }
-
-    public NoSuchPluginManagerException(String managerName, Throwable cause) {
-        super("No plugin manager found for: " + managerName, cause);
-    }
-
-    public NoSuchPluginManagerException(String managerName, String message, Throwable cause) {
-        super(message, cause);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Deprecated
+public @interface ExtensionMethod {
 }

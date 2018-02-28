@@ -1,4 +1,4 @@
-package org.plugface.core.security;
+package org.plugface.core.old.security;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.PluginClassLoader;
+import org.plugface.core.old.PluginClassLoader;
 
 import java.security.*;
 

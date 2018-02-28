@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old.impl;
 
 /*-
  * #%L
@@ -26,22 +26,28 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.core.old.PluginConfiguration;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * An exception thrown when trying to lookup for a non existent {@link Plugin}.
- * Should be thrown when a {@link Plugin} is being retrieved from a
- * {@link PluginContext} but is not present in the registry.
+ * Default implementation of {@link PluginConfiguration} extending {@link HashMap}
+ * for base functionalities
  */
-public class NoSuchPluginException extends RuntimeException {
-
-    public NoSuchPluginException(String pluginName) {
-        super("No plugin found for: " + pluginName);
+public class DefaultPluginConfiguration extends HashMap<String, Object> implements PluginConfiguration {
+    @Override
+    public void updateConfiguration(Map<String, Object> configuration) {
+        putAll(configuration);
     }
 
-    public NoSuchPluginException(String pluginName, Throwable cause) {
-        super("No plugin found for: " + pluginName, cause);
+    @Override
+    public Object getParameter(String name) {
+        return get(name);
     }
 
-    public NoSuchPluginException(String pluginName, String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public void setParameter(String name, Object value) {
+        put(name, value);
     }
 }

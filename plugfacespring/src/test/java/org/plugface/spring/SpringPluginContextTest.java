@@ -2,10 +2,10 @@ package org.plugface.spring;
 
 import org.junit.After;
 import org.junit.Test;
-import org.plugface.core.DefaultPlugin;
-import org.plugface.core.Plugin;
-import org.plugface.core.PluginManager;
-import org.plugface.core.impl.DefaultPluginManager;
+import org.plugface.core.old.DefaultPlugin;
+import org.plugface.core.old.Plugin;
+import org.plugface.core.old.PluginManager;
+import org.plugface.core.old.impl.DefaultPluginManager;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package org.plugface.core.impl;
+package org.plugface.core.old.impl;
 
 /*-
  * #%L
@@ -27,11 +27,11 @@ THE SOFTWARE.
  */
 
 import org.junit.Test;
-import org.plugface.core.DefaultPlugin;
-import org.plugface.core.Plugin;
-import org.plugface.core.PluginConfiguration;
-import org.plugface.core.PluginStatus;
-import org.plugface.core.annotations.Requires;
+import org.plugface.core.old.DefaultPlugin;
+import org.plugface.core.old.Plugin;
+import org.plugface.core.old.PluginConfiguration;
+import org.plugface.core.old.PluginStatus;
+import org.plugface.core.old.annotations.Requires;
 
 import java.util.Collection;
 import java.util.Collections;

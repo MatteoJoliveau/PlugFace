@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -26,33 +26,29 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.core.old.annotations.ExtensionMethod;
+
 /**
- * Abstract implementation of {@link Plugin} that extends
- * {@link DefaultPlugin} and remove the {@code execute()} functionality.
- * Useful for plugins that just need to run and forget.
+ * An exception thrown when trying to execute a non existent {@link ExtensionMethod}.
+ * Should be thrown when a {@link ExtensionMethod} is being retrieved from a
+ * {@link PluginManager} but is not present in the extensions cache.
+ * @deprecated since 0.6.0 in favour of the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
+ * functionality
  */
-public abstract class SimplePlugin extends DefaultPlugin<Object,Object> {
-
-    protected SimplePlugin(String name) {
-        super(name);
-    }
-    /**
-     * Throw {@link UnsupportedOperationException} if invoked
-     * @param parameters the parameters that the method accepts
-     * @return nothing
-     */
-    @Override
-    public final Object execute(Object parameters) {
-        throw new UnsupportedOperationException("This plugin can't execute");
+@Deprecated
+public class ExtensionMethodNotFound extends RuntimeException {
+    public ExtensionMethodNotFound() {
     }
 
-    @Override
-    public String toString() {
-        return "SimplePlugin{" +
-                "name='" + getName() + '\'' +
-                ", pluginConfiguration=" + getPluginConfiguration() +
-                ", pluginStatus=" + getStatus() +
-                ", pluginEnabled=" + isEnabled() +
-                "}";
+    public ExtensionMethodNotFound(String message) {
+        super(message);
+    }
+
+    public ExtensionMethodNotFound(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ExtensionMethodNotFound(Throwable cause) {
+        super(cause);
     }
 }

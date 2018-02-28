@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -27,9 +27,11 @@ THE SOFTWARE.
  */
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.plugface.core.impl.DefaultPluginContext;
-import org.plugface.core.impl.DefaultPluginManager;
+import org.plugface.core.old.*;
+import org.plugface.core.old.impl.DefaultPluginContext;
+import org.plugface.core.old.impl.DefaultPluginManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -45,9 +47,9 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
-
+@Ignore
 public class AbstractPluginManagerTest {
-
+/*
     private PluginContext context;
     private Plugin plugin;
 
@@ -328,7 +330,7 @@ public class AbstractPluginManagerTest {
         for (Plugin p : context2.getPluginMap().values()) {
             assertFalse(p.isEnabled());
         }
-    }
+    }*/
 }
 
 class ManagerTestPlugin extends SimplePlugin implements Iterable {

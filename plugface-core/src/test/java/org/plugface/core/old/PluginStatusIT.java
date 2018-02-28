@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -29,9 +29,9 @@ THE SOFTWARE.
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.plugface.core.*;
-import org.plugface.core.impl.DefaultPluginContext;
-import org.plugface.core.impl.DefaultPluginManager;
+import org.plugface.core.old.*;
+import org.plugface.core.old.impl.DefaultPluginContext;
+import org.plugface.core.old.impl.DefaultPluginManager;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 
 @Ignore
 public class PluginStatusIT {
-    private PluginContext context = new DefaultPluginContext();
+   /* private PluginContext context = new DefaultPluginContext();
     private PluginManager manager;
     @Before
     public void setUp() throws Exception {
@@ -95,5 +95,5 @@ public class PluginStatusIT {
             manager.enablePlugin(p);
         }
 
-    }
+    }*/
 }

@@ -1,10 +1,10 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
  * plugface-core
  * %%
- * Copyright (C) 2017 PlugFace
+ * Copyright (C) 2017 Matteo Joliveau
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,32 @@ THE SOFTWARE.
  */
 
 /**
- * The different states a plugin can be in.
+ * Abstract implementation of {@link Plugin} that extends
+ * {@link DefaultPlugin} and remove the {@code execute()} functionality.
+ * Useful for plugins that just need to run and forget.
  */
-public enum PluginStatus {
-    READY,
-    RUNNING,
-    STOPPED,
-    ERROR
+public abstract class SimplePlugin extends DefaultPlugin<Object,Object> {
 
+    protected SimplePlugin(String name) {
+        super(name);
+    }
+    /**
+     * Throw {@link UnsupportedOperationException} if invoked
+     * @param parameters the parameters that the method accepts
+     * @return nothing
+     */
+    @Override
+    public final Object execute(Object parameters) {
+        throw new UnsupportedOperationException("This plugin can't execute");
+    }
+
+    @Override
+    public String toString() {
+        return "SimplePlugin{" +
+                "name='" + getName() + '\'' +
+                ", pluginConfiguration=" + getPluginConfiguration() +
+                ", pluginStatus=" + getStatus() +
+                ", pluginEnabled=" + isEnabled() +
+                "}";
+    }
 }

@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.impl.DefaultPluginConfiguration;
+import org.plugface.core.old.impl.DefaultPluginConfiguration;
 
 /**
  * Abstract implementation of {@link Plugin} that provides

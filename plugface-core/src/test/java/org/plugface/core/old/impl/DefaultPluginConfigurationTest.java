@@ -1,4 +1,4 @@
-package org.plugface.core.annotations;
+package org.plugface.core.old.impl;
 
 /*-
  * #%L
@@ -26,28 +26,35 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.core.old.PluginConfiguration;
+import org.junit.Assert;
+import org.junit.Test;
 
-import org.plugface.core.Plugin;
-import org.plugface.core.PluginManager;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class DefaultPluginConfigurationTest {
 
-/**
- * Annotation that marks an extension method in a {@link Plugin}.
- * @deprecated since 0.6.0 in favour of the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
- * functionality
- * <p>
- *     Plugin methods annotated with this annotation will be discovered and registered by a
- *     {@link PluginManager}, and can be later invoked by calling
- *     {@link PluginManager#execExtension(String, String, Object...)}.
- *     Useful to specify extra methods that specific applications require their plugins to implement.
- * </p>
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Deprecated
-public @interface ExtensionMethod {
+    @Test
+    public void updateConfiguration() throws Exception {
+        PluginConfiguration config = new DefaultPluginConfiguration();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ParamOne", 1);
+        params.put("ParamTwo", 2);
+        params.put("ParamThree", 3);
+        params.put("ParamFour", 4);
+
+        config.updateConfiguration(params);
+
+        Assert.assertEquals(params, config);
+    }
+
+    @Test
+    public void setParams() throws Exception {
+        PluginConfiguration config = new DefaultPluginConfiguration();
+
+        config.setParameter("ParamOne", "One");
+
+        Assert.assertEquals("One", config.getParameter("ParamOne"));
+    }
 }

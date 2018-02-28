@@ -1,8 +1,8 @@
 package org.plugface.spring;
 
-import org.plugface.core.PluginContext;
-import org.plugface.core.PluginManager;
-import org.plugface.core.impl.DefaultPluginManager;
+import org.plugface.core.old.PluginContext;
+import org.plugface.core.old.PluginManager;
+import org.plugface.core.old.impl.DefaultPluginManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;

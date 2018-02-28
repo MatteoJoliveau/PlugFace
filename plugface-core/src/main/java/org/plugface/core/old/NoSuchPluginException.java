@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.old;
 
 /*-
  * #%L
@@ -26,29 +26,22 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.annotations.ExtensionMethod;
-
 /**
- * An exception thrown when trying to execute a non existent {@link ExtensionMethod}.
- * Should be thrown when a {@link ExtensionMethod} is being retrieved from a
- * {@link PluginManager} but is not present in the extensions cache.
- * @deprecated since 0.6.0 in favour of the {@link PluginManager#isPluginImplementingApi(Plugin, Class)}
- * functionality
+ * An exception thrown when trying to lookup for a non existent {@link Plugin}.
+ * Should be thrown when a {@link Plugin} is being retrieved from a
+ * {@link PluginContext} but is not present in the registry.
  */
-@Deprecated
-public class ExtensionMethodNotFound extends RuntimeException {
-    public ExtensionMethodNotFound() {
+public class NoSuchPluginException extends RuntimeException {
+
+    public NoSuchPluginException(String pluginName) {
+        super("No plugin found for: " + pluginName);
     }
 
-    public ExtensionMethodNotFound(String message) {
-        super(message);
+    public NoSuchPluginException(String pluginName, Throwable cause) {
+        super("No plugin found for: " + pluginName, cause);
     }
 
-    public ExtensionMethodNotFound(String message, Throwable cause) {
+    public NoSuchPluginException(String pluginName, String message, Throwable cause) {
         super(message, cause);
-    }
-
-    public ExtensionMethodNotFound(Throwable cause) {
-        super(cause);
     }
 }
