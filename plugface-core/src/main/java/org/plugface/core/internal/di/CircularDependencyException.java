@@ -1,4 +1,4 @@
-package org.plugface.core;
+package org.plugface.core.internal.di;
 
 public class CircularDependencyException extends RuntimeException {
 

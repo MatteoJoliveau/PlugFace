@@ -2,16 +2,19 @@ package org.plugface.core.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.plugface.core.PluginContext;
+import org.plugface.core.PluginManager;
 import org.plugface.core.PluginSource;
 import org.plugface.core.internal.DependencyResolver;
-import org.plugface.core.internal.tree.DependencyNode;
-import org.plugface.core.plugins.TestPlugin;
+import org.plugface.core.internal.di.Node;
+import org.plugface.core.plugins.*;
 import org.plugface.core.internal.AnnotationProcessor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,6 +46,9 @@ public class DefaultPluginManagerTest {
         final Collection<Class<?>> plugins = new ArrayList<>();
         plugins.add(TestPlugin.class);
         when(mockSource.load()).thenReturn(plugins);
+        final Collection<Node<?>> nodes = new ArrayList<>();
+        nodes.add(new Node<>(TestPlugin.class));
+        when(mockResolver.resolve(ArgumentMatchers.<Class<?>>anyCollection())).thenReturn(nodes);
     }
 
     @Test
@@ -90,6 +96,5 @@ public class DefaultPluginManagerTest {
         final TestPlugin fromContext = manager.getPlugin(TestPlugin.class);
         assertNotNull(fromContext);
     }
-
 
 }

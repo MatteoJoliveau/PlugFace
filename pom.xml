@@ -51,7 +51,7 @@
     </issueManagement>
     <modules>
         <module>plugface-core</module>
-        <module>plugfacespring</module>
+        <module>plugface-spring</module>
     </modules>
 
     <properties>

@@ -1,7 +1,8 @@
 package org.plugface.core.plugins;
 
 import org.plugface.core.annotations.Plugin;
-import org.plugface.core.annotations.Require;
+
+import javax.inject.Inject;
 
 @Plugin(value = "dependency")
 public class DependencyPlugin {
@@ -9,7 +10,8 @@ public class DependencyPlugin {
     private final TestPlugin dependency;
     private final OptionalPlugin optional;
 
-    public DependencyPlugin(@Require TestPlugin dependency, @Require(optional = true) OptionalPlugin optional) {
+    @Inject
+    public DependencyPlugin(TestPlugin dependency, OptionalPlugin optional) {
         this.dependency = dependency;
         this.optional = optional;
     }

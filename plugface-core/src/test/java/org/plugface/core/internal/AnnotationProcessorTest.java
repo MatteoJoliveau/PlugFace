@@ -2,7 +2,7 @@ package org.plugface.core.internal;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.plugface.core.internal.tree.DependencyNode;
+import org.plugface.core.internal.di.Node;
 import org.plugface.core.plugins.DependencyPlugin;
 import org.plugface.core.plugins.OptionalPlugin;
 import org.plugface.core.plugins.TestPlugin;
@@ -47,18 +47,8 @@ public class AnnotationProcessorTest {
 
     @Test
     public void shouldRetrieveDependencies() {
-        final Collection<DependencyNode> dependencies = sut.getDependencies(DependencyPlugin.class);
+        final Collection<Node<?>> dependencies = sut.getDependencies(DependencyPlugin.class);
         assertFalse(dependencies.isEmpty());
-        for (DependencyNode dependency : dependencies) {
-            final Class<?> clazz = dependency.getDependencyClass();
-            if (OptionalPlugin.class.equals(clazz)) {
-                assertTrue(dependency.isOptional());
-            } else if (TestPlugin.class.equals(clazz)) {
-                assertFalse(dependency.isOptional());
-            } else {
-                fail("Incorrect class");
-            }
-        }
     }
 
     @Plugin

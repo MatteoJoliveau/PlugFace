@@ -4,18 +4,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.plugface.core.PluginContext;
+import org.plugface.core.PluginManager;
 import org.plugface.core.annotations.Plugin;
+import org.plugface.core.factory.PluginSources;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.junit.Assert.assertNotNull;
+import javax.inject.Inject;
 
-public class SpringPluginContextTest {
+import static org.junit.Assert.*;
 
+public class SpringPluginManagerTest {
     private AnnotationConfigApplicationContext context;
-    private PluginContext sut;
+    private PluginManager sut;
 
     private void load(Class<?> config) throws Exception {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
@@ -26,38 +29,21 @@ public class SpringPluginContextTest {
 
     @Before
     public void setUp() throws Exception {
-
         load(SpringPluginContextTest.Config.class);
-        sut = this.context.getBean(PluginContext.class);
-        sut.addPlugin(new TestPlugin());
-    }
-
-    @Test
-    public void shouldLoadFromBothPCandSC() {
-        final TestPlugin plugin = sut.getPlugin(TestPlugin.class);
-        final TestBean bean = sut.getPlugin(TestBean.class);
-
-        assertNotNull(plugin);
-        assertNotNull(bean);
-    }
-
-    @Test
-    public void shouldLoadFromPC() {
-        final TestPlugin plugin = sut.getPlugin(TestPlugin.class);
-
-        assertNotNull(plugin);
-    }
-
-    @Test
-    public void shouldLoadFromSC() {
-        final TestBean bean = sut.getPlugin(TestBean.class);
-
-        assertNotNull(bean);
+        sut = this.context.getBean(PluginManager.class);
     }
 
     @After
     public void tearDown() throws Exception {
         context.stop();
+    }
+
+    @Test
+    public void shouldResolveMixedDependencies() throws Exception {
+        sut.loadPlugins(PluginSources.classList(TestPlugin.class));
+        final TestPlugin plugin = sut.getPlugin(TestPlugin.class);
+        assertNotNull(plugin);
+        assertEquals("Plugface: Hello Spring!", plugin.greet());
     }
 
     @Configuration
@@ -70,18 +56,13 @@ public class SpringPluginContextTest {
         }
     }
 
-    static class TestBean {
+    public static class TestBean {
         public String greet() {
             return "Hello Spring!";
         }
     }
 
-    @Plugin("test")
-    static class TestPlugin {
 
-        public String greet() {
-            return "Hello Plugface!";
-        }
-    }
+
 
 }

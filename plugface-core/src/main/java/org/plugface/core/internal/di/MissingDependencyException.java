@@ -1,10 +1,10 @@
-package org.plugface.core.old;
+package org.plugface.core.internal.di;
 
 /*-
  * #%L
  * plugface-core
  * %%
- * Copyright (C) 2017 Matteo Joliveau
+ * Copyright (C) 2017 PlugFace
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,21 +27,13 @@ THE SOFTWARE.
  */
 
 /**
- * An exception thrown when trying to lookup for a non existent {@link Plugin}.
- * Should be thrown when a {@link Plugin} is being retrieved from a
- * {@link PluginContext} but is not present in the registry.
+ * An exception thrown by a plugin when it depends on another plugin
+ * but this one has not been loaded
  */
-public class NoSuchPluginException extends RuntimeException {
+public class MissingDependencyException extends RuntimeException {
 
-    public NoSuchPluginException(String pluginName) {
-        super("No plugin found for: " + pluginName);
+    public MissingDependencyException(String message, Object... args) {
+        super(String.format(message, args));
     }
 
-    public NoSuchPluginException(String pluginName, Throwable cause) {
-        super("No plugin found for: " + pluginName, cause);
-    }
-
-    public NoSuchPluginException(String pluginName, String message, Throwable cause) {
-        super(message, cause);
-    }
 }

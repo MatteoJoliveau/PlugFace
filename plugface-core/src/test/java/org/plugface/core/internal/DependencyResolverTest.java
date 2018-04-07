@@ -2,7 +2,7 @@ package org.plugface.core.internal;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.plugface.core.internal.tree.DependencyNode;
+import org.plugface.core.internal.di.Node;
 import org.plugface.core.plugins.*;
 
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DependencyResolverTest {
 
@@ -26,11 +26,12 @@ public class DependencyResolverTest {
 
     @Test
     public void shouldResolveComplexDependencies() throws Exception {
-        List<Class<?>> plugins = newArrayList(DeepDependencyPlugin.class, DependencyPlugin.class, TestPlugin.class, OptionalPlugin.class, SingleDependencyPlugin.class);
-        Collection<DependencyNode> nodes = sut.resolve(plugins);
+        List<Class<?>> plugins = newArrayList(DeepDependencyPlugin.class, DependencyPlugin.class, TestPlugin.class, OptionalPlugin.class, SingleDependencyPlugin.class
+        );
+        Collection<Node<?>> nodes = sut.resolve(plugins);
         assertEquals(plugins.size(), nodes.size());
-        for (DependencyNode node : nodes) {
-            assertTrue(plugins.contains(node.getDependencyClass()));
+        for (Node node : nodes) {
+            assertTrue(plugins.contains(node.getRefClass()));
         }
     }
 
@@ -40,6 +41,7 @@ public class DependencyResolverTest {
         list.addAll(Arrays.asList(elements));
         return list;
     }
+
 
 
 }

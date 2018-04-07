@@ -1,1 +1,0 @@
-permissions.plugface-testing-1.0-SNAPSHOT.files=read test.txt, write test.txt

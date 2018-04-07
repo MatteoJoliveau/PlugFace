@@ -26,8 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.old.Plugin;
-import org.plugface.core.old.security.SandboxSecurityPolicy;
+import org.plugface.core.annotations.Plugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ import java.util.Properties;
 /**
  * Custom {@link URLClassLoader} that is used to load {@link Plugin} classes from Jar files.
  * <p>
- * It is used to give an empty set of permissions to plugins in {@link SandboxSecurityPolicy#isPlugin(ProtectionDomain)}
+ * It is used to give an empty set of permissions to plugins in SandboxSecurityPolicy#isPlugin(ProtectionDomain)
  * so that plugins run in a protected sandbox.
  * It also overrides the {@link URLClassLoader#getPermissions(CodeSource)} method so that
  * custom permissions specified in a <i>permissions.properties</i> file can be applied to specific plugins.
@@ -90,10 +89,11 @@ public class PluginClassLoader extends URLClassLoader {
      *
      * @param codesource the {@link CodeSource} to give the permissions to
      * @return a {@link PermissionCollection} whith all the appropriate permissions
-     * @see SandboxSecurityPolicy
      */
     @Override
     protected PermissionCollection getPermissions(CodeSource codesource) {
+        return super.getPermissions(codesource);
+        /*
         Permissions permissions = new Permissions();
         if (permissionProperties != null) {
             String pluginFileName = retrieveFileNameFromCodeSource(codesource);
@@ -143,6 +143,7 @@ public class PluginClassLoader extends URLClassLoader {
             }
         }
         return permissions;
+        */
     }
 
     /**

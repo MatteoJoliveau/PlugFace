@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation marking plugin classes that will be loaded at runtime.
- * This class must have a no-args constructor that will be called during loading.
- * Optionally, you
+ * This class must have either a no-args constructor or a constructor marked with {@link javax.inject.Inject} having
+ * other dependendent Plugins as parameters that will be resolved during instantiation.
  *
  * @author Matteo Joliveau
  */
