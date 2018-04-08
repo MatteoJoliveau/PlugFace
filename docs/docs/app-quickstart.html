@@ -14,11 +14,11 @@ your application, and will be used as the bridge between the two worlds.<br>
 Plugins will then implement these interfaces and be packaged separately.</p>
 <p>Now, let's talk about the building blocks you need to use plugins in your application.</p>
 <h2><a class="anchor" aria-hidden="true" id="plugin-context"></a><a href="#plugin-context" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Plugin Context</h2>
-<p>The context is your plugin registry. The <a href="apidocs/plugface-core/org/plugface/core/PluginContext.html">PluginContext</a> interface defines the methods used to register, remove
+<p>The context is your plugin registry. The <a href="/apidocs/plugface-core/org/plugface/core/PluginContext.html">PluginContext</a> interface defines the methods used to register, remove
 and retrieve plugin objects so that they can be used by your code. You normally don't need to access the context directly,
 as the <a href="#plugin-manager">PluginManager</a> will act as a safe proxy for it, but it is there if you need it.</p>
 <h2><a class="anchor" aria-hidden="true" id="plugin-manager"></a><a href="#plugin-manager" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Plugin Manager</h2>
-<p>The manager is your connection point with the plugin world. The <a href="apidocs/plugface-core/org/plugface/core/PluginManager.html">PluginManager</a> interface defines some proxy methods
+<p>The manager is your connection point with the plugin world. The <a href="/apidocs/plugface-core/org/plugface/core/PluginManager.html">PluginManager</a> interface defines some proxy methods
 to access the context but also a <code>loadPlugins(PluginSource source)</code> method that is used to dinamically
 load and instantiate plugin classes from a specified source.<br>
 The default implementation is <code>DefaultPluginManager</code>, and a convenience factory method is provided if you don't need
@@ -33,7 +33,7 @@ or from a list of <code>Class&lt;&gt;</code> objects (useful for testing or debu
 <h1><a class="anchor" aria-hidden="true" id="example"></a><a href="#example" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h1>
 <p>First of all let's define our plugin SDK. As per tradition, we'll make an Hello World application.</p>
 <p>We define our <code>Greeter</code> interface like so.<br>
-<strong>QUICK NOTE</strong> Using interfaces is not actually recommended, as plugins can be retrieved from a String based name,
+<strong>QUICK NOTE</strong> Using interfaces is not actually needed, as plugins can be retrieved from a String based name,
 but it makes using them much easier since loading them without knowing their supertype only allows to use them via reflection.</p>
 <pre><code class="hljs css java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Greeter</span> </span>{ 
 
