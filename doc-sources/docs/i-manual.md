@@ -4,7 +4,7 @@ title: Manual Installation
 sidebar_label: Manual
 ---
 
-PlugFace can be downloaded from the GitHub Release page as JAR files.
+PlugFace can be downloaded from the [GitHub Release page](https://github.com/MatteoJoliveau/PlugFace/releases) as JAR files.
 Just download the JAR file most suitable for you and copy it in your classpath.
 
 Don't forget to also download it's dependencies. We tried to keep them fairly limited, but you still have to
