@@ -8,18 +8,18 @@
 /* List of projects/orgs using your project for the users page */
 const users = [
   {
-    caption: 'User1',
-    image: '/test-site/img/docusaurus.svg',
-    infoLink: 'https://www.facebook.com',
+    caption: 'Matteo Joliveau',
+    image: 'https://www.gravatar.com/avatar/51b09ffeba75e9a9f1ed5216e3e9ee52',
+    infoLink: 'https://matteojoliveau.com',
     pinned: true,
   },
 ];
 
 const siteConfig = {
-  title: 'PlugFace Documentation' /* title for your website */,
+  title: 'PlugFace' /* title for your website */,
   tagline: 'The Official PlugFace Doc',
   url: 'https://matteojoliveau.github.io/plugface' /* your website url */,
-  baseUrl: '/plugface/' /* base url for your project */,
+  baseUrl: '/' /* base url for your project */,
   projectName: '',
   headerLinks: [
     {doc: 'app-quickstart', label: 'Docs'},
@@ -29,13 +29,13 @@ const siteConfig = {
   ],
   users,
   /* path to images for header/footer */
-  headerIcon: 'img/docusaurus.svg',
-  footerIcon: 'img/docusaurus.svg',
+  // headerIcon: 'img/docusaurus.svg',  
+  // footerIcon: 'img/docusaurus.svg',
   favicon: 'img/favicon.png',
   /* colors for website */
   colors: {
-    primaryColor: '#2E8555',
-    secondaryColor: '#205C3B',
+    primaryColor: '#E71D36',
+    secondaryColor: '#2EC4B6',
   },
   /* custom fonts for website */
   /*fonts: {

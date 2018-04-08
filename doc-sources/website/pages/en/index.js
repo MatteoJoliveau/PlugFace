@@ -76,13 +76,13 @@ class HomeSplash extends React.Component {
     let language = this.props.language || '';
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('docusaurus.svg')} />
+        {/* <Logo img_src={imgUrl('docusaurus.svg')} /> */}
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html', language)}>Example Link</Button>
-            <Button href={docUrl('doc2.html', language)}>Example Link 2</Button>
+            <Button href={docUrl('app-quickstart.html', language)}>Quick Start</Button>
+            <Button href={docUrl('spring-integration.html', language)}>Spring Integration</Button>
+            <Button href={docUrl('javadoc.html', language)}>Documentation</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -103,16 +103,16 @@ const Features = props => (
   <Block layout="fourColumn">
     {[
       {
-        content: 'This is the content of my feature',
-        image: imgUrl('docusaurus.svg'),
+        content: 'Divide your application into smaller modules that can be loaded and unloaded at runtime',
+        // image: imgUrl('docusaurus.svg'),
         imageAlign: 'top',
-        title: 'Feature One',
+        title: 'Easy Modularization',
       },
       {
-        content: 'The content of my second feature',
-        image: imgUrl('docusaurus.svg'),
+        content: 'Compose and orchestrate plugins to create complex behavior outside of your application',
+        // image: imgUrl('docusaurus.svg'),
         imageAlign: 'top',
-        title: 'Feature Two',
+        title: 'Easy Composition',
       },
     ]}
   </Block>
@@ -122,8 +122,11 @@ const FeatureCallout = props => (
   <div
     className="productShowcaseSection paddingBottom"
     style={{textAlign: 'center'}}>
-    <h2>Feature Callout</h2>
-    <MarkdownBlock>These are features of this project</MarkdownBlock>
+    <h2>The Simple Java Plugin System</h2>
+    <MarkdownBlock>
+      PlugFace allows to easily define, load and manage plugins in Java. Plugins are simply class that
+      are loaded into an application at runtime, without the need to have them available at compile time.
+    </MarkdownBlock>
   </div>
 );
 
@@ -131,9 +134,15 @@ const LearnHow = props => (
   <Block background="light">
     {[
       {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
+        content: `
+        PluginManager manager = PluginManagers.defaultPluginManager();
+        
+        manager.loadPlugins(PluginSources.jarSource("path/to/plugin/folder"));
+
+        Greeter greeterPlugin = manager.getPlugin(Greeter.class);
+        `,
+        image: imgUrl('java_logo.png'),
+        imageAlign: 'left',
         title: 'Learn How',
       },
     ]}
@@ -157,8 +166,10 @@ const Description = props => (
   <Block background="dark">
     {[
       {
-        content: 'This is another description of how this project is useful',
-        image: imgUrl('docusaurus.svg'),
+        content: `PlugFace is the simple, friction-free Java plugin framework that allows you to load classes at runtime
+        without having to worry about anything. Just grab your plugins, follow the three line [quickstart example](http://localhost:3000/plugface/docs/app-quickstart.html#example)
+        and you're good to go! `,
+        // image: imgUrl('docusaurus.svg'),
         imageAlign: 'right',
         title: 'Description',
       },
@@ -206,9 +217,8 @@ class Index extends React.Component {
         <div className="mainContainer">
           <Features />
           <FeatureCallout />
-          <LearnHow />
-          <TryOut />
           <Description />
+          <LearnHow />
           <Showcase language={language} />
         </div>
       </div>
