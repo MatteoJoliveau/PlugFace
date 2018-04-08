@@ -3,18 +3,15 @@ package org.plugface.spring;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.plugface.core.PluginContext;
 import org.plugface.core.PluginManager;
-import org.plugface.core.annotations.Plugin;
 import org.plugface.core.factory.PluginSources;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.inject.Inject;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class SpringPluginManagerTest {
     private AnnotationConfigApplicationContext context;

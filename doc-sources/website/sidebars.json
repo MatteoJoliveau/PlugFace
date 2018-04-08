@@ -1,10 +1,9 @@
 {
   "docs": {
-    "Docusaurus": ["doc1"],
-    "First Category": ["doc2"],
-    "Second Category": ["doc3"]
-  },
-  "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "Installation": ["install-maven", "install-gradle", "install-manual", "install-git"],
+    "Getting Started": ["app-quickstart", "plugin-quickstart"],
+    "Guides": ["dependency-injection"],
+    "Integrations": ["spring-integration"],
+    "JavaDoc": ["javadoc"]
   }
 }
