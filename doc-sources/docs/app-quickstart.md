@@ -44,7 +44,7 @@ or from a list of `Class<>` objects (useful for testing or debugging).
 First of all let's define our plugin SDK. As per tradition, we'll make an Hello World application.
 
 We define our `Greeter` interface like so.  
-**QUICK NOTE** Using interfaces is not actually recommended, as plugins can be retrieved from a String based name,
+**QUICK NOTE** Using interfaces is not actually needed, as plugins can be retrieved from a String based name,
 but it makes using them much easier since loading them without knowing their supertype only allows to use them via reflection.
 
 ```java

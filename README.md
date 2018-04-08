@@ -7,9 +7,9 @@
 *This README refers to versions 0.6.0+ which has undergone a major rewrite*
 
 PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications.
-It focuses on simplicity, easy and clean API and modularity. Visit the [Documentation]() for more in-depth information.  
+It focuses on simplicity, easy and clean API and modularity. Visit the [Documentation](https://plugface.matteojoliveau.com) for more in-depth information.  
 
-**Browse the Javadoc [here](/apidocs/plugface-core/index.html)**  
+**Browse the Javadoc [here](https://plugface.matteojoliveau.com/apidocs/plugface-core/index.html)**  
 
 ## Core Concepts
 * Simple `Plugin` annotation to mark entry points to be loaded and registered in the classpath at runtime.
@@ -21,7 +21,7 @@ Spring integration, plugins can also have Spring bean injected in their construc
 
 ### Download
 There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
-Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Docs for the full list.  
+Check out the **[Download](https://plugface.matteojoliveau.com/docs/install-maven.html)** section of the Docs for the full list.  
 *If using Spring Framework you may want to use `plugface-spring` instead of `plugface-core` for an out-of-the-box integration*
 
 To download the latest stable release in Maven, add the following snippet to the `<dependencies>` section of your pom.xml:
@@ -47,7 +47,7 @@ dependencies {
 ```
 
 ### Quick Start
-Check out the [Quickstart](https://github.com/MatteoJoliveau/PlugFace/wiki/Getting-Started) and [How It Works](https://github.com/MatteoJoliveau/PlugFace/wiki/How-It-Works) guides for more detailed instructions.
+Check out the [Quickstart](https://plugface.matteojoliveau.com/docs/app-quickstart.html) guides for more detailed instructions.
 
 ### License
 *The MIT License*  
