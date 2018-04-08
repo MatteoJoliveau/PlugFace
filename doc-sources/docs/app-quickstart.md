@@ -18,12 +18,12 @@ Plugins will then implement these interfaces and be packaged separately.
 Now, let's talk about the building blocks you need to use plugins in your application.
 
 ## Plugin Context
-The context is your plugin registry. The [PluginContext](apidocs/plugface-core/org/plugface/core/PluginContext.html) interface defines the methods used to register, remove 
+The context is your plugin registry. The [PluginContext](/apidocs/plugface-core/org/plugface/core/PluginContext.html) interface defines the methods used to register, remove 
 and retrieve plugin objects so that they can be used by your code. You normally don't need to access the context directly,
 as the [PluginManager](#plugin-manager) will act as a safe proxy for it, but it is there if you need it.
 
 ## Plugin Manager
-The manager is your connection point with the plugin world. The [PluginManager](apidocs/plugface-core/org/plugface/core/PluginManager.html) interface defines some proxy methods 
+The manager is your connection point with the plugin world. The [PluginManager](/apidocs/plugface-core/org/plugface/core/PluginManager.html) interface defines some proxy methods 
 to access the context but also a `loadPlugins(PluginSource source)` method that is used to dinamically
 load and instantiate plugin classes from a specified source.  
 The default implementation is `DefaultPluginManager`, and a convenience factory method is provided if you don't need
