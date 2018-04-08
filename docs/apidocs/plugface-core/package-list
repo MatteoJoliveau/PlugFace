@@ -1,0 +1,6 @@
+org.plugface.core
+org.plugface.core.annotations
+org.plugface.core.factory
+org.plugface.core.impl
+org.plugface.core.internal
+org.plugface.core.internal.di

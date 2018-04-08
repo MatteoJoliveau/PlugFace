@@ -1,0 +1,9 @@
+{
+  "docs": {
+    "Installation": ["install-maven", "install-gradle", "install-manual", "install-git"],
+    "Getting Started": ["app-quickstart", "plugin-quickstart"],
+    "Guides": ["dependency-injection"],
+    "Integrations": ["spring-integration"],
+    "JavaDoc": ["javadoc"]
+  }
+}

@@ -7,7 +7,7 @@
     <groupId>org.plugface</groupId>
     <artifactId>plugface</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.1</version>
+    <version>0.6.0</version>
 
     <name>PlugFace Framework</name>
     <description>
@@ -51,6 +51,7 @@
     </issueManagement>
     <modules>
         <module>plugface-core</module>
+        <module>plugface-spring</module>
     </modules>
 
     <properties>
@@ -68,7 +69,7 @@
         </repository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <url>https://nexus.matteojoliveau.com/repository/maven-snapshots/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <site>
             <id>github-pages</id>
@@ -76,19 +77,43 @@
         </site>
     </distributionManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.24</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.24</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.24</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.7.13</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.24</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>3.0.1</version>
+                <optional>true</optional>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <!-- Build phase plugins -->
     <build>
@@ -145,50 +170,12 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
                     <locales>en,fr,it,es,de</locales>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <licenseName>mit</licenseName>
-                    <includes>
-                        <include>**/*.java</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>add-license-info</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                            <goal>update-project-license</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                    </execution>
-                    <execution>
-                        <id>verify-license-info</id>
-                        <goals>
-                            <goal>check-file-header</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -304,6 +291,78 @@
     </reporting>
     <profiles>
         <profile>
+            <id>docs</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.6</version>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <workingDirectory>doc-sources/website</workingDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install node and yarn</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>v8.9.4</nodeVersion>
+                                    <yarnVersion>v1.5.1</yarnVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>yarn install</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>yarn build</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>build</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/docs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/doc-sources/website/build</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>release</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -326,6 +385,45 @@
                             <keyname>Matteo Joliveau</keyname>
                             <passphraseServerId>matteo-joliveau</passphraseServerId>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <configuration>
+                            <licenseName>mit</licenseName>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>add-license-info</id>
+                                <goals>
+                                    <goal>update-file-header</goal>
+                                    <goal>update-project-license</goal>
+                                </goals>
+                                <phase>process-sources</phase>
+                            </execution>
+                            <execution>
+                                <id>verify-license-info</id>
+                                <goals>
+                                    <goal>check-file-header</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

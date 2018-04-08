@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>PlugFace Blog</title>
+        <link>https://matteojoliveau.github.io/plugface/blog</link>
+        <description>The best place to stay up-to-date with the latest PlugFace news and events.</description>
+        <lastBuildDate>Sun, 08 Apr 2018 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>PlugFace Blog</title>
+            <url>https://matteojoliveau.github.io/plugface/undefined</url>
+            <link>https://matteojoliveau.github.io/plugface/blog</link>
+        </image>
+        <copyright>Copyright © 2018 Matteo Joliveau</copyright>
+        <item>
+            <title><![CDATA[New Documentation Site]]></title>
+            <link>https://matteojoliveau.github.io/plugface/blog/2018/04/08/new-doc-site.html</link>
+            <guid>https://matteojoliveau.github.io/plugface/blog/2018/04/08/new-doc-site.html</guid>
+            <pubDate>Sun, 08 Apr 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Welcome to the new PlugFace documentation website, built with <a href="https://docusaurus.io">Docusaurus</a>!<br>
+This website will provide documentation and guides on how to use PlugFace and its various components, as well as links to useful resources such as is</p>
+]]></description>
+        </item>
+    </channel>
+</rss>
