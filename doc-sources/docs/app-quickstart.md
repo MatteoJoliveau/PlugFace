@@ -48,7 +48,31 @@ We define our `Greeter` interface like so.
 but it makes using them much easier since loading them without knowing their supertype only allows to use them via reflection.
 
 ```java
+public interface Greeter { 
 
+    // Greet the world
+    String greet();
+}
 ```
+
+Somewhere in the universe we know that there is a plugin implementing this interface and it has been packaged in a convenient `greeter-plugin.jar` that we will put in a folder accessible from our application.
+
+Now, let's load it in our application.
+
+```java
+// somewhere
+
+PluginManager manager = PluginManagers.defaultPluginManager();
+manager.loadPlugins(PluginSources.jarSource("path/to/plugin/folder"));
+
+Greeter greeterPlugin = manager.getPlugin(Greeter.class); // Here is why having a shared interface between plugins and applications is convenient
+
+Object greeterPlugin = manager.getPlugin("greeter"); // As an alternative if you don't have shared code, the name is defined by the plugin itself
+
+System.out.println(greeterPlugin.greet()) // It works!
+```
+
+Et voilà, you have successfully modularized you application using plugins!  
+Now let's write our actual greeter plugin.
 
  
