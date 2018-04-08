@@ -3,20 +3,26 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.plugface/plugface.svg)](https://search.maven.org/#search|ga|1|plugface-core)
 [![Build Status](https://travis-ci.org/MatteoJoliveau/PlugFace.svg?branch=master)](https://travis-ci.org/MatteoJoliveau/PlugFace)
 
-**PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE** 
+**PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE**   
+*This README refers to versions 0.6.0+ which has undergone a major rewrite*
 
-PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications. It focuses on simplicity, easy and clean API and modularity. Visit the [Wiki](https://github.com/MatteoJoliveau/PlugFace/wiki) for more in-depth information.  
+PlugFace is a simple, lightweight, high abstraction plugin framework for Java applications.
+It focuses on simplicity, easy and clean API and modularity. Visit the [Documentation]() for more in-depth information.  
 
-**Browse the Javadoc [here](https://plugface.org/apidocs/index.html)**  
+**Browse the Javadoc [here](/apidocs/plugface-core/index.html)**  
 
 ## Core Concepts
-* Simple `Plugin` interface that provides a unified API to start, stop and configure plugins
+* Simple `Plugin` annotation to mark entry points to be loaded and registered in the classpath at runtime.
 * `PluginManager` utility class to load, configure and register plugins. It should be the primary way for applications to manage the PlugFace echosystems.
-* A `PlugfaceContext` that acts as a repository for registered plugins and managers. It holds the reference to all `PluginManager` instances and to the plugins that have been registered.
+* A `PluginContext` that acts as a repository for registered plugins and managers. It holds the reference to all the plugins that have been registered.
+* Pluggable source mechanism. Implementing the `PluginSource` interface allows for nearly infinite possibilities as to from where plugins are loaded.
+* **Dependency injection**: plugins can require other plugins using the standard Java `@Inject` annotation. If using the `plugface-spring` module for
+Spring integration, plugins can also have Spring bean injected in their constructors (but not the other way around). (See [Dependency Injection]())
 
 ### Download
 There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
-Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Wiki for the full list.
+Check out the **[Download](https://github.com/MatteoJoliveau/PlugFace/wiki/Download)** section of the Docs for the full list.  
+*If using Spring Framework you may want to use `plugface-spring` instead of `plugface-core` for an out-of-the-box integration*
 
 To download the latest stable release in Maven, add the following snippet to the `<dependencies>` section of your pom.xml:
 ```xml
@@ -40,24 +46,7 @@ dependencies {
 }
 ```
 
-### Example usage
-It's really easy to start using plugins in your application. You will just need a `PlugfaceContext`, a `PluginManager` and a folder that contains the plugins, packaged in Jar format.
-
-```java
-//Somewhere in the application
-
-PlugfaceContext context = new DefaultPlugfaceContext();
-
-PluginManager manager = new DefaultPluginManager(context);
-
-manager.setPluginFolder("/path/to/plugins");
-
-List<Plugin> loaded = manager.loadPlugins(true); //true sets the autoregister flag, automatically inserting the 
-                                                //plugins in the context
-manager.startAll(); 
-```
-That's all, PlugFace is working!
-
+### Quick Start
 Check out the [Quickstart](https://github.com/MatteoJoliveau/PlugFace/wiki/Getting-Started) and [How It Works](https://github.com/MatteoJoliveau/PlugFace/wiki/How-It-Works) guides for more detailed instructions.
 
 ### License
