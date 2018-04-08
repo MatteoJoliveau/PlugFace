@@ -7,7 +7,7 @@
     <groupId>org.plugface</groupId>
     <artifactId>plugface</artifactId>
     <packaging>pom</packaging>
-    <version>0.6.0</version>
+    <version>0.6.1-SNAPSHOT</version>
 
     <name>PlugFace Framework</name>
     <description>

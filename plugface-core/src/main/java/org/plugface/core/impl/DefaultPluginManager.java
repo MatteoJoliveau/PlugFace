@@ -26,6 +26,7 @@ THE SOFTWARE.
  * #L%
  */
 
+import org.plugface.core.annotations.Plugin;
 import org.plugface.core.internal.di.MissingDependencyException;
 import org.plugface.core.PluginContext;
 import org.plugface.core.PluginManager;
@@ -86,6 +87,10 @@ public class DefaultPluginManager implements PluginManager {
         }
 
         for (Class<?> pluginClass : pluginClasses) {
+            if (pluginClass.getAnnotation(Plugin.class) == null) {
+                pluginClasses.remove(pluginClass);
+                continue;
+            }
             if (context.hasPlugin(pluginClass)) {
                 pluginClasses.remove(pluginClass);
             }
@@ -104,6 +109,9 @@ public class DefaultPluginManager implements PluginManager {
 
     private void createPlugin(Node<?> node, Collection<Object> loaded) {
         final Class<?> refClass = node.getRefClass();
+        if (refClass.getAnnotation(Plugin.class) == null) {
+            return;
+        }
         if (!context.hasPlugin(refClass)) {
             final Object plugin = Objects.requireNonNull(create(refClass), "Could not create plugin of type " + refClass.getName());
             context.addPlugin(plugin);

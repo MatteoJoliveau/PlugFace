@@ -29,8 +29,9 @@ THE SOFTWARE.
 import org.plugface.core.annotations.Plugin;
 
 @Plugin("test")
-public class TestPlugin {
+public class TestPlugin extends TestSuperclass {
 
+    @Override
     public String greet() {
         return "Hello PlugFace!";
     }
