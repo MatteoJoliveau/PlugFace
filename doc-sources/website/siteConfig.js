@@ -18,7 +18,7 @@ const users = [
 const siteConfig = {
   title: 'PlugFace' /* title for your website */,
   tagline: 'The Official PlugFace Doc',
-  url: 'https://matteojoliveau.github.io/plugface' /* your website url */,
+  url: 'https://plugface.matteojoliveau.com' /* your website url */,
   baseUrl: '/' /* base url for your project */,
   projectName: '',
   headerLinks: [

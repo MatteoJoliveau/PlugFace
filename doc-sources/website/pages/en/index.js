@@ -167,7 +167,7 @@ const Description = props => (
     {[
       {
         content: `PlugFace is the simple, friction-free Java plugin framework that allows you to load classes at runtime
-        without having to worry about anything. Just grab your plugins, follow the three line [quickstart example](http://localhost:3000/plugface/docs/app-quickstart.html#example)
+        without having to worry about anything. Just grab your plugins, follow the three line [quickstart example](docs/app-quickstart.html#example)
         and you're good to go! `,
         // image: imgUrl('docusaurus.svg'),
         imageAlign: 'right',

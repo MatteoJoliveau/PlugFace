@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://matteojoliveau.github.io/plugface/blog</id>
+    <id>https://plugface.matteojoliveau.com/blog</id>
     <title>PlugFace Blog</title>
     <updated>2018-04-08T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
-    <link rel="alternate" href="https://matteojoliveau.github.io/plugface/blog"/>
+    <link rel="alternate" href="https://plugface.matteojoliveau.com/blog"/>
     <subtitle>The best place to stay up-to-date with the latest PlugFace news and events.</subtitle>
-    <logo>https://matteojoliveau.github.io/plugface/undefined</logo>
+    <logo>https://plugface.matteojoliveau.com/undefined</logo>
     <rights>Copyright © 2018 Matteo Joliveau</rights>
     <entry>
         <title type="html"><![CDATA[New Documentation Site]]></title>
-        <id>https://matteojoliveau.github.io/plugface/blog/2018/04/08/new-doc-site.html</id>
-        <link href="https://matteojoliveau.github.io/plugface/blog/2018/04/08/new-doc-site.html">
+        <id>https://plugface.matteojoliveau.com/blog/2018/04/08/new-doc-site.html</id>
+        <link href="https://plugface.matteojoliveau.com/blog/2018/04/08/new-doc-site.html">
         </link>
         <updated>2018-04-08T06:00:00Z</updated>
         <summary type="html"><![CDATA[<p>Welcome to the new PlugFace documentation website, built with <a href="https://docusaurus.io">Docusaurus</a>!<br>
