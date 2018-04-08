@@ -22,8 +22,8 @@ const siteConfig = {
   baseUrl: '/plugface/' /* base url for your project */,
   projectName: '',
   headerLinks: [
-    {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
+    {doc: 'app-quickstart', label: 'Docs'},
+    {doc: 'javadoc', label: 'API'},
     {page: 'help', label: 'Help'},
     {blog: true, label: 'Blog'},
   ],
