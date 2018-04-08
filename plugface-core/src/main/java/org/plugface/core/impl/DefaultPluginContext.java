@@ -62,7 +62,9 @@ public class DefaultPluginContext implements PluginContext {
     @Nullable
     public <T> T getPlugin(Class<T> pluginClass) {
         for (Object plugin : registry.values()) {
-            if (pluginClass.equals(plugin.getClass())) {
+            final Class<?> clazz = plugin.getClass();
+            final Class<?> superclass = clazz.getSuperclass();
+            if (pluginClass.equals(clazz) || pluginClass.equals(superclass) || isImplementingInterface(clazz, pluginClass)) {
                 return (T) plugin;
             }
         }
@@ -104,5 +106,20 @@ public class DefaultPluginContext implements PluginContext {
         return getPlugin(pluginClass) != null;
     }
 
+    private boolean isImplementingInterface(Class<?> clazz, Class<?> wanted) {
+        final Class<?>[] interfaces = clazz.getInterfaces();
+        for (Class<?> interf : interfaces) {
+            if (wanted.equals(interf)) {
+                return true;
+            }
+        }
+
+        final Class<?> superclass = clazz.getSuperclass();
+        if (superclass != null) {
+            return isImplementingInterface(superclass, wanted);
+        }
+
+        return false;
+    }
 
 }

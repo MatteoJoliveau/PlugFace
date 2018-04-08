@@ -30,7 +30,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.plugface.core.factory.PluginSources;
+import org.plugface.core.plugins.TestInterface;
 import org.plugface.core.plugins.TestPlugin;
+import org.plugface.core.plugins.TestSuperclass;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -91,6 +93,22 @@ public class DefaultPluginContextTest {
     public void shouldRetrievePluginFromClass() {
         registry.put("test", plugin);
         final TestPlugin test = context.getPlugin(TestPlugin.class);
+        assertTrue(registry.containsKey("test"));
+        assertEquals(plugin, test);
+    }
+
+    @Test
+    public void shouldRetrievePluginFromInterface() {
+        registry.put("test", plugin);
+        final TestInterface test = context.getPlugin(TestInterface.class);
+        assertTrue(registry.containsKey("test"));
+        assertEquals(plugin, test);
+    }
+
+    @Test
+    public void shouldRetrievePluginFromSuperclass() {
+        registry.put("test", plugin);
+        final TestSuperclass test = context.getPlugin(TestSuperclass.class);
         assertTrue(registry.containsKey("test"));
         assertEquals(plugin, test);
     }
