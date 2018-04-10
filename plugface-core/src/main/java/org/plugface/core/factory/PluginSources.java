@@ -42,10 +42,22 @@ import java.util.jar.JarFile;
 
 public class PluginSources {
 
+    /**
+     * Load plugins from JAR files located at the given path
+     *
+     * @param pluginDirectoryPath the path to the directory where the JAR files are located
+     * @return a list of loaded {@link Class} objects, never null
+     */
     public static PluginSource jarSource(final String pluginDirectoryPath) {
         return jarSource(URI.create(pluginDirectoryPath));
     }
 
+    /**
+     * Load plugins from JAR files located at the given {@link URI}
+     *
+     * @param pluginUri the {@link URI} to the directory where the JAR files are located
+     * @return a list of loaded {@link Class} objects, never null
+     */
     public static PluginSource jarSource(final URI pluginUri) {
         return new PluginSource() {
             @Override
@@ -86,6 +98,11 @@ public class PluginSources {
 
     }
 
+    /**
+     * Load plugins from the given list of {@link Class}. Mostly useful for testing and debugging
+     * @param classes a list of classes to load
+     * @return the same list given as input, never null
+     */
     public static PluginSource classList(final Class<?>... classes) {
         return new PluginSource() {
             @Override

@@ -29,13 +29,14 @@ THE SOFTWARE.
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.plugface.core.factory.PluginSources;
+import org.plugface.core.PluginRef;
+import org.plugface.core.plugins.OptionalPlugin;
 import org.plugface.core.plugins.TestInterface;
 import org.plugface.core.plugins.TestPlugin;
 import org.plugface.core.plugins.TestSuperclass;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -48,6 +49,8 @@ public class DefaultPluginContextTest {
     private DefaultPluginContext context;
 
     private TestPlugin plugin = new TestPlugin();
+
+    private OptionalPlugin optionalPlugin = new OptionalPlugin();
 
 
     @Before
@@ -113,4 +116,31 @@ public class DefaultPluginContextTest {
         assertEquals(plugin, test);
     }
 
+    @Test
+    public void shouldRetrieveAllThePlugins() throws Exception {
+        registry.put("test", plugin);
+        registry.put("optional", optionalPlugin);
+
+        final List<PluginRef> all = (List<PluginRef>) context.getAllPlugins();
+        assertFalse(all.isEmpty());
+
+        for (int i = 0; i < all.size(); i++) {
+            switch (i) {
+                case 0: {
+                    final PluginRef ref = all.get(i);
+                    assertEquals("test", ref.getName());
+                    assertEquals(plugin, ref.get());
+                    assertEquals(TestPlugin.class, ref.getType());
+                    break;
+                }
+                case 1: {
+                    final PluginRef ref = all.get(i);
+                    assertEquals("optional", ref.getName());
+                    assertEquals(optionalPlugin, ref.get());
+                    assertEquals(OptionalPlugin.class, ref.getType());
+                    break;
+                }
+            }
+        }
+    }
 }

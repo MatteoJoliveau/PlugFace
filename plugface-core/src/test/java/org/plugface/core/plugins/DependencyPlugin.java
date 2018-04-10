@@ -30,7 +30,7 @@ import org.plugface.core.annotations.Plugin;
 
 import javax.inject.Inject;
 
-@Plugin(value = "dependency")
+@Plugin(name = "dependency")
 public class DependencyPlugin {
 
     private final TestPlugin dependency;

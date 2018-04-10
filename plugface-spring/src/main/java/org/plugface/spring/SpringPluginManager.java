@@ -40,6 +40,11 @@ import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * A customized {@link DefaultPluginManager} to use in combination with
+ * Spring Framework.
+ * Allows injection of Spring Beans inside plugins
+ */
 public class SpringPluginManager extends DefaultPluginManager implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 

@@ -16,7 +16,7 @@ package my.app.plugins;
 import org.plugface.core.annotations.Plugin;
 import my.app.interfaces.Greeter;
 
-@Plugin("greeter") // we define that this is a plugin and it has the name "greeter"
+@Plugin(name = "greeter") // we define that this is a plugin and it has the name "greeter"
 public class GreeterPlugin implements Greeter {
 
     @Override

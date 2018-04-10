@@ -30,7 +30,7 @@ import org.plugface.core.annotations.Plugin;
 
 import javax.inject.Inject;
 
-@Plugin("single")
+@Plugin(name = "single")
 public class SingleDependencyPlugin {
 
     private final OptionalPlugin test;

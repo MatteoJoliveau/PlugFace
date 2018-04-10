@@ -26,19 +26,23 @@ THE SOFTWARE.
  * #L%
  */
 
-import org.plugface.core.annotations.Plugin;
-import org.plugface.core.internal.di.MissingDependencyException;
 import org.plugface.core.PluginContext;
 import org.plugface.core.PluginManager;
+import org.plugface.core.PluginRef;
 import org.plugface.core.PluginSource;
+import org.plugface.core.annotations.Plugin;
+import org.plugface.core.factory.PluginManagers;
 import org.plugface.core.internal.AnnotationProcessor;
 import org.plugface.core.internal.DependencyResolver;
+import org.plugface.core.internal.di.MissingDependencyException;
 import org.plugface.core.internal.di.Node;
 
 import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 
 public class DefaultPluginManager implements PluginManager {
 
@@ -46,6 +50,14 @@ public class DefaultPluginManager implements PluginManager {
     protected final AnnotationProcessor annotationProcessor;
     protected final DependencyResolver dependencyResolver;
 
+    /**
+     * Ideally not for public usage. Use {@link PluginManagers#defaultPluginManager()} instead for a fully
+     * configured <code>DefaultPluginManager</code>
+     *
+     * @param context             the {@link PluginContext} to use
+     * @param annotationProcessor the {@link AnnotationProcessor} to use
+     * @param dependencyResolver  the {@link DependencyResolver} to use
+     */
     public DefaultPluginManager(PluginContext context, AnnotationProcessor annotationProcessor, DependencyResolver dependencyResolver) {
         this.context = context;
         this.annotationProcessor = annotationProcessor;
@@ -58,6 +70,11 @@ public class DefaultPluginManager implements PluginManager {
     }
 
     @Override
+    public <T> void register(String name, T plugin) {
+        context.addPlugin(name, plugin);
+    }
+
+    @Override
     public <T> T getPlugin(String name) {
         return context.getPlugin(name);
     }
@@ -65,6 +82,11 @@ public class DefaultPluginManager implements PluginManager {
     @Override
     public <T> T getPlugin(Class<T> pluginClass) {
         return context.getPlugin(pluginClass);
+    }
+
+    @Override
+    public Collection<PluginRef> getAllPlugins() {
+        return context.getAllPlugins();
     }
 
     @Override
@@ -79,7 +101,7 @@ public class DefaultPluginManager implements PluginManager {
 
     @Override
     public Collection<Object> loadPlugins(PluginSource source) throws Exception {
-        final Collection<Class<?>> pluginClasses = source.load();
+        final Collection<Class<?>> pluginClasses = Objects.requireNonNull(source, "Plugin Source cannot be null").load();
         final Collection<Object> loaded = new ArrayList<>();
 
         if (pluginClasses.isEmpty()) {

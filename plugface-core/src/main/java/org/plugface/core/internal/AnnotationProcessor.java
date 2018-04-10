@@ -34,6 +34,9 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Internal class used to process the {@link Plugin} annotation
+ */
 public class AnnotationProcessor {
 
     public static <T> String getPluginName(T plugin) {
@@ -42,7 +45,7 @@ public class AnnotationProcessor {
 
     public static <T> String getPluginName(Class<T> plugin) {
         final Plugin annotation = getPluginAnnotation(plugin);
-        final String name = annotation.value();
+        final String name = annotation.name();
         return "".equalsIgnoreCase(name) ? null : name;
     }
 

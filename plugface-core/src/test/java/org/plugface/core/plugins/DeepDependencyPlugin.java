@@ -30,7 +30,7 @@ import org.plugface.core.annotations.Plugin;
 
 import javax.inject.Inject;
 
-@Plugin("deep")
+@Plugin(name = "deep")
 public class DeepDependencyPlugin {
 
     private final DependencyPlugin dependency;

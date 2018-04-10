@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 import org.plugface.core.annotations.Plugin;
 
-@Plugin("test")
+@Plugin(name = "test")
 public class TestPlugin extends TestSuperclass {
 
     @Override
