@@ -60,8 +60,9 @@ public interface PluginContext {
 
     /**
      * Register a plugin in the context
+     *
      * @param plugin the plugin object to register
-     * @param <T> the inferred type of the plugin
+     * @param <T>    the inferred type of the plugin
      */
     <T> void addPlugin(T plugin);
 

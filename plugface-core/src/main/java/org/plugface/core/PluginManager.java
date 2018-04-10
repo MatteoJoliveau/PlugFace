@@ -78,8 +78,9 @@ public interface PluginManager {
 
     /**
      * Remove a plugin with the given name from the context
+     *
      * @param name the name associated with the plugin
-     * @param <T> the inferred type of the plugin
+     * @param <T>  the inferred type of the plugin
      * @return the removed plugin, or <code>null</code> if none is exists
      */
     @Nullable
@@ -87,8 +88,9 @@ public interface PluginManager {
 
     /**
      * Remove a plugin from the context
+     *
      * @param plugin the plugin instance to remove
-     * @param <T> the inferred type of the plugin
+     * @param <T>    the inferred type of the plugin
      * @return the removed plugin, or <code>null</code> if none is exists
      */
     @Nullable

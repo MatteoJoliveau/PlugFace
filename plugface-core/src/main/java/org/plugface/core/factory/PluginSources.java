@@ -100,6 +100,7 @@ public class PluginSources {
 
     /**
      * Load plugins from the given list of {@link Class}. Mostly useful for testing and debugging
+     *
      * @param classes a list of classes to load
      * @return the same list given as input, never null
      */
