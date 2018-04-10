@@ -12,7 +12,7 @@
 <span class="hljs-keyword">import</span> org.plugface.core.annotations.Plugin;
 <span class="hljs-keyword">import</span> my.app.interfaces.Greeter;
 
-<span class="hljs-meta">@Plugin</span>(<span class="hljs-string">"greeter"</span>) <span class="hljs-comment">// we define that this is a plugin and it has the name "greeter"</span>
+<span class="hljs-meta">@Plugin</span>(name = <span class="hljs-string">"greeter"</span>) <span class="hljs-comment">// we define that this is a plugin and it has the name "greeter"</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GreeterPlugin</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Greeter</span> </span>{
 
     <span class="hljs-meta">@Override</span>

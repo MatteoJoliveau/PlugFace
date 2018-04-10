@@ -68,7 +68,7 @@
             <layout>default</layout>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
+            <id>maven-central</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <site>
