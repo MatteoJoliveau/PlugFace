@@ -16,7 +16,7 @@ or repositories.</p>
 
 <span class="hljs-keyword">import</span> org.plugface.core.annotations.Plugin;
 
-<span class="hljs-meta">@Plugin</span>(<span class="hljs-string">"test"</span>)
+<span class="hljs-meta">@Plugin</span>(name = <span class="hljs-string">"test"</span>)
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestPlugin</span> </span>{
 
     <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">greet</span><span class="hljs-params">()</span> </span>{
@@ -32,7 +32,7 @@ or repositories.</p>
 
 <span class="hljs-keyword">import</span> javax.inject.Inject;
 
-<span class="hljs-meta">@Plugin</span>(<span class="hljs-string">"single"</span>)
+<span class="hljs-meta">@Plugin</span>(name = <span class="hljs-string">"single"</span>)
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SingleDependencyPlugin</span> </span>{
 
     <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> TestPlugin test;

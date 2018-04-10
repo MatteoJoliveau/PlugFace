@@ -30,7 +30,7 @@ import org.plugface.core.annotations.Plugin;
 
 import javax.inject.Inject;
 
-@Plugin("test")
+@Plugin(name = "test")
     public class TestPlugin {
 
         private final SpringPluginContextTest.TestBean bean;

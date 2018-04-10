@@ -27,14 +27,11 @@ THE SOFTWARE.
  */
 
 import org.plugface.core.PluginContext;
+import org.plugface.core.PluginRef;
 import org.plugface.core.internal.AnnotationProcessor;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class DefaultPluginContext implements PluginContext {
@@ -46,12 +43,13 @@ public class DefaultPluginContext implements PluginContext {
     }
 
     public DefaultPluginContext(Map<String, Object> registry) {
-        this.registry = registry;
+        this.registry = Objects.requireNonNull(registry, "Plugin Registry cannot be null");
     }
 
     @Override
     @Nullable
     public <T> T getPlugin(String pluginName) {
+        Objects.requireNonNull(pluginName, "Plugin name to lookup cannot be null");
         if (registry.containsKey(pluginName)) {
             return (T) registry.get(pluginName);
         }
@@ -61,6 +59,7 @@ public class DefaultPluginContext implements PluginContext {
     @Override
     @Nullable
     public <T> T getPlugin(Class<T> pluginClass) {
+        Objects.requireNonNull(pluginClass, "Plugin class to lookup cannot be null");
         for (Object plugin : registry.values()) {
             final Class<?> clazz = plugin.getClass();
             final Class<?> superclass = clazz.getSuperclass();
@@ -72,8 +71,25 @@ public class DefaultPluginContext implements PluginContext {
     }
 
     @Override
+    public Collection<PluginRef> getAllPlugins() {
+        final ArrayList<PluginRef> plugins = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : registry.entrySet()) {
+            plugins.add(PluginRef.of(entry.getValue(), entry.getKey()));
+        }
+        return plugins;
+    }
+
+    @Override
     public <T> void addPlugin(T plugin) {
+        Objects.requireNonNull(plugin, "Plugin to register cannot be null");
         final String name = AnnotationProcessor.getPluginName(plugin);
+        addPlugin(name, plugin);
+    }
+
+    @Override
+    public <T> void addPlugin(String name, T plugin) {
+        Objects.requireNonNull(name, "Plugin name to register cannot be null");
+        Objects.requireNonNull(plugin, "Plugin to register cannot be null");
         if (registry.containsKey(name) || registry.containsValue(plugin)) {
             throw new IllegalArgumentException("Plugin already registered");
         }
@@ -83,6 +99,7 @@ public class DefaultPluginContext implements PluginContext {
     @Override
     @Nullable
     public <T> T removePlugin(T plugin) {
+        Objects.requireNonNull(plugin, "Plugin to remove cannot be null");
         final String name = AnnotationProcessor.getPluginName(plugin);
         return removePlugin(name);
     }
@@ -90,6 +107,7 @@ public class DefaultPluginContext implements PluginContext {
     @Override
     @Nullable
     public <T> T removePlugin(String pluginName) {
+        Objects.requireNonNull(pluginName, "Plugin name to remove cannot be null");
         if (registry.containsKey(pluginName)) {
             return (T) registry.remove(pluginName);
         }
@@ -115,11 +133,8 @@ public class DefaultPluginContext implements PluginContext {
         }
 
         final Class<?> superclass = clazz.getSuperclass();
-        if (superclass != null) {
-            return isImplementingInterface(superclass, wanted);
-        }
+        return superclass != null && isImplementingInterface(superclass, wanted);
 
-        return false;
     }
 
 }

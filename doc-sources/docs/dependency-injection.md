@@ -24,7 +24,7 @@ package plugins;
 
 import org.plugface.core.annotations.Plugin;
 
-@Plugin("test")
+@Plugin(name = "test")
 public class TestPlugin {
 
     public String greet() {
@@ -42,7 +42,7 @@ import org.plugface.core.annotations.Plugin;
 
 import javax.inject.Inject;
 
-@Plugin("single")
+@Plugin(name = "single")
 public class SingleDependencyPlugin {
 
     private final TestPlugin test;

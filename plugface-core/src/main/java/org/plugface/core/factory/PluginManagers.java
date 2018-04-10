@@ -35,6 +35,11 @@ import org.plugface.core.internal.DependencyResolver;
 
 public class PluginManagers {
 
+    /**
+     * A default {@link PluginManager} configured with internal dependencies for {@link PluginContext}, {@link AnnotationProcessor} and {@link DependencyResolver}
+     *
+     * @return a fully configured {@link DefaultPluginManager}
+     */
     public static PluginManager defaultPluginManager() {
         final DefaultPluginContext context = new DefaultPluginContext();
         final AnnotationProcessor processor = new AnnotationProcessor();

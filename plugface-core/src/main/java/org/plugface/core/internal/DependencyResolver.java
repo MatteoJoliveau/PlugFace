@@ -29,9 +29,12 @@ THE SOFTWARE.
 import org.plugface.core.internal.di.Graph;
 import org.plugface.core.internal.di.Node;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Internal class used to create a dependency graph
+ * for plugin dependency injection.
+ */
 public class DependencyResolver {
     private final AnnotationProcessor processor;
 

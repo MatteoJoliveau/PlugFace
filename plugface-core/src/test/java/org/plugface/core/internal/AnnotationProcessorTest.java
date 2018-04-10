@@ -28,11 +28,10 @@ THE SOFTWARE.
 
 import org.junit.Before;
 import org.junit.Test;
+import org.plugface.core.annotations.Plugin;
 import org.plugface.core.internal.di.Node;
 import org.plugface.core.plugins.DependencyPlugin;
-import org.plugface.core.plugins.OptionalPlugin;
 import org.plugface.core.plugins.TestPlugin;
-import org.plugface.core.annotations.Plugin;
 
 import java.util.Collection;
 
@@ -77,7 +76,7 @@ public class AnnotationProcessorTest {
         assertFalse(dependencies.isEmpty());
     }
 
-    @Plugin
+    @Plugin(name = "")
     private static class EmptyPlugin {}
     
 

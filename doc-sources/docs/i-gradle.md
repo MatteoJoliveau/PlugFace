@@ -21,9 +21,26 @@ dependencies {
 ```
 
 ## Snapshots
+Snapshots are accessible via Sonatype Nexus.  
+Add this line to your `build.gradle` file:
 
-Snapshots are accessible via [JitPack](https://jitpack.io/#matteojoliveau/PlugFace/develop-SNAPSHOT), follow the instruction at the provided link
-on how to enable and get the latest snapshot version from the `develop` branch, which is the semi-stable WIP branch.
+```groovy
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+```
+Then add:
+
+```groovy
+dependencies {
+    compile 'org.plugface:plugface-core:$SNAPSHOTVERSION'
+}
+```
+  
+## JitPack
+
+PlugFace is also accessible via [JitPack](https://jitpack.io/#matteojoliveau/PlugFace), follow the instruction at the provided link
+on how to enable and get the latest version or the latest snapshot from the `develop` branch, which is the semi-stable WIP branch.
 
 Notice that if using the JitPack version, the group-id is not the same as the one from Maven Central:
 ```groovy

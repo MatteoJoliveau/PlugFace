@@ -32,6 +32,10 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+/**
+ * A customized {@link DefaultPluginContext} to use in combination with
+ * Spring Framework
+ */
 public class SpringPluginContext extends DefaultPluginContext implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;

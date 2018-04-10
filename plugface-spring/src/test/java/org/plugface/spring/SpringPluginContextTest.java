@@ -102,7 +102,7 @@ public class SpringPluginContextTest {
         }
     }
 
-    @Plugin("test")
+    @Plugin(name = "test")
     static class TestPlugin {
 
         public String greet() {

@@ -7,7 +7,7 @@
     <groupId>org.plugface</groupId>
     <artifactId>plugface</artifactId>
     <packaging>pom</packaging>
-    <version>0.6.1</version>
+    <version>0.7.0</version>
 
     <name>PlugFace Framework</name>
     <description>
@@ -68,7 +68,7 @@
             <layout>default</layout>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
+            <id>maven-central</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <site>

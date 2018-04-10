@@ -1,4 +1,4 @@
-package org.plugface.core.annotations;
+package org.plugface.core;
 
 /*-
  * #%L
@@ -26,27 +26,36 @@ THE SOFTWARE.
  * #L%
  */
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Objects;
 
-/**
- * Annotation marking plugin classes that will be loaded at runtime.
- * This class must have either a no-args constructor or a constructor marked with {@link javax.inject.Inject} having
- * other dependent Plugins as parameters that will be resolved during instantiation.
- * @see Plugin#name()
- * @author Matteo Joliveau
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Plugin {
+public final class PluginRef<T> {
 
-    /**
-     * the name to associate with the plugin
-     *
-     * @return the plugin name
-     */
-    String name();
+    private final T ref;
+    private final String name;
+    private final Class<T> type;
+
+    private PluginRef(T ref, String name, Class<T> type) {
+        this.ref = Objects.requireNonNull(ref, "Plugin reference cannot be null");
+        this.name = Objects.requireNonNull(name, "Plugin name cannot be null");
+        this.type = Objects.requireNonNull(type, "Plugin type cannot be null");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> PluginRef<T> of(T ref, String name) {
+        return new PluginRef<>(ref, name, (Class<T>) ref.getClass());
+    }
+
+    public T get() {
+        return ref;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class<T> getType() {
+        return type;
+    }
+
 
 }

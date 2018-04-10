@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 import org.plugface.core.annotations.Plugin;
 
-@Plugin("optional")
+@Plugin(name = "optional")
 public class OptionalPlugin {
 
     public String greet() {
