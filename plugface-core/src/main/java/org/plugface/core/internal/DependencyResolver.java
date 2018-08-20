@@ -47,7 +47,12 @@ public class DependencyResolver {
         final Graph graph = new Graph();
         for (Class<?> pluginClass : pluginClasses) {
             final Collection<Node<?>> deps = processor.getDependencies(pluginClass);
-            graph.addEdges(new Node<>(pluginClass), deps);
+            final Node<?> node = new Node<>(pluginClass);
+            if (deps.isEmpty()) {
+                graph.addLeaf(node);
+            } else {
+                graph.addEdges(node, deps);
+            }
         }
 
         return graph.resolve();
