@@ -38,7 +38,7 @@ class Help extends React.Component {
             <header className="postHeader">
               <h2>Need help?</h2>
             </header>
-            <p>This project is maintained by a <a href="https://matteojoliveau.com" target="_blank">Matteo Joliveau</a> over at <a href="https://gtihub.com/matteojoliveau/plugface" target="_blank">GitHub</a>.</p>
+            <p>This project is maintained by a <a href="https://matteojoliveau.com" target="_blank">Matteo Joliveau</a> over at <a href="https://github.com/matteojoliveau/plugface" target="_blank">GitHub</a>.</p>
             <GridBlock contents={supportLinks} layout="threeColumn" />
           </div>
         </Container>
