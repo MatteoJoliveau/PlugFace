@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -123,4 +124,28 @@ public class DefaultPluginManagerTest {
         assertNotNull(fromContext);
     }
 
+    @Test
+    public void shouldNotLoadAPluginTwice() throws Exception {
+        manager.loadPlugins(mockSource);
+        this.shouldLoadPluginsFromSource();
+    }
+
+    @Test
+    public void shouldNotLoadForeignClasses() throws Exception {
+        final List<Object> plugins = (List<Object>) manager.loadPlugins(new PluginSource() {
+            @Override
+            public Collection<Class<?>> load() throws IOException, ClassNotFoundException {
+                return newArrayList(TestPlugin.class, String.class);
+            }
+        });
+
+        assertEquals(1, plugins.size());
+        assertTrue(plugins.get(0) instanceof TestPlugin);
+    }
+    
+    private <T> List<T> newArrayList(T... elements) {
+        ArrayList<T> list = new ArrayList<>(elements.length);
+        list.addAll(Arrays.asList(elements));
+        return list;
+    }
 }

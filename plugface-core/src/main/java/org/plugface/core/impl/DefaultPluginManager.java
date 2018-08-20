@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -108,13 +109,15 @@ public class DefaultPluginManager implements PluginManager {
             return loaded;
         }
 
-        for (Class<?> pluginClass : pluginClasses) {
+        final Iterator<Class<?>> itr = pluginClasses.iterator();
+        while (itr.hasNext()) {
+            Class<?> pluginClass = itr.next();
             if (pluginClass.getAnnotation(Plugin.class) == null) {
-                pluginClasses.remove(pluginClass);
+                itr.remove();
                 continue;
             }
             if (context.hasPlugin(pluginClass)) {
-                pluginClasses.remove(pluginClass);
+                itr.remove();
             }
         }
 
