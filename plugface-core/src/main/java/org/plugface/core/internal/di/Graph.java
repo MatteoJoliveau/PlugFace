@@ -44,6 +44,7 @@ public class Graph {
         }
         return this;
     }
+
     public Graph addEdge(Node<?> node, Node<?> adj) {
         Objects.requireNonNull(node, "Cannot attach an edge to a null node");
         if (Objects.equals(node, adj)) {
