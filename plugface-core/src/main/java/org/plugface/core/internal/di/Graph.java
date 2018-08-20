@@ -39,11 +39,17 @@ public class Graph {
     }
 
     public Graph addEdges(Node<?> node, Collection<Node<?>> adjs) {
+        if (adjs.isEmpty()) {
+            register(node);
+            return this;
+        }
+
         for (Node<?> adj : adjs) {
             addEdge(node, adj);
         }
         return this;
     }
+
     public Graph addEdge(Node<?> node, Node<?> adj) {
         Objects.requireNonNull(node, "Cannot attach an edge to a null node");
         if (Objects.equals(node, adj)) {
