@@ -123,4 +123,10 @@ public class DefaultPluginManagerTest {
         assertNotNull(fromContext);
     }
 
+    @Test
+    public void shouldNotLoadAPluginTwice() throws Exception {
+        manager.loadPlugins(mockSource);
+        this.shouldLoadPluginsFromSource();
+    }
+
 }
