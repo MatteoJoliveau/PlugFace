@@ -39,11 +39,6 @@ public class Graph {
     }
 
     public Graph addEdges(Node<?> node, Collection<Node<?>> adjs) {
-        if (adjs.isEmpty()) {
-            register(node);
-            return this;
-        }
-
         for (Node<?> adj : adjs) {
             addEdge(node, adj);
         }

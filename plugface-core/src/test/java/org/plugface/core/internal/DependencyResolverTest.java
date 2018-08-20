@@ -61,6 +61,16 @@ public class DependencyResolverTest {
         }
     }
 
+    @Test
+    public void shouldResolvePluginsWithoutDependencies() {
+        List<Class<?>> plugins = newArrayList(TestPlugin.class, OptionalPlugin.class);
+        final Collection<Node<?>> nodes = sut.resolve(plugins);
+        assertEquals(plugins.size(), nodes.size());
+        for (Node<?> node : nodes) {
+            assertTrue(plugins.contains(node.getRefClass()));
+        }
+    }
+
 
     private <T> List<T> newArrayList(T... elements) {
         ArrayList<T> list = new ArrayList<>(elements.length);
