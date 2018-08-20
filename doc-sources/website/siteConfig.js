@@ -50,7 +50,7 @@ const siteConfig = {
   },*/
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
   copyright:
-    'Copyright © ' +
+    'Copyright © 2017 - ' +
     new Date().getFullYear() +
     ' Matteo Joliveau',
   // organizationName: 'deltice', // or set an env variable ORGANIZATION_NAME
