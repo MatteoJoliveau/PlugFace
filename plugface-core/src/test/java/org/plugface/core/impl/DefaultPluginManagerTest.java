@@ -28,7 +28,10 @@ package org.plugface.core.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.plugface.core.PluginContext;
 import org.plugface.core.PluginManager;
 import org.plugface.core.PluginSource;
@@ -47,15 +50,20 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class DefaultPluginManagerTest {
 
-    private final PluginContext mockContext = mock(PluginContext.class);
+    @Mock
+    private PluginContext mockContext;
 
-    private final AnnotationProcessor mockProcessor = mock(AnnotationProcessor.class);
+    @Mock
+    private AnnotationProcessor mockProcessor;
 
-    private final PluginSource mockSource = mock(PluginSource.class);
+    @Mock
+    private PluginSource mockSource;
 
-    private final DependencyResolver mockResolver = mock(DependencyResolver.class);
+    @Mock
+    private DependencyResolver mockResolver;
 
     private DefaultPluginManager manager;
 
