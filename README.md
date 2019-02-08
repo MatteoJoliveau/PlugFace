@@ -2,6 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Maven Central](https://img.shields.io/maven-central/v/org.plugface/plugface.svg)](https://search.maven.org/#search|ga|1|plugface-core)
 [![Build Status](https://travis-ci.org/MatteoJoliveau/PlugFace.svg?branch=master)](https://travis-ci.org/MatteoJoliveau/PlugFace)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=org.plugface%3Aplugface&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.plugface%3Aplugface)
 
 **PLUGFACE IS STILL IN EARLY DEVELOPMENT. WAIT FOR THE 1.0.0-RELEASE FOR PRODUCTION USE**   
 *This README refers to versions 0.6.0+ which has undergone a major rewrite*
@@ -17,7 +18,7 @@ It focuses on simplicity, easy and clean API and modularity. Visit the [Document
 * A `PluginContext` that acts as a repository for registered plugins and managers. It holds the reference to all the plugins that have been registered.
 * Pluggable source mechanism. Implementing the `PluginSource` interface allows for nearly infinite possibilities as to from where plugins are loaded.
 * **Dependency injection**: plugins can require other plugins using the standard Java `@Inject` annotation. If using the `plugface-spring` module for
-Spring integration, plugins can also have Spring bean injected in their constructors (but not the other way around). (See [Dependency Injection]())
+Spring integration, plugins can also have Spring bean injected in their constructors (but not the other way around). (See [Dependency Injection](https://plugface.matteojoliveau.com/docs/dependency-injection.html))
 
 ### Download
 There are many ways to download PlugFace. The easiest one is to use a build management system like **Maven** or **Gradle**.  
