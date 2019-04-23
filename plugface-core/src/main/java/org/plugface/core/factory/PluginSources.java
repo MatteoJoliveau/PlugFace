@@ -27,7 +27,6 @@ THE SOFTWARE.
  */
 
 import org.plugface.core.PluginSource;
-import org.plugface.core.internal.PluginClassLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +58,17 @@ public class PluginSources {
      * @return a list of loaded {@link Class} objects, never null
      */
     public static PluginSource jarSource(final URI pluginUri) {
+        return jarSource(pluginUri, new SecurityClassLoaderCreator());
+    }
+
+    /**
+     * Load plugins from JAR files located at the given {@link URI} and loads it using given class loader
+     *
+     * @param pluginUri the {@link URI} to the directory where the JAR files are located
+     * @param classLoaderCreator the factory that will create {@link ClassLoader}
+     * @return a list of loaded {@link Class} objects, never null
+     */
+    public static PluginSource jarSource(final URI pluginUri, final ClassLoaderCreator classLoaderCreator) {
         return new PluginSource() {
             @Override
             public Collection<Class<?>> load() throws IOException, ClassNotFoundException {
@@ -77,7 +87,8 @@ public class PluginSources {
                         jarUrls.put(filePath, filePath.toUri().toURL());
                     }
                 }
-                final PluginClassLoader cl = new PluginClassLoader(jarUrls.values().toArray(new URL[]{}));
+                URL[] jars = jarUrls.values().toArray(new URL[0]);
+                final ClassLoader cl = classLoaderCreator.createClassLoader(jars);
                 for (Path jarPaht: jarUrls.keySet()) {
                     final File file = jarPaht.toAbsolutePath().toFile();
                     final JarFile jar = new JarFile(file);
